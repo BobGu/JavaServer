@@ -1,25 +1,25 @@
+import java.io.Console;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 public class Server {
+    private ServerSocket serverSocket;
 
-    private int port;
-
-    public Server() {
-       this(5000);
+    public Server(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
     }
 
-    public Server(int port) {
-        setPort(port);
+    public static void main(String port) {
     }
 
-    public static void main(String[] args) {
-        System.out.println("Hello World!");
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public void setPort(int port) {
-        this.port = port;
+    public void run() {
+        try {
+            System.out.print(serverSocket);
+            Socket socket = serverSocket.accept();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

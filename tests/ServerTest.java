@@ -4,17 +4,11 @@ import org.junit.Test;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
 public class ServerTest {
     private MockServerSocket serverSocket;
-
-    @After
-    public void CloseSockets() throws IOException {
-        serverSocket.close();
-    }
 
     @Test
     public void TestASocketIsOpened() throws IOException {
@@ -22,7 +16,9 @@ public class ServerTest {
         Server server = new Server(serverSocket);
         server.run();
         assertTrue(serverSocket.hasInvokedAccepted());
+        serverSocket.close();
     }
+
 
     private class MockServerSocket extends ServerSocket {
         private boolean acceptInvoked = false;

@@ -1,9 +1,12 @@
 import org.junit.After;
 import org.junit.Test;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
@@ -14,11 +17,10 @@ public class ServerTest {
     public void TestASocketIsOpened() throws IOException {
         MockServerSocket serverSocket = new MockServerSocket(9092);
         Server server = new Server(serverSocket);
-        server.run();
+        server.startServer();
         assertTrue(serverSocket.hasInvokedAccepted());
         serverSocket.close();
     }
-
 
     private class MockServerSocket extends ServerSocket {
         private boolean acceptInvoked = false;

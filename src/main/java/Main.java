@@ -9,7 +9,7 @@ public class Main {
 
         try {
             server = new Server(new ServerSocket(5000));
-            server.run();
+            server.startServer();
         } catch (IOException e) {
             e.printStackTrace();
         }

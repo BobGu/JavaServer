@@ -19,4 +19,10 @@ public class ParserTest {
         assertEquals("GET /logs HTTP/1.1", requestHeaderLines.get(0));
     }
 
+    @Test
+    public void TestCanParseForHTTPVerb() {
+        String firstLineOfRequestHeader = "GET /logs HTTP/1.1";
+        assertEquals("GET",  Parser.parseForHttpVerb(firstLineOfRequestHeader));
+    }
+
 }

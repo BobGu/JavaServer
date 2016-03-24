@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Parser {
 
@@ -18,6 +20,10 @@ public class Parser {
         }
 
         return linesOfInputStream;
+    }
+    public static String parseForHttpVerb(String firstLineOfRequest) {
+        String[] words = firstLineOfRequest.split(" ");
+        return words[0];
     }
 
 }

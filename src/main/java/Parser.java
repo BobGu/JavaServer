@@ -21,9 +21,15 @@ public class Parser {
 
         return linesOfInputStream;
     }
+
     public static String parseForHttpVerb(String firstLineOfRequest) {
         String[] words = firstLineOfRequest.split(" ");
         return words[0];
+    }
+
+    public static String parseForUrl(String secondLineOfRequest) {
+        String[] words = secondLineOfRequest.split(" ");
+        return words[1];
     }
 
 }

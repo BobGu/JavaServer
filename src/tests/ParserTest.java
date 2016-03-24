@@ -25,4 +25,10 @@ public class ParserTest {
         assertEquals("GET",  Parser.parseForHttpVerb(firstLineOfRequestHeader));
     }
 
+    @Test
+    public void TestCanParseForURL() {
+        String secondLineOfRequestHeader = "Host: localhost:5000";
+        assertEquals("localhost:5000", Parser.parseForUrl(secondLineOfRequestHeader));
+    }
+
 }

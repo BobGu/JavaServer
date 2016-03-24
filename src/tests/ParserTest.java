@@ -6,9 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-/**
- * Created by robertgu on 3/22/16.
- */
 public class ParserTest {
 
     @Test

@@ -1,6 +1,3 @@
-/**
- * Created by robertgu on 3/24/16.
- */
 public class Route {
     private String url;
     private String httpVerb;

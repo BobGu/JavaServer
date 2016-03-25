@@ -8,7 +8,7 @@ public class Main {
         Server server;
 
         try {
-            server = new Server(new ServerSocket(5000));
+            server = new Server(new ServerSocket(5000), new Routes());
             server.startServer();
         } catch (IOException e) {
             e.printStackTrace();

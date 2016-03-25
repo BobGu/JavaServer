@@ -19,7 +19,6 @@ public class Parser {
             if(line.trim().equals("")){
                 break;
             }
-            System.out.println(line);
             linesOfInputStream.add(line);
         }
 

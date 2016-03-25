@@ -7,9 +7,15 @@ import java.util.List;
 public class Server {
     private ServerSocket serverSocket;
     private Socket socket;
+    private Routes routes;
 
     public Server(ServerSocket serverSocket) {
+        this(serverSocket, new Routes());
+    }
+
+    public Server(ServerSocket serverSocket, Routes routes) {
         this.serverSocket = serverSocket;
+        this.routes = routes;
     }
 
     public Socket getSocket() {
@@ -37,7 +43,6 @@ public class Server {
     }
 
     private String responseHeader(String httpVerb, String url) {
-        Routes routes = new Routes();
         String responseHeader;
 
         if(routes.exist(httpVerb, url)) {

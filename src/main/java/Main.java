@@ -8,12 +8,17 @@ public class Main {
         Server server;
 
         try {
-            server = new Server(new ServerSocket(5000), new Routes());
+            if(args.length == 0) {
+                server = new Server(new ServerSocket(5000), new Routes());
+            } else {
+                String port = args[0];
+                int portNumber = Integer.parseInt(port);
+                server = new Server(new ServerSocket(5000), new Routes());
+            }
             server.startServer();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 }

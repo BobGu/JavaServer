@@ -7,11 +7,11 @@ public class Routes {
 
     public Routes() {
         routes = new ArrayList<Route>();
-        routes.add(new Route("GET", "localhost:5000"));
+        routes.add(new Route("GET", "localhost:5000/"));
     }
 
     public boolean exist(String httpVerb, String url) {
-        Predicate<Route> routeFound = route -> route.getHttpVerb() == httpVerb && route.getUrl() == url;
+        Predicate<Route> routeFound = route -> route.getHttpVerb().equals(httpVerb) && route.getUrl().equals(url);
         return routes.stream().anyMatch(routeFound);
     }
 

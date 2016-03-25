@@ -26,9 +26,21 @@ public class ParserTest {
     }
 
     @Test
-    public void TestCanParseForURL() {
+    public void TestCanParseForRootUrl() {
         String secondLineOfRequestHeader = "Host: localhost:5000";
-        assertEquals("localhost:5000", Parser.parseForUrl(secondLineOfRequestHeader));
+        assertEquals("localhost:5000", Parser.parseForRootUrl(secondLineOfRequestHeader));
+    }
+
+    @Test
+    public void TestCanParseForPathOfUrl() {
+        String  firstLineOfRequestHeader = "GET /foobar HTTP/1.1";
+        assertEquals("/foobar", Parser.parseForPathUrl(firstLineOfRequestHeader));
+    }
+
+    @Test
+    public void TestCanParseForMoreComplexPath() {
+        String firstLineOfRequestHeader = "GET /foobar/items/1";
+        assertEquals("/foobar/items/1", Parser.parseForPathUrl(firstLineOfRequestHeader));
     }
 
 }

@@ -16,6 +16,10 @@ public class Parser {
         String line;
 
         while ((line = buffer.readLine()) != null) {
+            if(line.trim().equals("")){
+                break;
+            }
+            System.out.println(line);
             linesOfInputStream.add(line);
         }
 
@@ -27,9 +31,15 @@ public class Parser {
         return words[0];
     }
 
-    public static String parseForUrl(String secondLineOfRequest) {
+    public static String parseForRootUrl(String secondLineOfRequest) {
         String[] words = secondLineOfRequest.split(" ");
         return words[1];
     }
+
+    public static String parseForPathUrl(String firstLineOfRequest) {
+        String[] words = firstLineOfRequest.split(" ");
+        return words[1];
+    }
+
 
 }

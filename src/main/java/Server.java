@@ -18,10 +18,6 @@ public class Server {
         this.routes = routes;
     }
 
-    public Socket getSocket() {
-        return socket;
-    }
-
     public void startServer() {
 
         while (true) {

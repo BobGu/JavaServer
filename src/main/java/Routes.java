@@ -8,6 +8,7 @@ public class Routes {
     public Routes() {
         routes = new ArrayList<Route>();
         routes.add(new Route("GET", "localhost:5000/"));
+        routes.add(new Route("OPTIONS", "localhost:5000/method_options"));
     }
 
     public boolean exist(String httpVerb, String url) {

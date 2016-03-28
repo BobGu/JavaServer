@@ -7,9 +7,11 @@ import java.util.List;
 public class Server {
     private ServerSocket serverSocket;
     private Socket socket;
+    private Router router;
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
+        this.router = new Router();
     }
 
     public void startServer() {
@@ -35,15 +37,15 @@ public class Server {
     private String responseHeader(String httpVerb, String url) {
         String responseHeader;
 
-       // if() {
-       //     responseHeader = "HTTP/1.1 200 OK\r\nAllow: GET,HEAD,POST,OPTIONS,PUT\r\n";
-       // } else if(routes.exist(httpVerb, url)) {
-       //     responseHeader = "HTTP/1.1 200 OK\r\n";
-       // } else {
-       //     responseHeader = "HTTP/1.1 404 Not Found\r\n";
-       // }
+        if(router.requestAllowed(url, httpVerb) && httpVerb.equals("OPTIONS")) {
+            responseHeader = "HTTP/1.1 200 OK\r\nAllow: GET,HEAD,POST,OPTIONS,PUT\r\n";
+        } else if(router.requestAllowed(url, httpVerb)) {
+            responseHeader = "HTTP/1.1 200 OK\r\n";
+        } else {
+            responseHeader = "HTTP/1.1 404 Not Found\r\n";
+        }
 
-        return "fake";
+        return responseHeader;
     }
 
 

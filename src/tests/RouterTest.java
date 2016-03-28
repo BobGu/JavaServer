@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 public class RouterTest {
 
     private Map<String, ArrayList<String>> routes = new HashMap<String, ArrayList<String>>();
@@ -12,14 +15,12 @@ public class RouterTest {
 
     @Before
     public void TestSetup() {
-        ArrayList<String> methods = new ArrayList<String>();
-        methods.add("GET");
-        routes.put("localhost:5000", methods);
-        router = new Router(routes);
+        router = new Router();
     }
 
     @Test
     public void TestUrlExistsInRoutes() {
-        assert(router.requestAllowed("localhost:5000", "GET"));
+        assertTrue(router.requestAllowed("localhost:5000/", "GET"));
     }
+
 }

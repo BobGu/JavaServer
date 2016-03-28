@@ -9,11 +9,11 @@ public class Main {
 
         try {
             if(args.length == 0) {
-                server = new Server(new ServerSocket(5000), new Routes());
+                server = new Server(new ServerSocket(5000));
             } else {
                 String port = args[0];
                 int portNumber = Integer.parseInt(port);
-                server = new Server(new ServerSocket(portNumber), new Routes());
+                server = new Server(new ServerSocket(portNumber));
             }
             server.startServer();
         } catch (IOException e) {

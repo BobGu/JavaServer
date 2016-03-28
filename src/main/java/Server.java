@@ -25,8 +25,11 @@ public class Server {
                 String httpVerb = Parser.parseForHttpVerb(clientHeaderRequestLines.get(0));
                 String url =  urlConstructor(clientHeaderRequestLines);
                 String responseHeader = responseHeader(httpVerb, url);
+                File file = new File("src/main/java/Views/index.html");
+                String responseBody = HtmlToStringConverter.convert(file);
+                String response = responseHeader + responseBody;
 
-                respond(responseHeader);
+                respond(response);
                 socket.shutdownOutput();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -40,7 +43,7 @@ public class Server {
         if(router.requestAllowed(url, httpVerb) && httpVerb.equals("OPTIONS")) {
             responseHeader = "HTTP/1.1 200 OK\r\nAllow: GET,HEAD,POST,OPTIONS,PUT\r\n";
         } else if(router.requestAllowed(url, httpVerb)) {
-            responseHeader = "HTTP/1.1 200 OK\r\n";
+            responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
         } else {
             responseHeader = "HTTP/1.1 404 Not Found\r\n";
         }

@@ -13,7 +13,7 @@ public class Main {
             } else {
                 String port = args[0];
                 int portNumber = Integer.parseInt(port);
-                server = new Server(new ServerSocket(5000), new Routes());
+                server = new Server(new ServerSocket(portNumber), new Routes());
             }
             server.startServer();
         } catch (IOException e) {

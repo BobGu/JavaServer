@@ -25,7 +25,7 @@ public class Router {
         ArrayList<String> rootRoutes = new ArrayList<String>();
         rootRoutes.add("GET");
 
-        routesToReturn.put("localhost:5000/", rootRoutes);
+        routesToReturn.put("/", rootRoutes);
         return routesToReturn;
     }
 

@@ -23,4 +23,7 @@ public class RouterTest {
         assertTrue(router.requestAllowed("localhost:5000/", "GET"));
     }
 
+    @Test public void TestShouldAllowAccessToHomepageRegardlessOfPort() {
+        assertTrue(router.requestAllowed("localhost:9000/", "GET"));
+    }
 }

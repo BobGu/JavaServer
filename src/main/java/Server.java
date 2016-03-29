@@ -23,10 +23,10 @@ public class Server {
                 InputStream clientSocketInputStream = socket.getInputStream();
                 List<String> clientHeaderRequestLines = Parser.parseInputStream(clientSocketInputStream);
                 String httpVerb = Parser.parseForHttpVerb(clientHeaderRequestLines.get(0));
-                String url =  urlConstructor(clientHeaderRequestLines);
-                String responseHeader = responseHeader(httpVerb, url);
-                File file = new File("src/main/java/Views/index.html");
-                String responseBody = HtmlToStringConverter.convert(file);
+                String pathUrl = Parser.parseForPathUrl(clientHeaderRequestLines.get(0));
+                String responseHeader = responseHeader(httpVerb, pathUrl);
+                InputStream fileStream = Server.class.getResourceAsStream("index.html");
+                String responseBody = Parser.convertStreamToString(fileStream);
                 String response = responseHeader + responseBody;
 
                 respond(response);
@@ -55,12 +55,5 @@ public class Server {
     private void respond(String headers) throws IOException {
         socket.getOutputStream().write(headers.getBytes());
     }
-
-    private String urlConstructor(List<String> clientHeaderRequestLines) {
-        String rootUrl = Parser.parseForRootUrl(clientHeaderRequestLines.get(1));
-        String pathUrl = Parser.parseForPathUrl(clientHeaderRequestLines.get(0));
-        return rootUrl + pathUrl;
-    }
-
 
 }

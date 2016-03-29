@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,14 +26,15 @@ public class Parser {
         return linesOfInputStream;
     }
 
+    public static String convertStreamToString(InputStream inputStream) {
+        Scanner s = new Scanner(inputStream).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+
+    }
+
     public static String parseForHttpVerb(String firstLineOfRequest) {
         String[] words = firstLineOfRequest.split(" ");
         return words[0];
-    }
-
-    public static String parseForRootUrl(String secondLineOfRequest) {
-        String[] words = secondLineOfRequest.split(" ");
-        return words[1];
     }
 
     public static String parseForPathUrl(String firstLineOfRequest) {

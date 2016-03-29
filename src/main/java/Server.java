@@ -7,11 +7,11 @@ import java.util.List;
 public class Server {
     private ServerSocket serverSocket;
     private Socket socket;
-    private Router router;
+    private Handler handler;
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
-        this.router = new Router();
+        this.handler = new Handler();
     }
 
     public void startServer() {
@@ -19,16 +19,8 @@ public class Server {
         while (true) {
             try {
                 socket = serverSocket.accept();
-
-                InputStream clientSocketInputStream = socket.getInputStream();
-                List<String> clientHeaderRequestLines = Parser.parseInputStream(clientSocketInputStream);
-                String httpVerb = Parser.parseForHttpVerb(clientHeaderRequestLines.get(0));
-                String pathUrl = Parser.parseForPathUrl(clientHeaderRequestLines.get(0));
-                String responseHeader = responseHeader(httpVerb, pathUrl);
-                InputStream fileStream = Server.class.getResourceAsStream("index.html");
-                String responseBody = Parser.convertStreamToString(fileStream);
-                String response = responseHeader + responseBody;
-
+                InputStream socketInputStream = socket.getInputStream();
+                String response = handler.handleRequest(socketInputStream);
                 respond(response);
                 socket.shutdownOutput();
             } catch (IOException e) {
@@ -37,23 +29,8 @@ public class Server {
         }
     }
 
-    private String responseHeader(String httpVerb, String url) {
-        String responseHeader;
-
-        if(router.requestAllowed(url, httpVerb) && httpVerb.equals("OPTIONS")) {
-            responseHeader = "HTTP/1.1 200 OK\r\nAllow: GET,HEAD,POST,OPTIONS,PUT\r\n";
-        } else if(router.requestAllowed(url, httpVerb)) {
-            responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
-        } else {
-            responseHeader = "HTTP/1.1 404 Not Found\r\n";
-        }
-
-        return responseHeader;
-    }
-
-
-    private void respond(String headers) throws IOException {
-        socket.getOutputStream().write(headers.getBytes());
+    private void respond(String response) throws IOException {
+        socket.getOutputStream().write(response.getBytes());
     }
 
 }

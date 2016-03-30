@@ -11,15 +11,6 @@ public class Router {
         routes = createRoutes();
     }
 
-    public boolean requestAllowed(String url, String httpVerb) {
-        List<String> methods = routes.get(url);
-        if(methods != null) {
-            return methods.contains(httpVerb);
-        } else {
-            return false;
-        }
-    }
-
     public boolean pathExists(String url) {
         List<String> methods = routes.get(url);
         return methods != null;

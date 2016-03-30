@@ -19,11 +19,8 @@ public class RouterTest {
     }
 
     @Test
-    public void TestUrlExistsInRoutes() {
-        assertTrue(router.requestAllowed("localhost:5000/", "GET"));
+    public void TestRootPathExists() {
+        assertTrue(router.pathExists("/"));
     }
 
-    @Test public void TestShouldAllowAccessToHomepageRegardlessOfPort() {
-        assertTrue(router.requestAllowed("localhost:9000/", "GET"));
-    }
 }

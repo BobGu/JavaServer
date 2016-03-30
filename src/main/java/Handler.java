@@ -45,7 +45,7 @@ public class Handler {
     }
 
     private String parseForRoute(InputStream socketInputStream) throws IOException {
-        String requestHeader = Parser.parseInputStream(socketInputStream);
+        String requestHeader = Parser.parseRequest(socketInputStream);
         String httpVerb = Parser.parseForHttpVerb(requestHeader);
         String pathUrl = Parser.parseForPathUrl(requestHeader);
         return httpVerb + " " + pathUrl;

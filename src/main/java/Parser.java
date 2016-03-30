@@ -10,28 +10,22 @@ import java.util.regex.Pattern;
 
 public class Parser {
 
-    public static String parseInputStream(InputStream inputStream) throws IOException {
-        String request= "";
-        BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream));
-        String line;
+    public static String parseRequest(InputStream inputStream) throws IOException {
+        String parsedRequest= "";
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-        while (!(line = buffer.readLine()).equals("")) {
-            request += line;
+        parsedRequest += readHeadersOfRequest(reader);
+
+        if(isBodyOfRequest(parsedRequest)) {
+            parsedRequest += readBodyOfRequest(parsedRequest, reader);
         }
 
-        if(isContentLength(request)) {
-            String contentLength = getContentLength(request);
-            int lettersToRead = Integer.parseInt(contentLength);
-            int c;
+        return parsedRequest;
+    }
 
-            for(int i = 0 ; i < lettersToRead; i++) {
-                c = buffer.read();
-                request += (char)c;
-            }
-        }
-
-        System.out.println(request);
-        return request;
+    public static String parseInputStream(InputStream inputStream) {
+        Scanner s = new Scanner(inputStream).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
     }
 
     public static String parseForHttpVerb(String requestHeader) {
@@ -44,7 +38,32 @@ public class Parser {
         return words[1];
     }
 
-    private static boolean isContentLength(String header) {
+    private static String readHeadersOfRequest(BufferedReader reader) throws IOException {
+        String requestHeaders = "";
+
+        String line;
+        while (!(line = reader.readLine()).equals("")) {
+            requestHeaders += line + " ";
+        }
+
+        return requestHeaders;
+    }
+
+    private static String readBodyOfRequest(String request, BufferedReader reader) throws IOException {
+        String requestBody = "";
+        String contentLength = getContentLength(request);
+        int lettersToRead = Integer.parseInt(contentLength);
+        int c;
+
+        for (int i = 0; i < lettersToRead; i++) {
+            c = reader.read();
+            requestBody += (char) c;
+        }
+
+        return requestBody;
+    }
+
+    private static boolean isBodyOfRequest(String header) {
         return header.contains("Content-Length");
     }
 
@@ -54,6 +73,7 @@ public class Parser {
         matcher.find();
         return matcher.group(1);
     }
+
 
 
 

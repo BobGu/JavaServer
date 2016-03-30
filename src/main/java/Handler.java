@@ -18,22 +18,22 @@ public class Handler {
     }
 
     public String handleRequest(InputStream socketInputStream) throws IOException {
-        String route = parseForRoute(socketInputStream);
-        boolean pathExists = router.pathExists(Parser.parseForPathUrl(route));
-        return handleResponse(route, pathExists);
+        setRoute(parseForRoute(socketInputStream));
+        boolean pathExists = router.pathExists(Parser.parseForPathUrl(getRoute()));
+        return handleResponse(pathExists);
     }
 
-    private String handleResponse(String route, boolean pathExists) throws IOException {
+    private String handleResponse(boolean pathExists) throws IOException {
         String response = "";
 
-        if(routesHttpVerb(route).equals("GET") && routesPath(route).equals("/")) {
-            String responseHeader = "HTTP/1.1 200 OK\r\n";
+        if(httpVerb(getRoute()).equals("GET") && path(getRoute()).equals("/")) {
+            String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
             InputStream fileStream = Server.class.getResourceAsStream("index.html");
             String responseBody = Parser.parseInputStream(fileStream);
             response = responseHeader + responseBody;
-        } else if(routesHttpVerb(route).equals("POST") && routesPath(route).equals("/form")) {
+        } else if(httpVerb(getRoute()).equals("POST") && path(getRoute()).equals("/form")) {
             response = "HTTP/1.1 200 OK\r\n";
-        } else if(routesHttpVerb(route).equals("OPTIONS") && routesPath(route).equals("/")) {
+        } else if(httpVerb(getRoute()).equals("OPTIONS") && path(getRoute()).equals("/")) {
             response = "HTTP/1.1 200 OK\r\nAllow: GET,HEAD,POST,OPTIONS,PUT\r\n";
         } else if(pathExists) {
             response = "HTTP/1.1 405 Method now allowed";
@@ -51,5 +51,12 @@ public class Handler {
         return httpVerb + " " + pathUrl;
     }
 
+    private String httpVerb(String route) {
+        return Parser.parseForHttpVerb(getRoute());
+    }
+
+    private String path(String route) {
+        return Parser.parseForPathUrl(route);
+    }
 
 }

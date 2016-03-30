@@ -21,6 +21,7 @@ public class Server {
                 socket = serverSocket.accept();
                 InputStream socketInputStream = socket.getInputStream();
                 String response = handler.handleRequest(socketInputStream);
+                System.out.println(response);
                 respond(response);
                 socket.shutdownOutput();
             } catch (IOException e) {

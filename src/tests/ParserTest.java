@@ -14,9 +14,8 @@ public class ParserTest {
         InputStream inputStream = new ByteArrayInputStream(requestString.getBytes());
 
         List<String> requestHeaderLines;
-        requestHeaderLines = Parser.parseInputStream(inputStream);
 
-        assertEquals("GET /logs HTTP/1.1", requestHeaderLines.get(0));
+        assertEquals(requestString, Parser.parseInputStream(inputStream));
     }
 
     @Test

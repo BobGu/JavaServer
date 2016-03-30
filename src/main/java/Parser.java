@@ -11,17 +11,27 @@ import java.util.regex.Pattern;
 public class Parser {
 
     public static String parseInputStream(InputStream inputStream) throws IOException {
-        String requestHeader = "";
+        String request= "";
         BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream));
         String line;
 
-        while ((line = buffer.readLine()) != null) {
-            if (line.trim().equals("")) {
-                break;
-            }
-            requestHeader += line;
+        while (!(line = buffer.readLine()).equals("")) {
+            request += line;
         }
-        return requestHeader;
+
+        if(isContentLength(request)) {
+            String contentLength = getContentLength(request);
+            int lettersToRead = Integer.parseInt(contentLength);
+            int c;
+
+            for(int i = 0 ; i < lettersToRead; i++) {
+                c = buffer.read();
+                request += (char)c;
+            }
+        }
+
+        System.out.println(request);
+        return request;
     }
 
     public static String parseForHttpVerb(String requestHeader) {
@@ -33,6 +43,18 @@ public class Parser {
         String[] words = requestHeader.split(" ");
         return words[1];
     }
+
+    private static boolean isContentLength(String header) {
+        return header.contains("Content-Length");
+    }
+
+    private static String getContentLength(String header) {
+        Pattern pattern = Pattern.compile("Content-Length: ([0-9]+)");
+        Matcher matcher = pattern.matcher(header);
+        matcher.find();
+        return matcher.group(1);
+    }
+
 
 
 }

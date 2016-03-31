@@ -6,7 +6,6 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
 public class ParserTest {
 

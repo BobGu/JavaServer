@@ -55,6 +55,8 @@ public class Router {
             response = controller.get();
         } else if(httpVerb.equals("POST")) {
             response = controller.post(request);
+        } else if(httpVerb.equals("DELETE")) {
+            response = controller.delete();
         }
 
         return response;

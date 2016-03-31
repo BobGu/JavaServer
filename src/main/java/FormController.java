@@ -4,11 +4,18 @@ import java.io.File;
 
 public class FormController extends Controller {
 
-    public String get() {
+    public String get() throws FileNotFoundException {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
+        String responseBody;
+        URL url = getClass().getResource("form.html");
 
-        InputStream fileStream = Server.class.getResourceAsStream("form.html");
-        String responseBody = Parser.parseInputStream(fileStream);
+        if(url != null) {
+            File file = new File(url.getPath());
+            InputStream htmlInputStream = new FileInputStream(file);
+            responseBody = Parser.parseInputStream(htmlInputStream);
+        } else {
+            responseBody = "";
+        }
 
         return responseHeader + responseBody;
     }
@@ -27,6 +34,16 @@ public class FormController extends Controller {
 
         fileOutputStream.write(buffer);
         fileOutputStream.close();
+
+        return responseHeader;
+    }
+
+    public String delete() {
+        String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
+
+        URL url = getClass().getResource("form.html");
+        File fileToDelete = new File(url.getPath());
+        fileToDelete.delete();
 
         return responseHeader;
     }

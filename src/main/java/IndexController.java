@@ -12,4 +12,8 @@ public class IndexController extends Controller {
     public String post(String request) {
         return "";
     }
+
+    public String delete() {
+       return "";
+    }
 }

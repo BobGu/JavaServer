@@ -1,16 +1,15 @@
 import java.io.*;
 import java.net.URL;
+import java.io.File;
 
 public class FormController extends Controller {
 
-    public String get() throws FileNotFoundException {
+    public String get() {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
 
-        URL url = getClass().getResource("form.html");
-        File fileToUpdate = new File(url.getPath());
-        InputStream htmlInputStream = new FileInputStream(fileToUpdate);
+        InputStream fileStream = Server.class.getResourceAsStream("form.html");
+        String responseBody = Parser.parseInputStream(fileStream);
 
-        String responseBody = Parser.parseInputStream(htmlInputStream);
         return responseHeader + responseBody;
     }
 

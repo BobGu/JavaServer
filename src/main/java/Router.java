@@ -33,15 +33,11 @@ public class Router {
         String httpVerb = Parser.parseForHttpVerb(route);
 
         if(path.equals("/")) {
-            String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
-            InputStream fileStream = Server.class.getResourceAsStream("index.html");
-            String responseBody = Parser.parseInputStream(fileStream);
-            response = responseHeader + responseBody;
+            IndexController indexController = new IndexController();
+            response = chooseAndCallControllerAction(indexController, httpVerb, request);
         } else if(path.equals("/form")) {
             FormController formController = new FormController();
             response = chooseAndCallControllerAction(formController, httpVerb, request);
-        } else if(httpVerb.equals("POST") && path.equals("/form")) {
-            response = "HTTP/1.1 200 OK\r\n";
         } else if(httpVerb.equals("OPTIONS") && path.equals("/")) {
             response = "HTTP/1.1 200 OK\r\nAllow: GET,HEAD,POST,OPTIONS,PUT\r\n";
         } else if(pathExists) {

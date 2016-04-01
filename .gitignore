@@ -6,4 +6,8 @@ JavaServer.iws
 out/production/JavaServer/Server.class
 out/test/JavaServer/ServertTest.class
 out*
+build/*
+gradle/
+gradlew
+gradlew.bat
 

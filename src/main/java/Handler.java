@@ -18,11 +18,26 @@ public class Handler {
         this.route = route;
     }
 
-    public String handleRequest(InputStream socketInputStream) throws IOException {
-        request = Parser.parseRequest(socketInputStream);
-        route = parseForRoute();
-        boolean pathExists = router.pathExists(Parser.parseForPathUrl(getRoute()));
-        return router.chooseRoute(pathExists, route, request);
+    public String getRequest() {
+        return request;
+    }
+
+    public void setRequest(String request) {
+        this.request = request;
+    }
+
+    public String handleRequestAndResponse(InputStream socketInputStream) throws IOException {
+        handleRequest(socketInputStream);
+        return response();
+    }
+
+    private void handleRequest(InputStream socketInputStream) throws IOException {
+        setRequest(Parser.parseRequest(socketInputStream));
+        setRoute(parseForRoute());
+    }
+
+    private String response() throws IOException {
+        return router.getResponse(getRoute(), getRequest());
     }
 
     private String parseForRoute() throws IOException {

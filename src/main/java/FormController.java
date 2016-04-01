@@ -33,12 +33,11 @@ public class FormController extends Controller {
 
     public String delete() {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
+        File file= new File("../resources/main/form.txt");
 
-        URL url = getClass().getResource("form.html");
-        File fileToDelete = new File(url.getPath());
-        fileToDelete.delete();
-
-        //delete a file if it exists if not don't try and delete it just return a 200ok !
+        if(file.exists()) {
+            file.delete();
+        }
 
         return responseHeader;
     }

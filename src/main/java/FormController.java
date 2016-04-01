@@ -26,7 +26,6 @@ public class FormController extends Controller {
         File newFile = new File("../resources/main/form.txt");
         FileWriter writer = new FileWriter(newFile, false);
         writer.write(textToWrite);
-        newFile.setWritable(true, false);
         writer.close();
 
         return responseHeader;

@@ -7,15 +7,9 @@ public class FormController extends Controller {
     public String get() throws FileNotFoundException {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
         String responseBody;
-        URL url = getClass().getResource("form.html");
 
-        if(url != null) {
-            File file = new File(url.getPath());
-            InputStream htmlInputStream = new FileInputStream(file);
-            responseBody = Parser.parseInputStream(htmlInputStream);
-        } else {
-            responseBody = "";
-        }
+        InputStream fileStream = Server.class.getResourceAsStream("form.txt");
+        responseBody = Parser.parseInputStream(fileStream);
 
         return responseHeader + responseBody;
     }

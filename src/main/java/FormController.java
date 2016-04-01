@@ -22,20 +22,12 @@ public class FormController extends Controller {
     public String post(String request) throws IOException {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
         String textToWrite = updateText(request);
-        URL url = getClass().getResource("form.txt");
 
-        if (url != null) {
-            File fileToOverWrite = new File(url.getPath());
-            FileWriter writer = new FileWriter(fileToOverWrite, false);
-            writer.write(textToWrite);
-            writer.close();
-        } else {
-            File newFile = new File("../resources/main/form.txt");
-            FileWriter writer = new FileWriter(newFile, false);
-            writer.write(textToWrite);
-            newFile.setWritable(true, false);
-            writer.close();
-        }
+        File newFile = new File("../resources/main/form.txt");
+        FileWriter writer = new FileWriter(newFile, false);
+        writer.write(textToWrite);
+        newFile.setWritable(true, false);
+        writer.close();
 
         return responseHeader;
     }

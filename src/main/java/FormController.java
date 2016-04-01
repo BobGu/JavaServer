@@ -7,9 +7,14 @@ public class FormController extends Controller {
     public String get() throws FileNotFoundException {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
         String responseBody;
+        File file = new File("../resources/main/form.txt");
 
-        InputStream fileStream = new FileInputStream("../resources/main/form.txt");
-        responseBody = Parser.parseInputStream(fileStream);
+        if(file.exists()) {
+            InputStream fileStream = new FileInputStream(file);
+            responseBody = Parser.parseInputStream(fileStream);
+        } else {
+            responseBody = "";
+        }
 
         return responseHeader + responseBody;
     }
@@ -21,7 +26,6 @@ public class FormController extends Controller {
 
         if (url != null) {
             File fileToOverWrite = new File(url.getPath());
-            System.out.println(fileToOverWrite.canWrite());
             FileWriter writer = new FileWriter(fileToOverWrite, false);
             writer.write(textToWrite);
             writer.close();

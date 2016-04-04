@@ -15,7 +15,6 @@ public class FormController implements Controller {
         } else {
             responseBody = "";
         }
-
         return responseHeader + responseBody;
     }
 

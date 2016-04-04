@@ -2,7 +2,7 @@ import java.io.*;
 import java.net.URL;
 import java.io.File;
 
-public class FormController extends Controller {
+public class FormController implements Controller {
 
     public String get() throws IOException {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";

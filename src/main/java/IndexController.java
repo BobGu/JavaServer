@@ -3,7 +3,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class IndexController extends Controller {
+public class IndexController implements Controller {
 
     public String get() throws IOException {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";

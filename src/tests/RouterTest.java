@@ -42,13 +42,8 @@ public class RouterTest {
         }
     }
 
-    private abstract class MockController extends Controller{
-        public abstract String get();
-        public abstract String post(String request);
-        public abstract String delete();
-    }
 
-    private class MockIndexController extends MockController{
+    private class MockIndexController implements Controller {
 
         public String get() {
             return "HTTP/1.1 200 OK\r\n\r\n";

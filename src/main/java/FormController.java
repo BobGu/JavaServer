@@ -11,7 +11,7 @@ public class FormController extends Controller {
 
         if(file.exists()) {
             InputStream fileStream = new FileInputStream(file);
-            responseBody = Parser.parseInputStream(fileStream);
+            responseBody = Parser.fileToText(fileStream);
         } else {
             responseBody = "";
         }

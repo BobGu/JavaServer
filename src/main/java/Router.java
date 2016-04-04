@@ -1,55 +1,44 @@
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Router {
 
-    private Map<String, ArrayList<String>> routes;
+    private Map<String, Controller> routes;
 
     public Router() {
-        routes = createRoutes();
+        this(null);
     }
 
-    private Map<String, ArrayList<String>> createRoutes() {
-        HashMap<String, ArrayList<String>> routesToReturn = new HashMap<String, ArrayList<String>>();
-        ArrayList<String> rootRoutes = new ArrayList<String>();
-        rootRoutes.add("GET");
-
-        routesToReturn.put("/", rootRoutes);
-        return routesToReturn;
-    }
-
-    public String getResponse(String request) throws IOException {
-        String response = "";
-        String path = Parser.parseForPathUrl(request);
-        String httpVerb = Parser.parseForHttpVerb(request);
-
-        if(path.equals("/")) {
-            IndexController indexController = new IndexController();
-            response = chooseAndCallControllerAction(indexController, httpVerb, request);
-        } else if(path.equals("/form")) {
-            FormController formController = new FormController();
-            response = chooseAndCallControllerAction(formController, httpVerb, request);
-        } else if(httpVerb.equals("OPTIONS") && path.equals("/")) {
-            response = "HTTP/1.1 200 OK\r\nAllow: GET,HEAD,POST,OPTIONS,PUT\r\n";
+    public Router(Map<String,Controller> routes) {
+        if (routes == null) {
+            this.routes = createRoutes();
         } else {
-            response = "HTTP/1.1 404 Not Found\r\n";
+            this.routes = routes;
         }
-
-        return response;
     }
 
-    private String chooseAndCallControllerAction(Controller controller, String httpVerb, String request) throws IOException {
+    private Map<String, Controller> createRoutes() {
+        Map<String, Controller> routes = new HashMap<String, Controller>();
+
+        routes.put("/", new IndexController());
+        routes.put("/form", new FormController());
+        return routes;
+    }
+
+    public String handle(Request request) throws IOException {
+        Controller controller = routes.get(request.getPath());
+        return callControllerAction(controller, request);
+    }
+
+    private String callControllerAction(Controller controller, Request request) throws IOException {
         String response =  "";
 
-        if(httpVerb.equals("GET")) {
+        if(request.getHttpVerb().equals("GET")) {
             response = controller.get();
-        } else if(httpVerb.equals("POST")) {
-            response = controller.post(request);
-        } else if(httpVerb.equals("DELETE")) {
+        } else if(request.getHttpVerb().equals("POST")) {
+            response = controller.post(request.getBody());
+        } else if(request.getHttpVerb().equals("DELETE")) {
             response = controller.delete();
         }
 

@@ -29,6 +29,11 @@ public class Parser {
         return parsedRequest;
     }
 
+    public static String fileToText(InputStream inputStream) throws IOException {
+        Scanner s = new Scanner(inputStream).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+
     public static String parseForHttpVerb(String requestHeader) {
         String[] words = requestHeader.split(" ");
         return words[0];

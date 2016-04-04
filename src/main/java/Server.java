@@ -7,11 +7,11 @@ import java.util.List;
 public class Server {
     private ServerSocket serverSocket;
     private Socket socket;
-    private Handler handler;
+    private Router router;
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
-        this.handler = new Handler();
+        this.router = new Router();
     }
 
     public void startServer() {
@@ -20,7 +20,8 @@ public class Server {
             try {
                 socket = serverSocket.accept();
                 InputStream socketInputStream = socket.getInputStream();
-                String response = handler.handleRequestAndResponse(socketInputStream);
+                Request request = Parser.parseAndCreateRequest(socketInputStream);
+                String response = router.handle(request);
                 respond(response);
                 socket.shutdownOutput();
             } catch (IOException e) {

@@ -2,15 +2,21 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Parser {
 
-    public static String parseRequest(InputStream inputStream) throws IOException {
+    public static Request parseAndCreateRequest(InputStream inputStream) throws IOException {
+        String request = parseInputStream(inputStream);
+        Map<String,String> fields = parseRequest(request);
+
+        return new Request(fields.get("path"), fields.get("httpVerb"), fields.get("body"));
+    }
+
+
+    public static String parseInputStream(InputStream inputStream) throws IOException {
         String parsedRequest= "";
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -23,11 +29,6 @@ public class Parser {
         return parsedRequest;
     }
 
-    public static String parseInputStream(InputStream inputStream) {
-        Scanner s = new Scanner(inputStream).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
-    }
-
     public static String parseForHttpVerb(String requestHeader) {
         String[] words = requestHeader.split(" ");
         return words[0];
@@ -36,6 +37,20 @@ public class Parser {
     public static String parseForPathUrl(String requestHeader) {
         String[] words = requestHeader.split(" ");
         return words[1];
+    }
+
+    private static Map<String, String> parseRequest(String request) {
+        Map<String, String> fields = new HashMap<String,String>();
+
+        String path = parseForPathUrl(request);
+        String httpVerb = parseForHttpVerb(request);
+        String body = isBodyOfRequest(request) ? parseForBody(request) : null;
+
+        fields.put("path", path);
+        fields.put("httpVerb", httpVerb);
+        fields.put("body", body);
+
+        return fields;
     }
 
     private static String readHeadersOfRequest(BufferedReader reader) throws IOException {
@@ -74,7 +89,9 @@ public class Parser {
         return matcher.group(1);
     }
 
-
-
+    private static String parseForBody(String request) {
+        String[] requestWords = request.split(" ");
+        return requestWords[requestWords.length - 1];
+    }
 
 }

@@ -14,7 +14,7 @@ public class Handler {
     }
 
     private String request(InputStream socketInputStream) throws IOException {
-        return Parser.parseRequest(socketInputStream);
+        return Parser.parseInputStream(socketInputStream);
     }
 
     private String response(String request) throws IOException {

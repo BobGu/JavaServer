@@ -8,24 +8,21 @@ public class RequestTest {
 
     @Before
     public void RequestObjectCreation() {
-        request = new Request();
+        request = new Request("/", "GET", "data=fatcat");
     }
 
     @Test
     public void TestCanSetAPath() {
-        request.setPath("/");
         assertEquals("/", request.getPath());
     }
 
     @Test
     public void TestCanSetAHttpVerb() {
-        request.setHttpVerb("GET");
         assertEquals("GET", request.getHttpVerb());
     }
 
     @Test
     public void TestCanSetABody() {
-        request.setBody("data=fatcat");
         assertEquals("data=fatcat", request.getBody());
     }
 

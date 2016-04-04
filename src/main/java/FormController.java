@@ -4,7 +4,7 @@ import java.io.File;
 
 public class FormController extends Controller {
 
-    public String get() throws FileNotFoundException {
+    public String get() throws IOException {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
         String responseBody;
         File file = new File("../resources/main/form.txt");

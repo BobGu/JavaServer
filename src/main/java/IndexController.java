@@ -1,8 +1,9 @@
+import java.io.IOException;
 import java.io.InputStream;
 
 public class IndexController extends Controller {
 
-    public String get() {
+    public String get() throws IOException {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
         InputStream fileStream = Server.class.getResourceAsStream("index.html");
         String responseBody = Parser.parseInputStream(fileStream);

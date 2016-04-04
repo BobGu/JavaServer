@@ -14,7 +14,7 @@ public class ParserTest {
         String request= "GET /logs HTTP/1.1\r\nHost: localhost:5000\r\nConnection: Keep-Alive\r\nUser-Agent: Apache-HttpClient/4.3.5 (java 1.5)\r\nAccept-Encoding: gzip,deflate\r\n\r\n";
         InputStream inputStream = new ByteArrayInputStream(request.getBytes());
 
-        String parsedRequest = Parser.parseRequest(inputStream);
+        String parsedRequest = Parser.parseInputStream(inputStream);
 
         Assert.assertThat(parsedRequest, containsString("Host: localhost:5000"));
     }
@@ -24,7 +24,7 @@ public class ParserTest {
         String request = "POST /foobar HTTP/1.1 Host: localhost:5000/form Connection: Keep-Alive Content-Length: 10\r\n\r\nname=Johns";
         InputStream inputStream = new ByteArrayInputStream(request.getBytes());
 
-        String parsedRequest = Parser.parseRequest(inputStream);
+        String parsedRequest = Parser.parseInputStream(inputStream);
 
         Assert.assertThat(parsedRequest, containsString("name=Johns"));
     }
@@ -46,5 +46,18 @@ public class ParserTest {
         String firstLineOfRequestHeader = "GET /foobar/items/1";
         assertEquals("/foobar/items/1", Parser.parseForPathUrl(firstLineOfRequestHeader));
     }
+
+    @Test
+    public void TestCanCreateARequestObject() throws IOException {
+        String requestString = "GET /logs HTTP/1.1\r\nHost: localhost:5000\r\nConnection: Keep-Alive\r\nUser-Agent: Apache-HttpClient/4.3.5 (java 1.5)\r\nAccept-Encoding: gzip,deflate\r\n\r\n";
+        InputStream inputStream = new ByteArrayInputStream(requestString.getBytes());
+
+        Request request = Parser.parseAndCreateRequest(inputStream);
+
+        assertEquals("/logs", request.getPath());
+        assertEquals( "GET", request.getHttpVerb());
+        assertEquals(null, request.getBody());
+    }
+
 
 }

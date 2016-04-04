@@ -22,10 +22,10 @@ public class Router {
         return routesToReturn;
     }
 
-    public String getResponse(String route, String request) throws IOException {
+    public String getResponse(String request) throws IOException {
         String response = "";
-        String path = Parser.parseForPathUrl(route);
-        String httpVerb = Parser.parseForHttpVerb(route);
+        String path = Parser.parseForPathUrl(request);
+        String httpVerb = Parser.parseForHttpVerb(request);
 
         if(path.equals("/")) {
             IndexController indexController = new IndexController();

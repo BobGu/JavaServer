@@ -13,11 +13,6 @@ public class Router {
         routes = createRoutes();
     }
 
-    public boolean pathExists(String url) {
-        List<String> methods = routes.get(url);
-        return methods != null;
-    }
-
     private Map<String, ArrayList<String>> createRoutes() {
         HashMap<String, ArrayList<String>> routesToReturn = new HashMap<String, ArrayList<String>>();
         ArrayList<String> rootRoutes = new ArrayList<String>();
@@ -27,10 +22,10 @@ public class Router {
         return routesToReturn;
     }
 
-    public String chooseRoute(boolean pathExists, String route, String request) throws IOException {
+    public String getResponse(String request) throws IOException {
         String response = "";
-        String path = Parser.parseForPathUrl(route);
-        String httpVerb = Parser.parseForHttpVerb(route);
+        String path = Parser.parseForPathUrl(request);
+        String httpVerb = Parser.parseForHttpVerb(request);
 
         if(path.equals("/")) {
             IndexController indexController = new IndexController();
@@ -40,8 +35,6 @@ public class Router {
             response = chooseAndCallControllerAction(formController, httpVerb, request);
         } else if(httpVerb.equals("OPTIONS") && path.equals("/")) {
             response = "HTTP/1.1 200 OK\r\nAllow: GET,HEAD,POST,OPTIONS,PUT\r\n";
-        } else if(pathExists) {
-            response = "HTTP/1.1 405 Method now allowed";
         } else {
             response = "HTTP/1.1 404 Not Found\r\n";
         }
@@ -51,6 +44,7 @@ public class Router {
 
     private String chooseAndCallControllerAction(Controller controller, String httpVerb, String request) throws IOException {
         String response =  "";
+
         if(httpVerb.equals("GET")) {
             response = controller.get();
         } else if(httpVerb.equals("POST")) {

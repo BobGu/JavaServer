@@ -20,7 +20,7 @@ public class Server {
             try {
                 socket = serverSocket.accept();
                 InputStream socketInputStream = socket.getInputStream();
-                String response = handler.handleRequest(socketInputStream);
+                String response = handler.handleRequestAndResponse(socketInputStream);
                 respond(response);
                 socket.shutdownOutput();
             } catch (IOException e) {

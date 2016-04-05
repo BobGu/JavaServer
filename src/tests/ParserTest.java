@@ -1,3 +1,4 @@
+import Requests.Request;
 import org.junit.Test;
 import org.junit.Assert;
 import java.io.ByteArrayInputStream;

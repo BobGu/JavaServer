@@ -1,3 +1,5 @@
+import Requests.Request;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -16,11 +18,15 @@ public class IndexController implements Controller {
         return responseHeader + responseBody;
     }
 
-    public String post(String request) {
+    public String post(Request request) {
         return "";
     }
 
     public String delete() {
+       return "";
+    }
+
+    public String put(Request request) {
        return "";
     }
 }

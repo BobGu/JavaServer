@@ -1,3 +1,5 @@
+import Requests.Request;
+
 import java.io.*;
 import java.net.URL;
 import java.io.File;
@@ -33,9 +35,9 @@ public class FormController implements Controller {
         return responseHeader + responseBody;
     }
 
-    public String post(String request) throws IOException {
+    public String post(Request request) throws IOException {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
-        String textToWrite = updateText(request);
+        String textToWrite = request.getBody();
         File file = new File(resourcePath);
 
         if(file.exists()) {
@@ -60,9 +62,8 @@ public class FormController implements Controller {
         return responseHeader;
     }
 
-    private String updateText(String request) throws IOException {
-        String[] requestWords = request.split(" ");
-        return requestWords[requestWords.length - 1];
+    public String put(Request request) throws IOException {
+        return post(request);
     }
 
     private String updateFileText(File file, String textToWrite) throws IOException {
@@ -76,28 +77,29 @@ public class FormController implements Controller {
         existingKeyMatcher.find();
         replacementKeyMatcher.find();
 
-
         if(areKeysTheSame(existingKeyMatcher, replacementKeyMatcher)) {
-            replaceValue(fileText, textToWrite);
+            fileText = replaceValue(fileText, textToWrite);
         } else {
             fileText += "\n" + textToWrite;
         }
+
 
         return fileText;
 
     }
     private boolean areKeysTheSame(Matcher existingMatcher, Matcher replacementMatcher) {
-        return existingMatcher.group(1) == replacementMatcher.group(1);
+        return existingMatcher.group(1).equals(replacementMatcher.group(1));
     }
-    private void replaceValue(String fileText, String textToWrite) {
-        Pattern valuePattern = Pattern.compile("=+[a-z]");
+
+    private String replaceValue(String fileText, String textToWrite) {
+        Pattern valuePattern = Pattern.compile("(=[a-z ]+)");
         Matcher existingValueMatcher = valuePattern.matcher(fileText);
         Matcher replacementValueMatcher = valuePattern.matcher(textToWrite);
 
         existingValueMatcher.find();
         replacementValueMatcher.find();
 
-        fileText.replace(existingValueMatcher.group(1), replacementValueMatcher.group(1));
+        return fileText.replace(existingValueMatcher.group(1), replacementValueMatcher.group(1));
     }
 
 }

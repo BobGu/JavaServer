@@ -1,3 +1,5 @@
+import Requests.Request;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
@@ -38,9 +40,11 @@ public class Router {
         if(request.getHttpVerb().equals("GET")) {
             response = controller.get();
         } else if(request.getHttpVerb().equals("POST")) {
-            response = controller.post(request.getBody());
+            response = controller.post(request);
         } else if(request.getHttpVerb().equals("DELETE")) {
             response = controller.delete();
+        } else if(request.getHttpVerb().equals("PUT")) {
+            response = controller.put(request);
         }
 
         return response;

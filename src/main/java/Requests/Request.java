@@ -1,3 +1,4 @@
+package Requests;
 public class Request {
     private String path;
     private String httpVerb;

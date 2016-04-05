@@ -1,3 +1,5 @@
+import Mocks.MockRequest;
+import Requests.Request;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -32,16 +34,6 @@ public class RouterTest {
         assertEquals("HTTP/1.1 200 OK\r\n\r\n", response);
     }
 
-    private class MockRequest extends Request {
-        private String path;
-        private String httpVerb;
-        private String body;
-
-        public MockRequest(String path, String httpVerb, String body) {
-            super(path, httpVerb, body);
-        }
-    }
-
 
     private class MockIndexController implements Controller {
 
@@ -49,13 +41,15 @@ public class RouterTest {
             return "HTTP/1.1 200 OK\r\n\r\n";
         }
 
-        public String post(String request) {
+        public String post(Request request) {
             return "HTTP/1.1 200 OK\r\n\r\n";
         }
 
         public String delete() {
             return "hello";
         }
+
+        public String put(Request request) { return "yo";}
 
     }
 

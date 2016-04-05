@@ -15,8 +15,8 @@ public class FormControllerTest {
 
     @Before
     public void TestCreateFormController() {
-        File file = new File("src/tests/TestFiles/fakeform.txt");
-        formController = new FormController(file);
+        String path = "src/tests/TestFiles/fakeform.txt";
+        formController = new FormController(path);
     }
 
     @Test

@@ -23,7 +23,7 @@ public class Router {
         Map<String, Controller> routes = new HashMap<String, Controller>();
 
         routes.put("/", new IndexController());
-        routes.put("/form", new FormController(new File("../main/resources/form.txt")));
+        routes.put("/form", new FormController());
         return routes;
     }
 

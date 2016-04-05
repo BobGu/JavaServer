@@ -24,9 +24,6 @@ public class FormControllerTest {
     }
 
     public void createFile() throws IOException {
-        File file = new File("src/tests/TestFiles/fakeform.txt");
-        file.createNewFile();
-
         FileWriter writer = new FileWriter("src/tests/TestFiles/fakeform.txt", false);
         writer.write("data=form form test");
         writer.close();
@@ -52,12 +49,12 @@ public class FormControllerTest {
     public void TestPostAddsDataIfKeyDoesNotExist() throws IOException {
         createFile();
 
-        String request = "data=hello";
+        String request = "greeting=hello";
         String response = formController.post(request);
         String getResponse = formController.get();
 
         Assert.assertThat(formController.get(), containsString("data=form form test"));
-        Assert.assertThat(getResponse, containsString("data=hello"));
+        Assert.assertThat(getResponse, containsString("greeting=hello"));
     }
 
     @Test

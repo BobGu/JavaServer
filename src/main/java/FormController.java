@@ -39,7 +39,7 @@ public class FormController implements Controller {
         File file = new File(resourcePath);
 
         if(file.exists()) {
-            updateFileText(file, textToWrite);
+            textToWrite = updateFileText(file, textToWrite);
         }
             FileWriter writer = new FileWriter(resourcePath, false);
             writer.write(textToWrite);
@@ -76,18 +76,19 @@ public class FormController implements Controller {
         existingKeyMatcher.find();
         replacementKeyMatcher.find();
 
-        boolean keysAreTheSame = existingKeyMatcher.group(1) == replacementKeyMatcher.group(1);
 
-        if(keysAreTheSame) {
+        if(areKeysTheSame(existingKeyMatcher, replacementKeyMatcher)) {
             replaceValue(fileText, textToWrite);
         } else {
-            fileText += textToWrite;
+            fileText += "\n" + textToWrite;
         }
 
         return fileText;
 
     }
-
+    private boolean areKeysTheSame(Matcher existingMatcher, Matcher replacementMatcher) {
+        return existingMatcher.group(1) == replacementMatcher.group(1);
+    }
     private void replaceValue(String fileText, String textToWrite) {
         Pattern valuePattern = Pattern.compile("=+[a-z]");
         Matcher existingValueMatcher = valuePattern.matcher(fileText);

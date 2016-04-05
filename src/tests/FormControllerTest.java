@@ -49,6 +49,18 @@ public class FormControllerTest {
     }
 
     @Test
+    public void TestPostAddsDataIfKeyDoesNotExist() throws IOException {
+        createFile();
+
+        String request = "data=hello";
+        String response = formController.post(request);
+        String getResponse = formController.get();
+
+        Assert.assertThat(formController.get(), containsString("data=form form test"));
+        Assert.assertThat(getResponse, containsString("data=hello"));
+    }
+
+    @Test
     public void TestDeleteMethodDeletesAFile() throws IOException {
         createFile();
         Assert.assertThat(formController.get(), containsString("data=form form test"));

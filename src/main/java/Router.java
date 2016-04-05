@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class Router {
         Map<String, Controller> routes = new HashMap<String, Controller>();
 
         routes.put("/", new IndexController());
-        routes.put("/form", new FormController());
+        routes.put("/form", new FormController(new File("../main/resources/form.txt")));
         return routes;
     }
 

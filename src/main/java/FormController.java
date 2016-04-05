@@ -3,14 +3,18 @@ import java.net.URL;
 import java.io.File;
 
 public class FormController implements Controller {
+    private File resource;
+
+    public FormController(File resourcePath) {
+        this.resource= resourcePath;
+    }
 
     public String get() throws IOException {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
         String responseBody;
-        File file = new File("../resources/main/form.txt");
 
-        if(file.exists()) {
-            InputStream fileStream = new FileInputStream(file);
+        if(resource.exists()) {
+            InputStream fileStream = new FileInputStream(resource);
             responseBody = Parser.fileToText(fileStream);
         } else {
             responseBody = "";
@@ -22,8 +26,7 @@ public class FormController implements Controller {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
         String textToWrite = updateText(request);
 
-        File newFile = new File("../resources/main/form.txt");
-        FileWriter writer = new FileWriter(newFile, false);
+        FileWriter writer = new FileWriter(resource, false);
         writer.write(textToWrite);
         writer.close();
 
@@ -32,10 +35,9 @@ public class FormController implements Controller {
 
     public String delete() {
         String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
-        File file= new File("../resources/main/form.txt");
 
-        if(file.exists()) {
-            file.delete();
+        if(resource.exists()) {
+            resource.delete();
         }
 
         return responseHeader;

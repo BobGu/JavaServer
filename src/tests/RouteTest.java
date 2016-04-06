@@ -11,7 +11,7 @@ public class RouteTest {
 
     @Before
     public void CreateARoute() {
-        route = new Route("/", new String[] {"GET", "POST", "DELETE"}, new MockController());
+        route = new Route("/", "GET", new MockController());
     }
 
     @Test
@@ -20,14 +20,18 @@ public class RouteTest {
     }
 
     @Test
-    public void TestRouteCanGetItsMethodsAllowed() {
-        String[] expectedMethods = new String[] {"GET", "POST", "DELETE"};
-        assertArrayEquals(expectedMethods, route.getMethodsAllowed());
+    public void TestRouteCanGetItsHttpVerb() {
+        assertEquals("GET", route.getHttpVerb());
     }
 
     @Test
     public void TestRouteCanGetAController() {
         assertThat(route.getController(), instanceOf(MockController.class));
+    }
+
+    @Test
+    public void TestCanReturnAFullRoute() {
+        assertEquals("GET /", route.toString());
     }
 
 }

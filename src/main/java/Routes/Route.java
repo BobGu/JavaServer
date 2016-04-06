@@ -4,12 +4,12 @@ import Controllers.Controller;
 
 public class Route {
     private String path;
-    private String[] methodsAllowed;
+    private String httpVerb;
     private Controller controller;
 
-    public Route(String path, String[] methodsAllowed, Controller controller) {
+    public Route(String path, String httpVerb, Controller controller) {
         this.path = path;
-        this.methodsAllowed = methodsAllowed;
+        this.httpVerb = httpVerb;
         this.controller = controller;
     }
 
@@ -17,11 +17,18 @@ public class Route {
         return path;
     }
 
-    public String[] getMethodsAllowed() {
-        return methodsAllowed;
+    public String getHttpVerb() {
+        return httpVerb;
     }
 
     public Controller getController() {
         return controller;
     }
+
+    @Override
+    public String toString() {
+        return httpVerb + " " + path;
+    }
+
+
 }

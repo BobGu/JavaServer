@@ -32,5 +32,4 @@ public class RouterTest {
         assertFalse(router.routeExists("/foobar", "GET"));
     }
 
-
 }

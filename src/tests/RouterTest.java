@@ -1,10 +1,12 @@
 import Controllers.Controller;
 import Mocks.MockController;
 import Mocks.MockRequest;
+import Routes.Route;
 import Routes.Router;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,8 +16,9 @@ public class RouterTest {
 
     @Test
     public void TestHandleReturnsAppropriateResponse() throws IOException {
-        Map<String, Controller> routes = new HashMap<String, Controller>();
-        routes.put("/", new MockController());
+        ArrayList<Route> routes = new ArrayList<Route>();
+        Route route = new Route("/", new String[] {"GET", "POST"}, new MockController());
+        routes.add(route);
 
         Router router = new Router(routes);
         MockRequest request = new MockRequest("/", "GET", null);
@@ -26,8 +29,9 @@ public class RouterTest {
 
     @Test
     public void TestHandleReturnsCorrectResponse() throws IOException {
-        Map<String, Controller> routes = new HashMap<String, Controller>();
-        routes.put("/", new MockController());
+        ArrayList<Route> routes = new ArrayList<Route>();
+        Route route = new Route("/", new String[] {"GET", "POST"}, new MockController());
+        routes.add(route);
 
         Router router = new Router(routes);
         MockRequest request = new MockRequest("/", "POST", "data=thisNewData");

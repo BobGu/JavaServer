@@ -1,43 +1,35 @@
-import Controllers.Controller;
-import Mocks.MockController;
-import Mocks.MockRequest;
+import Controllers.FormController;
 import Routes.Route;
 import Routes.Router;
+import org.junit.Before;
 import org.junit.Test;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class RouterTest {
+    private ArrayList<Route> routes;
+    private Router router;
 
-    @Test
-    public void TestHandleReturnsAppropriateResponse() throws IOException {
-        ArrayList<Route> routes = new ArrayList<Route>();
-        Route route = new Route("/", new String[] {"GET", "POST"}, new MockController());
+    @Before
+    public void setup() {
+        routes = new ArrayList<Route>();
+        Route route = new Route("/", "GET", new FormController());
         routes.add(route);
 
-        Router router = new Router(routes);
-        MockRequest request = new MockRequest("/", "GET", null);
-        String response = router.handle(request);
+        router = new Router(routes);
+    }
 
-        assertEquals("HTTP/1.1 200 OK\r\n\r\n", response);
+
+    @Test
+    public void testIfARouteExists() {
+        assertTrue(router.routeExists("/", "GET"));
     }
 
     @Test
-    public void TestHandleReturnsCorrectResponse() throws IOException {
-        ArrayList<Route> routes = new ArrayList<Route>();
-        Route route = new Route("/", new String[] {"GET", "POST"}, new MockController());
-        routes.add(route);
-
-        Router router = new Router(routes);
-        MockRequest request = new MockRequest("/", "POST", "data=thisNewData");
-        String response = router.handle(request);
-
-        assertEquals("HTTP/1.1 200 OK\r\n\r\n", response);
+    public void testIfARouteIsNotFound() {
+        assertFalse(router.routeExists("/foobar", "GET"));
     }
 
 

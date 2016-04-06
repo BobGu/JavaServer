@@ -7,8 +7,6 @@ import Requests.Request;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Router {
     private ArrayList<Route> routes = new ArrayList<Route>();
@@ -25,14 +23,14 @@ public class Router {
         }
     }
 
-    private void createRoutes() {
-        routes.add(new Route("/", new String[] {"GET"}, new IndexController()));
-        routes.add(new Route("/form", new String[] {"GET", "POST", "PUT", "DELETE", "OPTIONS"}, new FormController()));
+    public boolean routeExists(String path, String httpVerb) {
+        return routes.stream()
+                     .anyMatch(route -> route.toString().equals(httpVerb+ " " + path));
     }
 
-    public String handle(Request request) throws IOException {
-        Route route = findRoute(request.getPath());
-        return callControllerAction(route.getController(), request);
+    private void createRoutes() {
+        routes.add(new Route("/", "GET", new IndexController()));
+        routes.add(new Route("/form", "GET", new FormController()));
     }
 
     private Route findRoute(String path) {
@@ -40,22 +38,6 @@ public class Router {
                     .filter(route -> route.getPath().equals(path))
                     .findFirst()
                     .get();
-    }
-
-    private String callControllerAction(Controller controller, Request request) throws IOException {
-        String response =  "";
-
-        if(request.getHttpVerb().equals("GET")) {
-            response = controller.get();
-        } else if(request.getHttpVerb().equals("POST")) {
-            response = controller.post(request);
-        } else if(request.getHttpVerb().equals("DELETE")) {
-            response = controller.delete();
-        } else if(request.getHttpVerb().equals("PUT")) {
-            response = controller.put(request);
-        }
-
-        return response;
     }
 
 }

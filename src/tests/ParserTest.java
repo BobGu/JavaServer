@@ -1,3 +1,4 @@
+import Parsers.Parser;
 import Requests.Request;
 import org.junit.Test;
 import org.junit.Assert;

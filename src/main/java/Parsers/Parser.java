@@ -1,3 +1,5 @@
+package Parsers;
+
 import Requests.Request;
 
 import java.io.BufferedReader;

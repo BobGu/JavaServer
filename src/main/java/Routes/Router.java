@@ -1,37 +1,45 @@
+package Routes;
+
+import Controllers.Controller;
+import Controllers.FormController;
+import Controllers.IndexController;
 import Requests.Request;
 
-import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Router {
-
-    private Map<String, Controller> routes;
+    private ArrayList<Route> routes = new ArrayList<Route>();
 
     public Router() {
         this(null);
     }
 
-    public Router(Map<String,Controller> routes) {
+    public Router(ArrayList<Route> routes) {
         if (routes == null) {
-            this.routes = createRoutes();
+            createRoutes();
         } else {
             this.routes = routes;
         }
     }
 
-    private Map<String, Controller> createRoutes() {
-        Map<String, Controller> routes = new HashMap<String, Controller>();
-
-        routes.put("/", new IndexController());
-        routes.put("/form", new FormController());
-        return routes;
+    private void createRoutes() {
+        routes.add(new Route("/", new String[] {"GET"}, new IndexController()));
+        routes.add(new Route("/form", new String[] {"GET", "POST", "PUT", "DELETE", "OPTIONS"}, new FormController()));
     }
 
     public String handle(Request request) throws IOException {
-        Controller controller = routes.get(request.getPath());
-        return callControllerAction(controller, request);
+        Route route = findRoute(request.getPath());
+        return callControllerAction(route.getController(), request);
+    }
+
+    private Route findRoute(String path) {
+       return routes.stream()
+                    .filter(route -> route.getPath().equals(path))
+                    .findFirst()
+                    .get();
     }
 
     private String callControllerAction(Controller controller, Request request) throws IOException {

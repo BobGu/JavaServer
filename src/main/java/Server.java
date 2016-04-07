@@ -16,7 +16,7 @@ public class Server {
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
         this.router = new Router();
-        this.buildResponse = new BuildResponse(this.router);
+        this.buildResponse = new BuildResponse(this.router, serverSocket.getLocalPort());
     }
 
     public void startServer() {

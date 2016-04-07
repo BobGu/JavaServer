@@ -4,20 +4,24 @@ import Requests.Request;
 import Controllers.Controller;
 
 public class MockController implements Controller {
+    private boolean postInvoked = false;
 
     public String get() {
-        return "HTTP/1.1 200 OK\r\n\r\n";
+        return "Hello World!";
     }
 
-    public String post(Request request) {
-        return "HTTP/1.1 200 OK\r\n\r\n";
+    public void post(Request request) {
+        postInvoked = true;
     }
 
-    public String delete() {
-        return "hello";
+    public void delete() {
     }
 
-    public String put(Request request) { return "yo";}
+    public void put(Request request) { }
+
+    public boolean isPostInvoked() {
+        return postInvoked;
+    }
 
 }
 

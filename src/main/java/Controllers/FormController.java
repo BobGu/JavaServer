@@ -24,7 +24,6 @@ public class FormController implements Controller {
     }
 
     public String get() throws IOException {
-        String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
         String responseBody;
         File file = new File(resourcePath);
 
@@ -34,11 +33,10 @@ public class FormController implements Controller {
         } else {
             responseBody = "";
         }
-        return responseHeader + responseBody;
+        return responseBody;
     }
 
-    public String post(Request request) throws IOException {
-        String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
+    public void post(Request request) throws IOException {
         String textToWrite = request.getBody();
         File file = new File(resourcePath);
 
@@ -50,22 +48,19 @@ public class FormController implements Controller {
             writer.close();
 
 
-        return responseHeader;
     }
 
-    public String delete() {
-        String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
+    public void delete() {
         File file = new File(resourcePath);
 
         if(file.exists()) {
             file.delete();
         }
 
-        return responseHeader;
     }
 
-    public String put(Request request) throws IOException {
-        return post(request);
+    public void put(Request request) throws IOException {
+        post(request);
     }
 
     private String updateFileText(File file, String textToWrite) throws IOException {

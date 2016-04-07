@@ -35,10 +35,9 @@ public class FormControllerTest {
     @Test
     public void TestPostAddsDate() throws IOException {
         MockRequest request = new MockRequest("/form", "POST", "data=hello");
-        String response = formController.post(request);
+        formController.post(request);
         String getResponse = formController.get();
 
-        Assert.assertThat(response, containsString("HTTP/1.1 200 OK\r\n\r\n"));
         Assert.assertThat(getResponse, containsString("data=hello"));
     }
 
@@ -47,7 +46,7 @@ public class FormControllerTest {
         MockRequest request = new MockRequest("/form", "POST", "greeting=hello");
         createFile();
 
-        String response = formController.post(request);
+        formController.post(request);
         String getResponse = formController.get();
 
         Assert.assertThat(formController.get(), containsString("data=form form test"));
@@ -71,10 +70,9 @@ public class FormControllerTest {
         createFile();
         Assert.assertThat(formController.get(), containsString("data=form form test"));
 
-        String deleteResponse = formController.delete();
+        formController.delete();
         String getResponse = formController.get();
 
-        Assert.assertThat(deleteResponse, containsString("HTTP/1.1 200 OK\r\n\r\n"));
         assertTrue(!getResponse.contains("data=form form test"));
     }
 
@@ -82,10 +80,9 @@ public class FormControllerTest {
     public void TestPutCreatesANewResourceIfOneDoesNotExist() throws IOException {
         MockRequest request = new MockRequest("/form", "PUT", "data=im a cool guy");
 
-        String putResponse = formController.put(request);
+        formController.put(request);
         String getResponse = formController.get();
 
-        Assert.assertThat(putResponse, containsString("HTTP/1.1 200 OK"));
         Assert.assertThat(getResponse, containsString("data=im a cool guy"));
     }
 

@@ -17,13 +17,13 @@ public class BuildResponseTest {
 
     private BuildResponse buildResponseWhenRouteExists() {
         MockRouter router = new MockRouter(true, true);
-        return new BuildResponse(router);
+        return new BuildResponse(router, 5000);
     }
 
     @Test
     public void TestReturnsAFourOhFour() throws IOException {
         MockRouter router = new MockRouter(false, false);
-        BuildResponse buildResponse = new BuildResponse(router);
+        BuildResponse buildResponse = new BuildResponse(router, 5000);
         Request request = new Request("/foobar", "GET", null);
 
         assertEquals("HTTP/1.1 404 Not Found\r\n\r\n", buildResponse.build(request));
@@ -39,7 +39,7 @@ public class BuildResponseTest {
     @Test
     public void TestReturnsATwoHundredAndMethodsAllowed() throws IOException {
         MockRouter router = new MockRouter(false, true);
-        BuildResponse buildResponse = new BuildResponse(router);
+        BuildResponse buildResponse = new BuildResponse(router, 5000);
         Request request = new Request("/", "OPTIONS", null);
         String expectedResponse = "HTTP/1.1 200 OK\r\nAllow: GET,POST,OPTIONS\r\n\r\n";
 
@@ -49,7 +49,7 @@ public class BuildResponseTest {
     @Test
     public void TestReturnsAFourOhFourIfPathDoesntExist() throws IOException {
         MockRouter router = new MockRouter(false, false);
-        BuildResponse buildResponse = new BuildResponse(router);
+        BuildResponse buildResponse = new BuildResponse(router, 5000);
         Request request = new Request("/foobar", "OPTIONS", null);
         String expectedResponse = "HTTP/1.1 404 Not Found\r\n\r\n";
 
@@ -68,12 +68,24 @@ public class BuildResponseTest {
     public void TestReturnsCorrectResponseBody() throws IOException {
         MockController controller = new MockController();
         MockRouter router = new MockRouter(true, true, controller);
-        BuildResponse buildResponse = new BuildResponse(router);
+        BuildResponse buildResponse = new BuildResponse(router, 5000);
         Request postRequest = new Request("/", "POST", "New Body");
 
         buildResponse.build(postRequest);
 
         assertTrue(controller.isPostInvoked());
+    }
+
+    @Test
+    public void TestRetunsAThreeOhTwoResponse() throws IOException {
+        MockController controller = new MockController();
+        MockRouter router = new MockRouter(false, false, controller);
+        BuildResponse buildResponse = new BuildResponse(router, 5000);
+        Request request = new Request("/redirect", "GET", null);
+
+        String response = buildResponse.build(request);
+
+        assertThat(response, containsString("HTTP/1.1 302 Found\r\nLocation: http://localhost:5000/"));
     }
 
 

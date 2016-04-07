@@ -4,6 +4,7 @@ import Controllers.FormController;
 import Controllers.IndexController;
 
 import java.util.ArrayList;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,6 +39,13 @@ public class Router {
         return routes.stream().anyMatch(route -> route.getPath().equals(path));
     }
 
+    public Route findRoute(String path, String httpVerb) {
+        return routes.stream()
+                     .filter(routeFound(path, httpVerb))
+                     .findFirst()
+                     .get();
+    }
+
     private void createRoutes() {
         routes.add(new Route("/", "GET", new IndexController()));
         routes.add(new Route("/form", "GET", new FormController()));
@@ -47,6 +55,10 @@ public class Router {
        return routes.stream()
                     .filter(route -> route.getPath().equals(path));
 
+    }
+
+    private Predicate<Route> routeFound(String path, String httpVerb) {
+        return route -> route.getPath().equals(path) && route.getHttpVerb().equals(httpVerb);
     }
 
 }

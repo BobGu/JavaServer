@@ -12,11 +12,19 @@ public class BuildResponse {
     }
 
     public String build(Request request) {
-        if (!router.routeExists(request.getPath(), request.getHttpVerb())) {
-            return "HTTP/1.1 404 Not Found\r\n\r\n";
+        String response = "";
+
+        if(!router.pathExists(request.getPath())) {
+            response = "HTTP/1.1 404 Not Found\r\n\r\n";
+        } else if(request.getHttpVerb().equals("OPTIONS")) {
+            response = "HTTP/1.1 200 OK\r\nAllow: "
+                    + router.methodsAllowed(request.getPath())
+                    + "\r\n\r\n";
+        } else {
+            response = "HTTP/1.1 200 OK\r\n\r\n";
         }
 
-        return "hello";
+        return response;
     }
 
 }

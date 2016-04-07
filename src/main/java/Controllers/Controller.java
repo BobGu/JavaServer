@@ -10,7 +10,7 @@ public interface Controller {
 
     public abstract String get() throws IOException;
     public abstract void post(Request request) throws IOException;
-    public abstract String delete();
+    public abstract void delete();
     public abstract void put(Request request) throws IOException;
 
 }

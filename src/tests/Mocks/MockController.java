@@ -14,8 +14,7 @@ public class MockController implements Controller {
         postInvoked = true;
     }
 
-    public String delete() {
-        return "hello";
+    public void delete() {
     }
 
     public void put(Request request) { }

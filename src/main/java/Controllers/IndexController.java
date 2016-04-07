@@ -11,21 +11,19 @@ import java.io.InputStream;
 public class IndexController implements Controller {
 
     public String get() throws IOException {
-        String responseHeader = "HTTP/1.1 200 OK\r\n\r\n";
         String responseBody;
 
         File file = new File("../resources/main/index.html");
         InputStream fileStream = new FileInputStream(file);
         responseBody = Parser.fileToText(fileStream);
 
-        return responseHeader + responseBody;
+        return responseBody;
     }
 
     public void post(Request request) {
     }
 
-    public String delete() {
-       return "";
+    public void delete() {
     }
 
     public void put(Request request) {

@@ -70,10 +70,9 @@ public class FormControllerTest {
         createFile();
         Assert.assertThat(formController.get(), containsString("data=form form test"));
 
-        String deleteResponse = formController.delete();
+        formController.delete();
         String getResponse = formController.get();
 
-        Assert.assertThat(deleteResponse, containsString("HTTP/1.1 200 OK\r\n\r\n"));
         assertTrue(!getResponse.contains("data=form form test"));
     }
 

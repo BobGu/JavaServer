@@ -9,8 +9,8 @@ import java.io.IOException;
 public interface Controller {
 
     public abstract String get() throws IOException;
-    public abstract String post(Request request) throws IOException;
+    public abstract void post(Request request) throws IOException;
     public abstract String delete();
-    public abstract String put(Request request) throws IOException;
+    public abstract void put(Request request) throws IOException;
 
 }

@@ -21,15 +21,13 @@ public class IndexController implements Controller {
         return responseHeader + responseBody;
     }
 
-    public String post(Request request) {
-        return "";
+    public void post(Request request) {
     }
 
     public String delete() {
        return "";
     }
 
-    public String put(Request request) {
-       return "";
+    public void put(Request request) {
     }
 }

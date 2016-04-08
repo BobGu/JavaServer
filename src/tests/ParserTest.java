@@ -61,5 +61,10 @@ public class ParserTest {
         assertEquals(null, request.getBody());
     }
 
+    @Test
+    public void TestCanParseForPath() {
+        String request= "GET /parameters?name=boboblaw";
+        assertEquals("/parameters", Parser.parseForPathUrl(request));
+    }
 
 }

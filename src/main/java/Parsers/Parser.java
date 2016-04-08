@@ -44,8 +44,11 @@ public class Parser {
     }
 
     public static String parseForPathUrl(String requestHeader) {
-        String[] words = requestHeader.split(" ");
-        return words[1];
+        Pattern pattern = Pattern.compile("(/[a-z]+)");
+        Matcher matcher = pattern.matcher(requestHeader);
+        matcher.find();
+
+        return matcher.group(0);
     }
 
     private static Map<String, String> parseRequest(String request) {

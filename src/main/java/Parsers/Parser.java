@@ -51,6 +51,18 @@ public class Parser {
         return matcher.group(0);
     }
 
+    public static List<String> parseForParameters(String requestHeader) {
+        List<String> allMatches = new ArrayList<String>();
+        Pattern pattern = Pattern.compile("([a-z]+=[a-z]+)");
+        Matcher matcher = pattern.matcher(requestHeader);
+
+        while(matcher.find()) {
+            allMatches.add(matcher.group());
+        }
+
+        return allMatches;
+    }
+
     private static Map<String, String> parseRequest(String request) {
         Map<String, String> fields = new HashMap<String,String>();
 

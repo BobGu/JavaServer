@@ -8,6 +8,8 @@ import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParserTest {
 
@@ -65,6 +67,27 @@ public class ParserTest {
     public void TestCanParseForPath() {
         String request= "GET /parameters?name=boboblaw";
         assertEquals("/parameters", Parser.parseForPathUrl(request));
+    }
+
+    @Test
+    public void TestCanParseForParameter() {
+        List<String> expectedValues = new ArrayList<String>();
+        String request = "GET /parameters?name=myname";
+
+        expectedValues.add("name=myname");
+
+        assertEquals(expectedValues, Parser.parseForParameters(request));
+    }
+
+    @Test
+    public void TestCanParseForMultipleParameters() {
+        List<String> expectedValues = new ArrayList<String>();
+        String request = "GET /parameters?name=myname&city=losangeles";
+
+        expectedValues.add("name=myname");
+        expectedValues.add("city=losangeles");
+
+        assertEquals(expectedValues, Parser.parseForParameters(request));
     }
 
 }

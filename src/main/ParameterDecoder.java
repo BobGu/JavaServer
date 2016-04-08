@@ -19,17 +19,19 @@ public class ParameterDecoder {
                          .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private String decodeCharacter(String percentEncodedCharacter) {
-        return encodedCharacters.get(percentEncodedCharacter);
+    private String decodeCharacter(String character) {
+        String decodedCharacter = encodedCharacters.get(character);
+        return decodedCharacter == null ? character: decodedCharacter;
     }
 
     private List<String> findMatches(String encodedPhrase) {
         List<String> allMatches = new ArrayList<String>();
-        Matcher matcher = Pattern.compile("(%.{2})").matcher(encodedPhrase);
+        Matcher matcher = Pattern.compile("(%.{2})|([a-z]+)").matcher(encodedPhrase);
 
         while(matcher.find()) {
             allMatches.add(matcher.group());
         }
+
         return allMatches;
     }
 
@@ -39,6 +41,7 @@ public class ParameterDecoder {
         for (String character : decodedCharacters) {
             decodedString += character;
         }
+
         return decodedString;
     }
 

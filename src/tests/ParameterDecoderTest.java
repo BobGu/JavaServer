@@ -45,6 +45,12 @@ public class ParameterDecoderTest {
         assertEquals("! =", decoder.decode(encodedParameter));
     }
 
+    @Test
+    public void TestCharactersThatAreNotEncodedGetReturned() {
+        String encodedParameter = "%22is%20that%20all%22";
+        assertEquals("\"is that all\"", decoder.decode(encodedParameter));
+    }
+
     private Map<String, String> createReservedEncodedCharacters() {
         Map<String, String> encodedCharacters = new HashMap<String,String>();
         encodedCharacters.put("%21", "!");

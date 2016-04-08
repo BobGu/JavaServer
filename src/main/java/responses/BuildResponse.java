@@ -30,7 +30,7 @@ public class BuildResponse {
             } else if (request.getHttpVerb().equals("PUT")) {
                 route.getController().post(request);
             } else if (request.getHttpVerb().equals("DELETE")) {
-                route.getController().put(request);
+                route.getController().delete();
             }
         } else if (request.getHttpVerb().equals("OPTIONS") && router.pathExists(request.getPath())) {
             response = "HTTP/1.1 200 OK\r\nAllow: "

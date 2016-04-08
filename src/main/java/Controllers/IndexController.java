@@ -28,4 +28,6 @@ public class IndexController implements Controller {
 
     public void put(Request request) {
     }
+
+    public void head() {}
 }

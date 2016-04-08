@@ -12,5 +12,6 @@ public interface Controller {
     public abstract void post(Request request) throws IOException;
     public abstract void delete();
     public abstract void put(Request request) throws IOException;
+    public abstract void head();
 
 }

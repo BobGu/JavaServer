@@ -63,6 +63,8 @@ public class FormController implements Controller {
         post(request);
     }
 
+    public void head(){}
+
     private String updateFileText(File file, String textToWrite) throws IOException {
         InputStream fileStream = new FileInputStream(file);
         String fileText = Parser.fileToText(fileStream);

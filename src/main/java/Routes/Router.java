@@ -2,6 +2,7 @@ package Routes;
 
 import Controllers.FormController;
 import Controllers.IndexController;
+import Controllers.MethodOptionsController;
 
 import java.util.ArrayList;
 import java.util.function.Predicate;
@@ -49,6 +50,13 @@ public class Router {
     private void createRoutes() {
         routes.add(new Route("/", "GET", new IndexController()));
         routes.add(new Route("/form", "GET", new FormController()));
+        routes.add(new Route("/form", "POST", new FormController()));
+        routes.add(new Route("/form", "PUT", new FormController()));
+        routes.add(new Route("/form", "DELETE", new FormController()));
+        routes.add(new Route("/method_options", "GET", new MethodOptionsController()));
+        routes.add(new Route("/method_options", "HEAD", new MethodOptionsController()));
+        routes.add(new Route("/method_options", "POST", new MethodOptionsController()));
+        routes.add(new Route("/method_options", "PUT", new MethodOptionsController()));
     }
 
     private Stream<Route> findRoutes(String path) {

@@ -19,7 +19,7 @@ public class BuildResponse {
     public String build(Request request) throws IOException {
         String response = "";
 
-        if(router.routeExists(request.getPath(), request.getHttpVerb())) {
+        if(router.routeExists(request.getPath(), request.getHttpVerb()) && !request.getHttpVerb().equals("OPTIONS")) {
             response += "HTTP/1.1 200 OK\r\n\r\n";
             Route route = router.findRoute(request.getPath(), request.getHttpVerb());
 
@@ -30,7 +30,9 @@ public class BuildResponse {
             } else if (request.getHttpVerb().equals("PUT")) {
                 route.getController().post(request);
             } else if (request.getHttpVerb().equals("DELETE")) {
-                route.getController().put(request);
+                route.getController().delete();
+            } else if (request.getHttpVerb().equals("HEAD")) {
+                route.getController().head();
             }
         } else if (request.getHttpVerb().equals("OPTIONS") && router.pathExists(request.getPath())) {
             response = "HTTP/1.1 200 OK\r\nAllow: "

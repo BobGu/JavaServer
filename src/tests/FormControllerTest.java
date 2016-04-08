@@ -19,11 +19,13 @@ import static org.junit.Assert.assertTrue;
 public class FormControllerTest {
     private FormController formController;
     private String path;
+    private MockRequest mockGetRequest;
 
     @Before
     public void TestCreateFormController() {
         String path = "src/tests/TestFiles/fakeform.txt";
         formController = new FormController(path);
+        mockGetRequest = new MockRequest("/form", "GET", "data=yet");
     }
 
     public void createFile() throws IOException {
@@ -37,6 +39,9 @@ public class FormControllerTest {
         String response = formController.get();
         Assert.assertThat(response,
                 containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
+        MockRequest request = new MockRequest("/form", "GET", "data=hello");
+        String response = formController.get(request);
+        Assert.assertThat(response, containsString(""));
     }
 
     @Test
@@ -51,7 +56,7 @@ public class FormControllerTest {
     public void TestPostAddsData() throws IOException {
         MockRequest request = new MockRequest("/form", "POST", "data=hello");
         formController.post(request);
-        String getResponse = formController.get();
+        String getResponse = formController.get(mockGetRequest);
 
         Assert.assertThat(getResponse, containsString("data=hello"));
     }
@@ -62,9 +67,9 @@ public class FormControllerTest {
         createFile();
 
         formController.post(request);
-        String getResponse = formController.get();
+        String getResponse = formController.get(mockGetRequest);
 
-        Assert.assertThat(formController.get(), containsString("data=form form test"));
+        Assert.assertThat(formController.get(mockGetRequest), containsString("data=form form test"));
         Assert.assertThat(getResponse, containsString("greeting=hello"));
     }
 
@@ -74,7 +79,7 @@ public class FormControllerTest {
         createFile();
 
         formController.post(request);
-        String getResponse = formController.get();
+        String getResponse = formController.get(mockGetRequest);
 
         Assert.assertThat(getResponse, containsString("data=newdata"));
         assertTrue(!getResponse.contains("data=form form test"));
@@ -83,10 +88,10 @@ public class FormControllerTest {
     @Test
     public void TestDeleteMethodDeletesAFile() throws IOException {
         createFile();
-        Assert.assertThat(formController.get(), containsString("data=form form test"));
+        Assert.assertThat(formController.get(mockGetRequest), containsString("data=form form test"));
 
         formController.delete();
-        String getResponse = formController.get();
+        String getResponse = formController.get(mockGetRequest);
 
         assertTrue(!getResponse.contains("data=form form test"));
     }
@@ -96,7 +101,7 @@ public class FormControllerTest {
         MockRequest request = new MockRequest("/form", "PUT", "data=im a cool guy");
 
         formController.put(request);
-        String getResponse = formController.get();
+        String getResponse = formController.get(mockGetRequest);
 
         Assert.assertThat(getResponse, containsString("data=im a cool guy"));
     }

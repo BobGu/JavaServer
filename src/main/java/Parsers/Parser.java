@@ -1,6 +1,7 @@
 package Parsers;
 
 import Requests.Request;
+import decoders.ParameterDecoder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class Parser {
         String request = parseInputStream(inputStream);
         Map<String,String> fields = parseRequest(request);
 
-        return new Request(fields.get("path"), fields.get("httpVerb"), fields.get("body"));
+        return new Request(fields.get("path"), fields.get("httpVerb"), fields.get("parameters"));
     }
 
 
@@ -51,30 +52,44 @@ public class Parser {
         return matcher.group(0);
     }
 
-    public static List<String> parseForParameters(String requestHeader) {
-        List<String> allMatches = new ArrayList<String>();
+    public static String parseForParameters(String requestHeader) {
+        String parameters = "";
+        ParameterDecoder decoder = new ParameterDecoder();
+        String decodedParameter = decoder.decode(requestHeader);
         Pattern pattern = Pattern.compile("([a-z]+=[a-z]+)");
-        Matcher matcher = pattern.matcher(requestHeader);
+        Matcher matcher = pattern.matcher(decodedParameter);
 
         while(matcher.find()) {
-            allMatches.add(matcher.group());
+            parameters += matcher.group();
         }
 
-        return allMatches;
+        return parameters;
+
     }
 
     private static Map<String, String> parseRequest(String request) {
         Map<String, String> fields = new HashMap<String,String>();
+        String parameters;
 
         String path = parseForPathUrl(request);
         String httpVerb = parseForHttpVerb(request);
-        String body = isBodyOfRequest(request) ? parseForBody(request) : null;
+        if (isBodyOfRequest(request)) {
+            parameters = parseForBody(request);
+        } else if(isQuery(request)) {
+            parameters = parseForParameters(request);
+        } else {
+            parameters = null;
+        }
 
         fields.put("path", path);
         fields.put("httpVerb", httpVerb);
-        fields.put("body", body);
+        fields.put("parameters", parameters);
 
         return fields;
+    }
+
+    private static boolean isQuery(String request) {
+        return request.contains("?");
     }
 
     private static String readHeadersOfRequest(BufferedReader reader) throws IOException {

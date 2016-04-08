@@ -60,7 +60,7 @@ public class ParserTest {
 
         assertEquals("/logs", request.getPath());
         assertEquals( "GET", request.getHttpVerb());
-        assertEquals(null, request.getBody());
+        assertEquals(null, request.getParameters());
     }
 
     @Test
@@ -71,23 +71,14 @@ public class ParserTest {
 
     @Test
     public void TestCanParseForParameter() {
-        List<String> expectedValues = new ArrayList<String>();
         String request = "GET /parameters?name=myname";
-
-        expectedValues.add("name=myname");
-
-        assertEquals(expectedValues, Parser.parseForParameters(request));
+        assertEquals("name=myname", Parser.parseForParameters(request));
     }
 
     @Test
     public void TestCanParseForMultipleParameters() {
-        List<String> expectedValues = new ArrayList<String>();
         String request = "GET /parameters?name=myname&city=losangeles";
-
-        expectedValues.add("name=myname");
-        expectedValues.add("city=losangeles");
-
-        assertEquals(expectedValues, Parser.parseForParameters(request));
+        assertEquals("name=mynamecity=losangeles", Parser.parseForParameters(request));
     }
 
 }

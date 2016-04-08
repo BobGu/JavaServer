@@ -1,7 +1,7 @@
+import decoders.ParameterDecoder;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,8 +47,14 @@ public class ParameterDecoderTest {
 
     @Test
     public void TestCharactersThatAreNotEncodedGetReturned() {
-        String encodedParameter = "%22is%20that%20all%22";
-        assertEquals("\"is that all\"", decoder.decode(encodedParameter));
+        String encodedParameter = "%22is%20that%20all%22name=bob";
+        assertEquals("\"is that all\"name=bob", decoder.decode(encodedParameter));
+    }
+
+    @Test
+    public void ReturnsTheOrignalStringIfNoCharactersAreEncoded() {
+        String parameter = "name=bob";
+        assertEquals("name=bob", decoder.decode(parameter));
     }
 
     private Map<String, String> createReservedEncodedCharacters() {

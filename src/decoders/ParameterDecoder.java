@@ -33,7 +33,7 @@ public class ParameterDecoder {
         while(matcher.find()) {
             allMatches.add(matcher.group());
         }
-
+        System.out.println(allMatches.get(allMatches.size() - 3));
         return allMatches;
     }
 

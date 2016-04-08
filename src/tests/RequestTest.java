@@ -23,8 +23,8 @@ public class RequestTest {
     }
 
     @Test
-    public void TestCanSetABody() {
-        assertEquals("data=fatcat", request.getBody());
+    public void TestCanSetParameters() {
+        assertEquals("data=fatcat", request.getParameters());
     }
 
 }

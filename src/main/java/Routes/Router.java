@@ -6,16 +6,12 @@ import Controllers.MethodOptionsController;
 import Requests.Request;
 import httpStatus.HttpStatus;
 import specialCharacters.EscapeCharacters;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class Router {
     private ArrayList<Route> routes = new ArrayList<Route>();
-    private int portNumber;
 
     public Router() {
         this(null);

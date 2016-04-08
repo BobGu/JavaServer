@@ -5,6 +5,7 @@ import Requests.Request;
 public class ParameterController implements Controller {
 
     public String get(Request request) {
+        System.out.println(request.getParameters());
         return request.getParameters();
     }
 

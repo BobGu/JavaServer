@@ -57,6 +57,12 @@ public class ParameterDecoderTest {
         assertEquals("name=bob", decoder.decode(parameter));
     }
 
+    @Test
+    public void TestCanDecodeAComplexString() {
+        String parameter = "parameters?variable_1=Operators%20%3C%2C&variable_2=stuff";
+        assertEquals("variable_1=Operators <,&variable_2=stuff", decoder.decode(parameter));
+    }
+
     private Map<String, String> createReservedEncodedCharacters() {
         Map<String, String> encodedCharacters = new HashMap<String,String>();
         encodedCharacters.put("%21", "!");

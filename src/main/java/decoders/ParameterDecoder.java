@@ -28,7 +28,7 @@ public class ParameterDecoder {
 
     private List<String> findMatches(String encodedPhrase) {
         List<String> allMatches = new ArrayList<String>();
-        Matcher matcher = Pattern.compile("(%.{2})|([a-z=]+)").matcher(encodedPhrase);
+        Matcher matcher = Pattern.compile("(%.{2})|([a-z=?&]+)").matcher(encodedPhrase);
 
         while(matcher.find()) {
             allMatches.add(matcher.group());

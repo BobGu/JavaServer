@@ -4,6 +4,10 @@ import Requests.Request;
 
 public class MethodOptionsController implements Controller{
 
+    public String handle(Request request) {
+        return "pop";
+    }
+
     public String get() {
         return "";
     }

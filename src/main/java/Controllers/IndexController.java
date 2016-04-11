@@ -10,6 +10,10 @@ import java.io.InputStream;
 
 public class IndexController implements Controller {
 
+    public String handle(Request request) throws IOException {
+        return get();
+    }
+
     public String get() throws IOException {
         String responseBody;
 

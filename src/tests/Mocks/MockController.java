@@ -5,6 +5,7 @@ import Controllers.Controller;
 
 public class MockController implements Controller {
     private boolean postInvoked = false;
+    private boolean handleInvoked = false;
 
     public String get() {
         return "Hello World!";
@@ -24,8 +25,17 @@ public class MockController implements Controller {
         return postInvoked;
     }
 
+    public boolean isHandleInvoked() {
+        return handleInvoked;
+    }
+
     public void head() {
 
+    }
+
+    public String handle(Request request) {
+        handleInvoked = true;
+        return "handling the request";
     }
 
 }

@@ -1,8 +1,16 @@
+import Controllers.Controller;
 import Controllers.FormController;
+import Controllers.IndexController;
+import Mocks.MockController;
+import Requests.Request;
 import Routes.Route;
 import Routes.Router;
+import httpStatus.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
+import specialCharacters.EscapeCharacters;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -10,48 +18,47 @@ import static org.junit.Assert.*;
 public class RouterTest {
     private ArrayList<Route> routes;
     private Router router;
-    private Route routeGetIndex;
+    private MockController indexController;
+    private MockController formController;
+
+    public RouterTest() {
+    }
 
     @Before
     public void setup() {
         routes = new ArrayList<Route>();
-        routeGetIndex = new Route("/", "GET", new FormController());
-        Route routePostIndex = new Route("/", "POST", new FormController());
-        routes.add(routeGetIndex);
-        routes.add(routePostIndex);
+        indexController = new MockController();
+        formController = new MockController();
+        Route routeRoot = new Route("/", indexController);
+        Route routeForm = new Route("/form", formController);
+
+        routes.add(routeRoot);
+        routes.add(routeForm);
 
         router = new Router(routes);
     }
 
     @Test
-    public void TestIfARouteExists() {
-        assertTrue(router.routeExists("/", "GET"));
+    public void TestItCanDirectARequestToTheCorrectController() throws IOException {
+        Request request = new Request("/", "GET", null);
+        router.direct(request);
+        assertTrue(indexController.isHandleInvoked());
     }
 
     @Test
-    public void TestIfARouteIsNotFound() {
-        assertFalse(router.routeExists("/foobar", "GET"));
+    public void TestItCanDirectToTheCorrectController() throws IOException {
+        Request request = new Request("/form", "GET", null);
+        router.direct(request);
+
+        assertTrue(formController.isHandleInvoked());
+        assertFalse(indexController.isHandleInvoked());
     }
 
     @Test
-    public void TestIfAPathExists() {
-        assertTrue(router.pathExists("/"));
-    }
+    public void TestIfRouteDoesNotExist() throws IOException {
+        Request request = new Request("/foobar", "GET", null);
+        String response = router.direct(request);
 
-    @Test
-    public void TestAPathDoesNotExist() {
-        assertFalse(router.pathExists("/foobar"));
+        assertEquals(HttpStatus.notFound + EscapeCharacters.newline + EscapeCharacters.newline, response);
     }
-
-    @Test
-    public void TestMethodsAllowedOnAPath() {
-        String methodsAllowed = "GET,POST,OPTIONS";
-        assertEquals(methodsAllowed, router.methodsAllowed("/"));
-    }
-
-    @Test
-    public void TestCanFindARoute() {
-        assertEquals(routeGetIndex, router.findRoute("/", "GET"));
-    }
-
 }

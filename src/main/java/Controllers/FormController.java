@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FormController implements Controller {
+    private String METHODS_ALLOWED = "GET,POST,PUT,DELETE,OPTIONS";
     private String resourcePath;
 
     public FormController(){
@@ -23,6 +24,27 @@ public class FormController implements Controller {
         } else {
             this.resourcePath = resourcePath;
         }
+    }
+
+    public String handle(Request request) throws IOException {
+        String response = "";
+        if (METHODS_ALLOWED.contains(request.getHttpVerb())) {
+            if (request.getHttpVerb().equals("GET")) {
+                response = get();
+            } else if (request.getHttpVerb().equals("POST")) {
+                response = post(request);
+            } else if (request.getHttpVerb().equals("PUT")) {
+                response = put(request);
+            } else if (request.getHttpVerb().equals("DELETE")) {
+                response = delete();
+            } else if (request.getHttpVerb().equals("OPTIONS")) {
+                response = options();
+            }
+        } else {
+            response = HttpStatus.methodNotAllowed;
+        }
+
+        return response;
     }
 
     public String get() throws IOException {
@@ -54,20 +76,28 @@ public class FormController implements Controller {
         return response;
     }
 
-    public void delete() {
+    public String delete() {
+        String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
         File file = new File(resourcePath);
 
         if(file.exists()) {
             file.delete();
         }
-
+        return response;
     }
 
     public String put(Request request) throws IOException {
         return post(request);
     }
 
-    public void head(){}
+    public String options() {
+        return  HttpStatus.okay
+                + EscapeCharacters.newline
+                + "Allow: "
+                + METHODS_ALLOWED
+                + EscapeCharacters.newline
+                + EscapeCharacters.newline;
+    }
 
     private String updateFileText(File file, String textToWrite) throws IOException {
         InputStream fileStream = new FileInputStream(file);

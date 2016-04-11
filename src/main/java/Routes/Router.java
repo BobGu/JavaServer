@@ -3,14 +3,19 @@ package Routes;
 import Controllers.FormController;
 import Controllers.IndexController;
 import Controllers.MethodOptionsController;
+import Requests.Request;
+import httpStatus.HttpStatus;
+import specialCharacters.EscapeCharacters;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class Router {
     private ArrayList<Route> routes = new ArrayList<Route>();
+    private int portNumber;
 
     public Router() {
         this(null);
@@ -24,49 +29,27 @@ public class Router {
         }
     }
 
-    public boolean routeExists(String path, String httpVerb) {
-        return routes.stream()
-                     .anyMatch(route -> route.toString().equals(httpVerb+ " " + path));
-    }
+    public String direct(Request request) throws IOException {
+        String response;
+        Optional<Route> route = findRoute(request.getPath());
 
-    public String methodsAllowed(String path) {
-        Stream<Route> routes = findRoutes(path);
-        return routes.map(route -> route.getHttpVerb())
-                     .collect(Collectors.joining(","))
-                     .concat(",OPTIONS");
-    }
-
-    public boolean pathExists(String path) {
-        return routes.stream().anyMatch(route -> route.getPath().equals(path));
-    }
-
-    public Route findRoute(String path, String httpVerb) {
-        return routes.stream()
-                     .filter(routeFound(path, httpVerb))
-                     .findFirst()
-                     .get();
+        if (route.isPresent()) {
+            response = route.get().getController().handle(request);
+        } else {
+            response = HttpStatus.notFound + EscapeCharacters.newline + EscapeCharacters.newline;
+        }
+        return response;
     }
 
     private void createRoutes() {
-        routes.add(new Route("/", "GET", new IndexController()));
-        routes.add(new Route("/form", "GET", new FormController()));
-        routes.add(new Route("/form", "POST", new FormController()));
-        routes.add(new Route("/form", "PUT", new FormController()));
-        routes.add(new Route("/form", "DELETE", new FormController()));
-        routes.add(new Route("/method_options", "GET", new MethodOptionsController()));
-        routes.add(new Route("/method_options", "HEAD", new MethodOptionsController()));
-        routes.add(new Route("/method_options", "POST", new MethodOptionsController()));
-        routes.add(new Route("/method_options", "PUT", new MethodOptionsController()));
+        routes.add(new Route("/", new IndexController()));
+        routes.add(new Route("/form", new FormController()));
+        routes.add(new Route("/method_options",  new MethodOptionsController()));
     }
 
-    private Stream<Route> findRoutes(String path) {
-       return routes.stream()
-                    .filter(route -> route.getPath().equals(path));
-
+    private Optional<Route> findRoute(String path) {
+        return routes.stream()
+                     .filter(route -> route.getPath().equals(path))
+                     .findFirst();
     }
-
-    private Predicate<Route> routeFound(String path, String httpVerb) {
-        return route -> route.getPath().equals(path) && route.getHttpVerb().equals(httpVerb);
-    }
-
 }

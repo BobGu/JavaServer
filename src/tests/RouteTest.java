@@ -11,7 +11,7 @@ public class RouteTest {
 
     @Before
     public void CreateARoute() {
-        route = new Route("/", "GET", new MockController());
+        route = new Route("/", new MockController());
     }
 
     @Test
@@ -20,18 +20,8 @@ public class RouteTest {
     }
 
     @Test
-    public void TestRouteCanGetItsHttpVerb() {
-        assertEquals("GET", route.getHttpVerb());
-    }
-
-    @Test
     public void TestRouteCanGetAController() {
         assertThat(route.getController(), instanceOf(MockController.class));
-    }
-
-    @Test
-    public void TestCanReturnAFullRoute() {
-        assertEquals("GET /", route.toString());
     }
 
 }

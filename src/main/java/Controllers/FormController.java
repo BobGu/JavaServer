@@ -2,6 +2,8 @@ package Controllers;
 
 import Parsers.Parser;
 import Requests.Request;
+import httpStatus.HttpStatus;
+import specialCharacters.EscapeCharacters;
 
 import java.io.*;
 import java.io.File;
@@ -9,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FormController implements Controller {
+    private String METHODS_ALLOWED = "GET,POST,PUT,DELETE,OPTIONS";
     private String resourcePath;
 
     public FormController(){
@@ -23,7 +26,30 @@ public class FormController implements Controller {
         }
     }
 
+    public String handle(Request request) throws IOException {
+        String response = "";
+        if (METHODS_ALLOWED.contains(request.getHttpVerb())) {
+            if (request.getHttpVerb().equals("GET")) {
+                response = get();
+            } else if (request.getHttpVerb().equals("POST")) {
+                response = post(request);
+            } else if (request.getHttpVerb().equals("PUT")) {
+                response = put(request);
+            } else if (request.getHttpVerb().equals("DELETE")) {
+                response = delete();
+            } else if (request.getHttpVerb().equals("OPTIONS")) {
+                response = options();
+            }
+        } else {
+            response = HttpStatus.methodNotAllowed;
+        }
+
+        return response;
+    }
+
     public String get() throws IOException {
+        String response;
+        String responseHead = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
         String responseBody;
         File file = new File(resourcePath);
 
@@ -33,10 +59,11 @@ public class FormController implements Controller {
         } else {
             responseBody = "";
         }
-        return responseBody;
+        return responseHead + responseBody;
     }
 
-    public void post(Request request) throws IOException {
+    public String post(Request request) throws IOException {
+        String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
         String textToWrite = request.getBody();
         File file = new File(resourcePath);
 
@@ -46,24 +73,31 @@ public class FormController implements Controller {
             FileWriter writer = new FileWriter(resourcePath, false);
             writer.write(textToWrite);
             writer.close();
-
-
+        return response;
     }
 
-    public void delete() {
+    public String delete() {
+        String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
         File file = new File(resourcePath);
 
         if(file.exists()) {
             file.delete();
         }
-
+        return response;
     }
 
-    public void put(Request request) throws IOException {
-        post(request);
+    public String put(Request request) throws IOException {
+        return post(request);
     }
 
-    public void head(){}
+    public String options() {
+        return  HttpStatus.okay
+                + EscapeCharacters.newline
+                + "Allow: "
+                + METHODS_ALLOWED
+                + EscapeCharacters.newline
+                + EscapeCharacters.newline;
+    }
 
     private String updateFileText(File file, String textToWrite) throws IOException {
         InputStream fileStream = new FileInputStream(file);

@@ -10,6 +10,10 @@ import java.io.InputStream;
 
 public class IndexController implements Controller {
 
+    public String handle(Request request) throws IOException {
+        return get();
+    }
+
     public String get() throws IOException {
         String responseBody;
 
@@ -20,13 +24,15 @@ public class IndexController implements Controller {
         return responseBody;
     }
 
-    public void post(Request request) {
+    public String post(Request request) {
+        return "a response";
     }
 
     public void delete() {
     }
 
-    public void put(Request request) {
+    public String put(Request request) {
+        return "hello";
     }
 
     public void head() {}

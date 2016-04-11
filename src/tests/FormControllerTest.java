@@ -1,8 +1,10 @@
 import Controllers.FormController;
 import Mocks.MockRequest;
+import httpStatus.HttpStatus;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import specialCharacters.EscapeCharacters;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,11 +31,20 @@ public class FormControllerTest {
     @Test
     public void TestCorrectResponseForGet() throws IOException {
         String response = formController.get();
-        Assert.assertThat(response, containsString("HTTP/1.1 200 OK\r\n\r\n"));
+        Assert.assertThat(response,
+                          containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
     }
 
     @Test
-    public void TestPostAddsDate() throws IOException {
+    public void TestPostReturnsTwoHundredOkay() throws IOException {
+        MockRequest request = new MockRequest("/form", "POST", "data=hello");
+        String response = formController.post(request);
+
+        Assert.assertThat(response, containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
+    }
+
+    @Test
+    public void TestPostAddsData() throws IOException {
         MockRequest request = new MockRequest("/form", "POST", "data=hello");
         formController.post(request);
         String getResponse = formController.get();
@@ -84,6 +95,14 @@ public class FormControllerTest {
         String getResponse = formController.get();
 
         Assert.assertThat(getResponse, containsString("data=im a cool guy"));
+    }
+
+    @Test
+    public void TestPutReturnsAOkayResponse() throws IOException {
+        MockRequest request = new MockRequest("/form", "PUT", "data=im a cool guy");
+        String response = formController.put(request);
+
+        Assert.assertThat(response, containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
     }
 
 }

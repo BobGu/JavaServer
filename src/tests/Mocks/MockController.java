@@ -10,17 +10,22 @@ public class MockController implements Controller {
         return "Hello World!";
     }
 
-    public void post(Request request) {
+    public String post(Request request) {
         postInvoked = true;
+        return "TRUE";
     }
 
     public void delete() {
     }
 
-    public void put(Request request) { }
+    public String put(Request request) { return "PUTTER";}
 
     public boolean isPostInvoked() {
         return postInvoked;
+    }
+
+    public void head() {
+
     }
 
 }

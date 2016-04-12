@@ -81,4 +81,10 @@ public class ParserTest {
         assertEquals("name=mynamecity=losangeles", Parser.parseForParameters(request));
     }
 
+    @Test
+    public void TestCanParseForParametersThatArePercentEncoded() {
+        String request = "GET /parameters?variable_1=Operators%20%3C%2C&variable_2=stuff";
+        assertEquals("variable_1=Operators <,&variable_2=stuff", Parser.parseForParameters(request));
+    }
+
 }

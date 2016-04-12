@@ -59,7 +59,7 @@ public class ParameterDecoderTest {
 
     @Test
     public void TestCanDecodeAComplexString() {
-        String parameter = "parameters?variable_1=Operators%20%3C%2C&variable_2=stuff";
+        String parameter = "variable_1=Operators%20%3C%2C&variable_2=stuff";
         assertEquals("variable_1=Operators <,&variable_2=stuff", decoder.decode(parameter));
     }
 

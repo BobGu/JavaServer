@@ -55,8 +55,9 @@ public class Parser {
     public static String parseForParameters(String requestHeader) {
         String parameters = "";
         ParameterDecoder decoder = new ParameterDecoder();
-        String decodedParameter = decoder.decode(requestHeader);
-        Pattern pattern = Pattern.compile("([a-z]+=[a-z]+)");
+        String query = parseForQuery(requestHeader);
+        String decodedParameter = decoder.decode(query);
+        Pattern pattern = Pattern.compile("([a-z]+=[a-z]+[^&]+)");
         Matcher matcher = pattern.matcher(decodedParameter);
 
         while(matcher.find()) {
@@ -65,6 +66,15 @@ public class Parser {
 
         return parameters;
 
+    }
+
+    private static String parseForQuery(String request) {
+        Pattern pattern = Pattern.compile("([^?]+=.+)");
+        Matcher matcher = pattern.matcher(request);
+
+        matcher.find();
+
+        return matcher.group(0);
     }
 
     private static Map<String, String> parseRequest(String request) {

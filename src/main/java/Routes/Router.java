@@ -1,9 +1,6 @@
 package Routes;
 
-import Controllers.FormController;
-import Controllers.IndexController;
-import Controllers.MethodOptionsController;
-import Controllers.ParameterController;
+import Controllers.*;
 import Requests.Request;
 import httpStatus.HttpStatus;
 import specialCharacters.EscapeCharacters;
@@ -43,6 +40,7 @@ public class Router {
         routes.add(new Route("/form", new FormController()));
         routes.add(new Route("/method_options",  new MethodOptionsController()));
         routes.add(new Route("/parameters", new ParameterController()));
+        routes.add(new Route("/logs", new LogsController()));
     }
 
     private Optional<Route> findRoute(String path) {

@@ -7,7 +7,7 @@ public class MockController implements Controller {
     private boolean postInvoked = false;
     private boolean handleInvoked = false;
 
-    public String get() {
+    public String get(Request request) {
         return "Hello World!";
     }
 

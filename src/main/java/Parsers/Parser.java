@@ -1,7 +1,7 @@
 package Parsers;
-
 import Requests.Request;
-
+import decoders.ParameterDecoder;
+import specialCharacters.EscapeCharacters;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +16,7 @@ public class Parser {
         String request = parseInputStream(inputStream);
         Map<String,String> fields = parseRequest(request);
 
-        return new Request(fields.get("path"), fields.get("httpVerb"), fields.get("body"));
+        return new Request(fields.get("path"), fields.get("httpVerb"), fields.get("parameters"));
     }
 
 
@@ -44,22 +44,78 @@ public class Parser {
     }
 
     public static String parseForPathUrl(String requestHeader) {
-        String[] words = requestHeader.split(" ");
-        return words[1];
+        Pattern pattern = Pattern.compile("(/[a-zA-Z0-9]*)");
+        Matcher matcher = pattern.matcher(requestHeader);
+        matcher.find();
+
+        return matcher.group(0);
+    }
+
+    public static String parseForParameters(String requestHeader) {
+        String parameters = "";
+        String[] linesOfRequest= requestHeader.split(EscapeCharacters.newline);
+        String firstLineOfRequest = linesOfRequest[0];
+        parameters = formatParameters(parseForQuery(firstLineOfRequest));
+
+        if (isEncoded(parameters)) {
+            parameters = decodeParameters(parameters);
+        }
+        return parameters;
+    }
+
+    private static String formatParameters(String parameters) {
+        parameters = parameters.replaceAll("&", EscapeCharacters.newline);
+        return parameters.replaceAll("=", " = ");
+    }
+
+    private static String decodeParameters(String parameters) {
+        String decodedParameters = "";
+        ParameterDecoder decoder = new ParameterDecoder();
+        String[] keyAndValues = parameters.split("\r\n");
+
+        for(String keyAndValue: keyAndValues) {
+            decodedParameters += decoder.decode(keyAndValue) + EscapeCharacters.newline;
+        }
+
+        return decodedParameters.trim();
+    }
+
+    private static boolean isEncoded(String parameters) {
+        return parameters.contains("%");
+    }
+
+    private static String parseForQuery(String request) {
+        Pattern pattern = Pattern.compile("([^?]+=[\\S]+)");
+        Matcher matcher = pattern.matcher(request);
+
+        matcher.find();
+
+        return matcher.group(0);
     }
 
     private static Map<String, String> parseRequest(String request) {
         Map<String, String> fields = new HashMap<String,String>();
+        String parameters;
 
         String path = parseForPathUrl(request);
         String httpVerb = parseForHttpVerb(request);
-        String body = isBodyOfRequest(request) ? parseForBody(request) : null;
+        if (isBodyOfRequest(request)) {
+            parameters = parseForBody(request);
+        } else if(isQuery(request)) {
+            parameters = parseForParameters(request);
+        } else {
+            parameters = null;
+        }
 
         fields.put("path", path);
         fields.put("httpVerb", httpVerb);
-        fields.put("body", body);
+        fields.put("parameters", parameters);
 
         return fields;
+    }
+
+    private static boolean isQuery(String request) {
+        return request.contains("?");
     }
 
     private static String readHeadersOfRequest(BufferedReader reader) throws IOException {
@@ -67,7 +123,7 @@ public class Parser {
 
         String line;
         while (!(line = reader.readLine()).equals("")) {
-            requestHeaders += line + " ";
+            requestHeaders += line + EscapeCharacters.newline;
         }
 
         return requestHeaders;

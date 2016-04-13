@@ -2,12 +2,17 @@ import Parsers.Parser;
 import Requests.Request;
 import org.junit.Test;
 import org.junit.Assert;
+import specialCharacters.EscapeCharacters;
+
+import javax.lang.model.util.ElementScanner6;
 import java.io.ByteArrayInputStream;
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParserTest {
 
@@ -58,8 +63,33 @@ public class ParserTest {
 
         assertEquals("/logs", request.getPath());
         assertEquals( "GET", request.getHttpVerb());
-        assertEquals(null, request.getBody());
+        assertEquals(null, request.getParameters());
     }
 
+    @Test
+    public void TestCanParseForPath() {
+        String request= "GET /parameters?name=boboblaw";
+        assertEquals("/parameters", Parser.parseForPathUrl(request));
+    }
+
+    @Test
+    public void TestCanParseForParameter() {
+        String request = "GET /parameters?name=myname";
+        assertEquals("name = myname", Parser.parseForParameters(request));
+    }
+
+    @Test
+    public void TestCanParseForMultipleParameters() {
+        String request = "GET /parameters?name=myname&city=losangeles";
+        assertEquals("name = myname" + EscapeCharacters.newline + "city = losangeles",
+                     Parser.parseForParameters(request));
+    }
+
+    @Test
+    public void TestCanParseForParametersThatArePercentEncoded() {
+        String request = "GET /parameters?variable_1=Operators%20%3C%2C&variable_2=stuff";
+        assertEquals("variable_1 = Operators <," + EscapeCharacters.newline + "variable_2 = stuff",
+                     Parser.parseForParameters(request));
+    }
 
 }

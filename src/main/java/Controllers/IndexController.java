@@ -2,6 +2,8 @@ package Controllers;
 
 import Parsers.Parser;
 import Requests.Request;
+import httpStatus.HttpStatus;
+import specialCharacters.EscapeCharacters;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,25 +17,14 @@ public class IndexController implements Controller {
     }
 
     public String get() throws IOException {
-        String responseBody;
+        String response = "";
+        response += HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
 
         File file = new File("../resources/main/index.html");
         InputStream fileStream = new FileInputStream(file);
-        responseBody = Parser.fileToText(fileStream);
+        response += Parser.fileToText(fileStream);
 
-        return responseBody;
+        return response;
     }
 
-    public String post(Request request) {
-        return "a response";
-    }
-
-    public void delete() {
-    }
-
-    public String put(Request request) {
-        return "hello";
-    }
-
-    public void head() {}
 }

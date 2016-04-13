@@ -56,13 +56,19 @@ public class ParserTest {
 
     @Test
     public void TestCanCreateARequestObject() throws IOException {
-        String requestString = "GET /logs HTTP/1.1\r\nHost: localhost:5000\r\nConnection: Keep-Alive\r\nUser-Agent: Apache-HttpClient/4.3.5 (java 1.5)\r\nAccept-Encoding: gzip,deflate\r\n\r\n";
+        String requestString = "GET /logs HTTP/1.1\r\n"
+                               + "Authorization: Basic YWRtaW46aHVudGVyMg==\r\n"
+                               + "Host: localhost:5000\r\n"
+                               + "Connection: Keep-Alive\r\n"
+                               + "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\r\n"
+                               + "Accept-Encoding: gzip,deflate\r\n\r\n";
         InputStream inputStream = new ByteArrayInputStream(requestString.getBytes());
 
         Request request = Parser.parseAndCreateRequest(inputStream);
 
         assertEquals("/logs", request.getPath());
         assertEquals( "GET", request.getHttpVerb());
+        assertEquals("YWRtaW46aHVudGVyMg==", request.getAuthorization());
         assertEquals(null, request.getParameters());
     }
 

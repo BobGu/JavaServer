@@ -16,7 +16,7 @@ public class Parser {
         String request = parseInputStream(inputStream);
         Map<String,String> fields = parseRequest(request);
 
-        return new Request(fields.get("path"), fields.get("httpVerb"), fields.get("parameters"));
+        return new Request(fields.get("path"), fields.get("httpVerb"), fields.get("parameters"), fields.get("authorization"));
     }
 
 
@@ -80,6 +80,15 @@ public class Parser {
         return decodedParameters.trim();
     }
 
+    private static String parseForAuthorization(String request) {
+        Pattern pattern = Pattern.compile("Authorization: Basic (.+)");
+        Matcher matcher = pattern.matcher(request);
+
+        matcher.find();
+
+        return matcher.group(0);
+    }
+
     private static boolean isEncoded(String parameters) {
         return parameters.contains("%");
     }
@@ -106,10 +115,12 @@ public class Parser {
         } else {
             parameters = null;
         }
+        String authorization = parseForAuthorization(request);
 
         fields.put("path", path);
         fields.put("httpVerb", httpVerb);
         fields.put("parameters", parameters);
+        fields.put("authorization", authorization);
 
         return fields;
     }

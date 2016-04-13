@@ -9,7 +9,7 @@ public class RequestTest {
 
     @Before
     public void RequestObjectCreation() {
-        request = new Request("/", "GET", "data=fatcat");
+        request = new Request("/", "GET", "data=fatcat", "QWxhZGRpbjpPcGVuU2VzYW1l");
     }
 
     @Test
@@ -25,6 +25,11 @@ public class RequestTest {
     @Test
     public void TestCanSetParameters() {
         assertEquals("data=fatcat", request.getParameters());
+    }
+
+    @Test
+    public void TestCanGetAuthenticateBase64() {
+        assertEquals("QWxhZGRpbjpPcGVuU2VzYW1l", request.getAuthorization());
     }
 
 }

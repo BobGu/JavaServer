@@ -1,8 +1,7 @@
 package Parsers;
-
 import Requests.Request;
 import decoders.ParameterDecoder;
-
+import specialCharacters.EscapeCharacters;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,7 +44,7 @@ public class Parser {
     }
 
     public static String parseForPathUrl(String requestHeader) {
-        Pattern pattern = Pattern.compile("(/[a-z]+)");
+        Pattern pattern = Pattern.compile("(/[a-zA-Z0-9]*)");
         Matcher matcher = pattern.matcher(requestHeader);
         matcher.find();
 
@@ -54,22 +53,39 @@ public class Parser {
 
     public static String parseForParameters(String requestHeader) {
         String parameters = "";
-        ParameterDecoder decoder = new ParameterDecoder();
-        String query = parseForQuery(requestHeader);
-        String decodedParameter = decoder.decode(query);
-        Pattern pattern = Pattern.compile("([a-z]+=[a-z]+[^&]+)");
-        Matcher matcher = pattern.matcher(decodedParameter);
+        String[] linesOfRequest= requestHeader.split(EscapeCharacters.newline);
+        String firstLineOfRequest = linesOfRequest[0];
+        parameters = formatParameters(parseForQuery(firstLineOfRequest));
 
-        while(matcher.find()) {
-            parameters += matcher.group();
+        if (isEncoded(parameters)) {
+            parameters = decodeParameters(parameters);
+        }
+        return parameters;
+    }
+
+    private static String formatParameters(String parameters) {
+        parameters = parameters.replaceAll("&", EscapeCharacters.newline);
+        return parameters.replaceAll("=", " = ");
+    }
+
+    private static String decodeParameters(String parameters) {
+        String decodedParameters = "";
+        ParameterDecoder decoder = new ParameterDecoder();
+        String[] keyAndValues = parameters.split("\r\n");
+
+        for(String keyAndValue: keyAndValues) {
+            decodedParameters += decoder.decode(keyAndValue) + EscapeCharacters.newline;
         }
 
-        return parameters;
+        return decodedParameters.trim();
+    }
 
+    private static boolean isEncoded(String parameters) {
+        return parameters.contains("%");
     }
 
     private static String parseForQuery(String request) {
-        Pattern pattern = Pattern.compile("([^?]+=.+)");
+        Pattern pattern = Pattern.compile("([^?]+=[\\S]+)");
         Matcher matcher = pattern.matcher(request);
 
         matcher.find();
@@ -107,7 +123,7 @@ public class Parser {
 
         String line;
         while (!(line = reader.readLine()).equals("")) {
-            requestHeaders += line + " ";
+            requestHeaders += line + EscapeCharacters.newline;
         }
 
         return requestHeaders;

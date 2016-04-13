@@ -63,6 +63,17 @@ public class ParameterDecoderTest {
         assertEquals("variable_1=Operators <,&variable_2=stuff", decoder.decode(parameter));
     }
 
+    @Test
+    public void TestCanDecodePercentEncodedCharactersAndNonPercentEncoded() {
+        String parameter = "!%3D";
+        assertEquals("!=", decoder.decode(parameter));
+    }
+    @Test
+    public void TestTheThing() {
+        String parameter = "%20!%3D%3B%";
+        assertEquals(" !=;", decoder.decode(parameter));
+    }
+
     private Map<String, String> createReservedEncodedCharacters() {
         Map<String, String> encodedCharacters = new HashMap<String,String>();
         encodedCharacters.put("%21", "!");

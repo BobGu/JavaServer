@@ -36,12 +36,10 @@ public class FormControllerTest {
 
     @Test
     public void TestCorrectResponseForGet() throws IOException {
-        String response = formController.get();
-        Assert.assertThat(response,
-                containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
         MockRequest request = new MockRequest("/form", "GET", "data=hello");
         String response = formController.get(request);
-        Assert.assertThat(response, containsString(""));
+        Assert.assertThat(response,
+                containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
     }
 
     @Test
@@ -190,7 +188,7 @@ public class FormControllerTest {
         }
 
         @Override
-        public String get() {
+        public String get(Request request) {
             getInvoked = true;
             return "get request called";
        }

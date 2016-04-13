@@ -30,7 +30,7 @@ public class FormController implements Controller {
         String response = "";
         if (METHODS_ALLOWED.contains(request.getHttpVerb())) {
             if (request.getHttpVerb().equals("GET")) {
-                response = get();
+                response = get(request);
             } else if (request.getHttpVerb().equals("POST")) {
                 response = post(request);
             } else if (request.getHttpVerb().equals("PUT")) {
@@ -47,7 +47,7 @@ public class FormController implements Controller {
         return response;
     }
 
-    public String get() throws IOException {
+    public String get(Request request) throws IOException {
         String response;
         String responseHead = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
         String responseBody;
@@ -64,7 +64,7 @@ public class FormController implements Controller {
 
     public String post(Request request) throws IOException {
         String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
-        String textToWrite = request.getBody();
+        String textToWrite = request.getParameters();
         File file = new File(resourcePath);
 
         if(file.exists()) {

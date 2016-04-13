@@ -1,23 +1,34 @@
 package Controllers;
 
 import Requests.Request;
+import httpStatus.HttpStatus;
+import specialCharacters.EscapeCharacters;
 
 public class ParameterController implements Controller {
 
+    public String handle(Request request) {
+        String response = "";
+
+        if (request.getHttpVerb().equals("GET")) {
+            response = get(request);
+        }
+        return response;
+    }
+
     public String get(Request request) {
-        System.out.println(request.getParameters());
-        return request.getParameters();
+        String responseHead = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+        String responseBody = request.getParameters();
+
+        return responseHead + responseBody;
     }
 
-    public void post(Request request) {
+    private int toInt(byte[] responseBody) {
+        int totalBytes = 0;
 
+        for(Byte b:responseBody) {
+            totalBytes += b.intValue();
+        }
+        return totalBytes;
     }
 
-    public void put(Request request) {
-
-    }
-
-    public void delete() {
-
-    }
 }

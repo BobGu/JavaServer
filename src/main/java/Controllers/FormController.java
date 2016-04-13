@@ -70,9 +70,10 @@ public class FormController implements Controller {
         if(file.exists()) {
             textToWrite = updateFileText(file, textToWrite);
         }
-            FileWriter writer = new FileWriter(resourcePath, false);
-            writer.write(textToWrite);
-            writer.close();
+
+        FileWriter writer = new FileWriter(resourcePath, false);
+        writer.write(textToWrite);
+        writer.close();
         return response;
     }
 

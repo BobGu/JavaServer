@@ -9,6 +9,9 @@ import specialCharacters.EscapeCharacters;
 import java.io.IOException;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 public class RequestsControllerTest {
 
     @Test
@@ -20,9 +23,6 @@ public class RequestsControllerTest {
         assertEquals(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline, response);
     }
 
-    private void assertEquals(String s, String response) {
-    }
-
     @Test
     public void TestVisitGetsAddedToLog() throws IOException {
         Log log = Log.getInstance();
@@ -31,7 +31,7 @@ public class RequestsControllerTest {
 
         controller.handle(request);
 
-        List<String> recentVisits = log.recentVisits(1);
+        List<String> recentVisits = log.recentVisits(100);
         String recentVisit = recentVisits.get(0);
 
         assertEquals("HEAD /requests HTTP/1.1", recentVisit);

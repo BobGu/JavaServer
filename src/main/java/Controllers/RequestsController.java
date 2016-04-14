@@ -20,7 +20,7 @@ public class RequestsController implements Controller {
 
     public String head() {
         Log log = Log.getInstance();
-        log.addVisit("PUT /these HTTP/1.1");
+        log.addVisit("HEAD /requests HTTP/1.1");
         return HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
     }
 

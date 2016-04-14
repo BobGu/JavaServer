@@ -2,9 +2,11 @@ package Controllers;
 
 import Requests.Request;
 import httpStatus.HttpStatus;
+import logs.Log;
 import specialCharacters.EscapeCharacters;
 
 import javax.xml.bind.DatatypeConverter;
+import java.util.List;
 
 public class LogsController implements Controller{
 
@@ -28,11 +30,24 @@ public class LogsController implements Controller{
 
         if (request.getAuthorization() != null && isAdmin(authorizationCode)) {
             response += HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+            response += getLogVisits();
         } else {
             response += HttpStatus.notAuthorized + EscapeCharacters.newline;
             response += "WWW-Authenticate: Basic realm=\"/ Bob Server Logs\"" + EscapeCharacters.newline + EscapeCharacters.newline;
         }
         return response;
+    }
+
+    private String getLogVisits() {
+        String visits = "";
+        Log log = Log.getInstance();
+        List<String> recentVisits = log.recentVisits(3);
+
+        for(String recentVisit:recentVisits) {
+            visits += recentVisit + EscapeCharacters.newline;
+        }
+
+        return visits;
     }
 
     private String decodeBase64(String encodedString) {

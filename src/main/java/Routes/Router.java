@@ -41,6 +41,7 @@ public class Router {
         routes.add(new Route("/method_options",  new MethodOptionsController()));
         routes.add(new Route("/parameters", new ParameterController()));
         routes.add(new Route("/logs", new LogsController()));
+        routes.add(new Route("/log", new LogController()));
     }
 
     private Optional<Route> findRoute(String path) {

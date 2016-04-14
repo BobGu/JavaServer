@@ -4,6 +4,7 @@ import httpStatus.HttpStatus;
 import logs.Log;
 import org.junit.Test;
 import Requests.Request;
+import specialCharacters.EscapeCharacters;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,6 +34,16 @@ public class LogControllerTest {
         String recentVisit = recentVisits.get(0);
 
         assertEquals("GET /log HTTP/1.1", recentVisit);
+    }
+
+    @Test
+    public void TestMethodsNotAllowed() throws IOException {
+        Request request = new Request("/log", "POST", null, null);
+        Controller controller = new LogController();
+        String response = controller.handle(request);
+
+        assertEquals(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline,
+                     response);
     }
 
 }

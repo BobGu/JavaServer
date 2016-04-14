@@ -10,6 +10,8 @@ public class LogController implements Controller{
         String response = "";
         if (request.getHttpVerb().equals("GET")) {
             response = get();
+        } else {
+            response = HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
         }
 
         return response;

@@ -25,4 +25,11 @@ public class LogsControllerTest {
         assertThat(controller.handle(request), containsString("WWW-Authenticate: Basic realm=\"/ Bob Server Logs\""));
     }
 
+    @Test
+    public void TestResponseIsTwoHundredIfAuthenticated() throws IOException {
+        Request request = new Request("/logs", "GET", null, "YWRtaW46aHVudGVyMg==");
+        Controller controller = new LogsController();
+        assertThat(controller.handle(request), containsString(HttpStatus.okay));
+    }
+
 }

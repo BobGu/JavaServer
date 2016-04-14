@@ -86,7 +86,7 @@ public class Parser {
 
         matcher.find();
 
-        return matcher.group(0);
+        return matcher.group(1);
     }
 
     private static boolean isEncoded(String parameters) {
@@ -115,7 +115,7 @@ public class Parser {
         } else {
             parameters = null;
         }
-        String authorization = parseForAuthorization(request);
+        String authorization = request.contains("Authorization") ? parseForAuthorization(request) : null;
 
         fields.put("path", path);
         fields.put("httpVerb", httpVerb);

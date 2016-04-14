@@ -80,14 +80,6 @@ public class Parser {
         return decodedParameters.trim();
     }
 
-    private static String parseForAuthorization(String request) {
-        Pattern pattern = Pattern.compile("Authorization: Basic (.+)");
-        Matcher matcher = pattern.matcher(request);
-
-        matcher.find();
-
-        return matcher.group(1);
-    }
 
     private static boolean isEncoded(String parameters) {
         return parameters.contains("%");
@@ -108,7 +100,7 @@ public class Parser {
         String path = parseForPathUrl(request);
         String httpVerb = parseForHttpVerb(request);
         String parameters = parseForParameters(request);
-        String authorization = request.contains("Authorization") ? parseForAuthorization(request) : null;
+        String authorization = parseForAuthorization(request);
 
         fields.put("path", path);
         fields.put("httpVerb", httpVerb);
@@ -116,6 +108,26 @@ public class Parser {
         fields.put("authorization", authorization);
 
         return fields;
+    }
+
+    private static String parseForAuthorization(String request) {
+        String authorization = "";
+
+        if (request.contains("Authorization")) {
+            authorization = findAuthorization(request);
+        } else {
+            authorization = null;
+        }
+        return authorization;
+    }
+
+    private static String findAuthorization(String request) {
+        Pattern pattern = Pattern.compile("Authorization: Basic (.+)");
+        Matcher matcher = pattern.matcher(request);
+
+        matcher.find();
+
+        return matcher.group(1);
     }
 
     private static String parseForParameters(String request) {

@@ -7,6 +7,8 @@ import specialCharacters.EscapeCharacters;
 
 import java.io.*;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -104,14 +106,14 @@ public class FormController implements Controller {
         InputStream fileStream = new FileInputStream(file);
         String fileText = Parser.fileToText(fileStream);
 
-        Pattern keyPattern = Pattern.compile("([a-z]+=)");
+        Pattern keyPattern = Pattern.compile("([a-zA-Z0-9\"]+=)");
         Matcher existingKeyMatcher = keyPattern.matcher(fileText);
         Matcher replacementKeyMatcher = keyPattern.matcher(textToWrite);
 
-        existingKeyMatcher.find();
+        List<String> allExistingKeys = findMatches(fileText, existingKeyMatcher);
         replacementKeyMatcher.find();
 
-        if(areKeysTheSame(existingKeyMatcher, replacementKeyMatcher)) {
+        if(anyKeysTheSame(allExistingKeys, replacementKeyMatcher.group())) {
             fileText = replaceValue(fileText, textToWrite);
         } else {
             fileText += "\n" + textToWrite;
@@ -121,12 +123,23 @@ public class FormController implements Controller {
         return fileText;
 
     }
-    private boolean areKeysTheSame(Matcher existingMatcher, Matcher replacementMatcher) {
-        return existingMatcher.group(1).equals(replacementMatcher.group(1));
+
+    private List<String> findMatches(String fileText, Matcher existingKeyMatcher) {
+        List<String> allMatches = new ArrayList<String>();
+
+        while(existingKeyMatcher.find()) {
+            allMatches.add(existingKeyMatcher.group());
+        }
+        return allMatches;
+    }
+
+    private boolean anyKeysTheSame(List<String> existingKeys, String replacementKey) {
+        return existingKeys.stream()
+                           .anyMatch(key -> key.equals(replacementKey));
     }
 
     private String replaceValue(String fileText, String textToWrite) {
-        Pattern valuePattern = Pattern.compile("(=[a-z ]+)");
+        Pattern valuePattern = Pattern.compile("(=[a-zA-Z0-9\" ]+)");
         Matcher existingValueMatcher = valuePattern.matcher(fileText);
         Matcher replacementValueMatcher = valuePattern.matcher(textToWrite);
 

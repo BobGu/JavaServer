@@ -4,15 +4,13 @@ import org.junit.Test;
 import org.junit.Assert;
 import specialCharacters.EscapeCharacters;
 
-import javax.lang.model.util.ElementScanner6;
 import java.io.ByteArrayInputStream;
+
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ParserTest {
 
@@ -56,13 +54,19 @@ public class ParserTest {
 
     @Test
     public void TestCanCreateARequestObject() throws IOException {
-        String requestString = "GET /logs HTTP/1.1\r\nHost: localhost:5000\r\nConnection: Keep-Alive\r\nUser-Agent: Apache-HttpClient/4.3.5 (java 1.5)\r\nAccept-Encoding: gzip,deflate\r\n\r\n";
+        String requestString = "GET /logs HTTP/1.1\r\n"
+                               + "Authorization: Basic YWRtaW46aHVudGVyMg==\r\n"
+                               + "Host: localhost:5000\r\n"
+                               + "Connection: Keep-Alive\r\n"
+                               + "User-Agent: Apache-HttpClient/4.3.5 (java 1.5)\r\n"
+                               + "Accept-Encoding: gzip,deflate\r\n\r\n";
         InputStream inputStream = new ByteArrayInputStream(requestString.getBytes());
 
         Request request = Parser.parseAndCreateRequest(inputStream);
 
         assertEquals("/logs", request.getPath());
         assertEquals( "GET", request.getHttpVerb());
+        assertEquals("YWRtaW46aHVudGVyMg==", request.getAuthorization());
         assertEquals(null, request.getParameters());
     }
 
@@ -73,23 +77,29 @@ public class ParserTest {
     }
 
     @Test
-    public void TestCanParseForParameter() {
-        String request = "GET /parameters?name=myname";
-        assertEquals("name = myname", Parser.parseForParameters(request));
+    public void TestCanParseForParameter() throws IOException {
+        String requestHeader = "GET /parameters?name=myname" + EscapeCharacters.newline + EscapeCharacters.newline;
+        InputStream stream = new ByteArrayInputStream(requestHeader.getBytes());
+        Request request = Parser.parseAndCreateRequest(stream);
+        assertEquals("name = myname", request.getParameters());
     }
 
     @Test
-    public void TestCanParseForMultipleParameters() {
-        String request = "GET /parameters?name=myname&city=losangeles";
-        assertEquals("name = myname" + EscapeCharacters.newline + "city = losangeles",
-                     Parser.parseForParameters(request));
+    public void TestCanParseForMultipleParameters() throws IOException {
+        String requestHeader = "GET /parameters?name=myname&city=losangeles" + EscapeCharacters.newline + EscapeCharacters.newline;
+        InputStream stream = new ByteArrayInputStream(requestHeader.getBytes());
+        Request request = Parser.parseAndCreateRequest(stream);
+        assertEquals("name = myname" + EscapeCharacters.newline + "city = losangeles", request.getParameters());
     }
 
     @Test
-    public void TestCanParseForParametersThatArePercentEncoded() {
-        String request = "GET /parameters?variable_1=Operators%20%3C%2C&variable_2=stuff";
+    public void TestCanParseForParametersThatArePercentEncoded() throws IOException {
+        String requestHeader = "GET /parameters?variable_1=Operators%20%3C%2C&variable_2=stuff" + EscapeCharacters.newline + EscapeCharacters.newline;
+        InputStream stream = new ByteArrayInputStream((requestHeader.getBytes()));
+        Request request = Parser.parseAndCreateRequest(stream);
         assertEquals("variable_1 = Operators <," + EscapeCharacters.newline + "variable_2 = stuff",
-                     Parser.parseForParameters(request));
+                      request.getParameters());
+
     }
 
 }

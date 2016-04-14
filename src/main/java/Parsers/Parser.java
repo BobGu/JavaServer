@@ -16,7 +16,7 @@ public class Parser {
         String request = parseInputStream(inputStream);
         Map<String,String> fields = parseRequest(request);
 
-        return new Request(fields.get("path"), fields.get("httpVerb"), fields.get("parameters"));
+        return new Request(fields.get("path"), fields.get("httpVerb"), fields.get("parameters"), fields.get("authorization"));
     }
 
 
@@ -44,14 +44,14 @@ public class Parser {
     }
 
     public static String parseForPathUrl(String requestHeader) {
-        Pattern pattern = Pattern.compile("(/[a-zA-Z0-9]*)");
+        Pattern pattern = Pattern.compile("(/[a-zA-Z0-9/]*)");
         Matcher matcher = pattern.matcher(requestHeader);
         matcher.find();
 
         return matcher.group(0);
     }
 
-    public static String parseForParameters(String requestHeader) {
+    private static String parseForUrlParameters(String requestHeader) {
         String parameters = "";
         String[] linesOfRequest= requestHeader.split(EscapeCharacters.newline);
         String firstLineOfRequest = linesOfRequest[0];
@@ -80,6 +80,7 @@ public class Parser {
         return decodedParameters.trim();
     }
 
+
     private static boolean isEncoded(String parameters) {
         return parameters.contains("%");
     }
@@ -95,23 +96,51 @@ public class Parser {
 
     private static Map<String, String> parseRequest(String request) {
         Map<String, String> fields = new HashMap<String,String>();
-        String parameters;
 
         String path = parseForPathUrl(request);
         String httpVerb = parseForHttpVerb(request);
-        if (isBodyOfRequest(request)) {
-            parameters = parseForBody(request);
-        } else if(isQuery(request)) {
-            parameters = parseForParameters(request);
-        } else {
-            parameters = null;
-        }
+        String parameters = parseForParameters(request);
+        String authorization = parseForAuthorization(request);
 
         fields.put("path", path);
         fields.put("httpVerb", httpVerb);
         fields.put("parameters", parameters);
+        fields.put("authorization", authorization);
 
         return fields;
+    }
+
+    private static String parseForAuthorization(String request) {
+        String authorization = "";
+
+        if (request.contains("Authorization")) {
+            authorization = findAuthorization(request);
+        } else {
+            authorization = null;
+        }
+        return authorization;
+    }
+
+    private static String findAuthorization(String request) {
+        Pattern pattern = Pattern.compile("Authorization: Basic (.+)");
+        Matcher matcher = pattern.matcher(request);
+
+        matcher.find();
+
+        return matcher.group(1);
+    }
+
+    private static String parseForParameters(String request) {
+        String parameters;
+
+        if (isBodyOfRequest(request)) {
+            parameters = parseForBody(request);
+        } else if (isQuery(request)) {
+            parameters = parseForUrlParameters(request);
+        } else {
+            parameters = null;
+        }
+        return parameters;
     }
 
     private static boolean isQuery(String request) {

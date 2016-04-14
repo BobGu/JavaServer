@@ -25,7 +25,7 @@ public class FormControllerTest {
     public void TestCreateFormController() {
         String path = "src/tests/TestFiles/fakeform.txt";
         formController = new FormController(path);
-        mockGetRequest = new MockRequest("/form", "GET", "data=yet");
+        mockGetRequest = new MockRequest("/form", "GET", "data=yet", null);
     }
 
     public void createFile() throws IOException {
@@ -36,7 +36,7 @@ public class FormControllerTest {
 
     @Test
     public void TestCorrectResponseForGet() throws IOException {
-        MockRequest request = new MockRequest("/form", "GET", "data=hello");
+        MockRequest request = new MockRequest("/form", "GET", "data=hello", null);
         String response = formController.get(request);
         Assert.assertThat(response,
                 containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
@@ -44,7 +44,7 @@ public class FormControllerTest {
 
     @Test
     public void TestPostReturnsTwoHundredOkay() throws IOException {
-        MockRequest request = new MockRequest("/form", "POST", "data=hello");
+        MockRequest request = new MockRequest("/form", "POST", "data=hello", null);
         String response = formController.post(request);
 
         Assert.assertThat(response, containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
@@ -52,7 +52,7 @@ public class FormControllerTest {
 
     @Test
     public void TestPostAddsData() throws IOException {
-        MockRequest request = new MockRequest("/form", "POST", "data=hello");
+        MockRequest request = new MockRequest("/form", "POST", "data=hello", null);
         formController.post(request);
         String getResponse = formController.get(mockGetRequest);
 
@@ -61,7 +61,7 @@ public class FormControllerTest {
 
     @Test
     public void TestPostAddsDataIfKeyDoesNotExist() throws IOException {
-        MockRequest request = new MockRequest("/form", "POST", "greeting=hello");
+        MockRequest request = new MockRequest("/form", "POST", "greeting=hello", null);
         createFile();
 
         formController.post(request);
@@ -73,7 +73,7 @@ public class FormControllerTest {
 
     @Test
     public void TestPostReplacesDataWithSameKey() throws IOException {
-        MockRequest request = new MockRequest("/form", "POST", "data=newdata");
+        MockRequest request = new MockRequest("/form", "POST", "data=newdata", null);
         createFile();
 
         formController.post(request);
@@ -96,7 +96,7 @@ public class FormControllerTest {
 
     @Test
     public void TestPutCreatesANewResourceIfOneDoesNotExist() throws IOException {
-        MockRequest request = new MockRequest("/form", "PUT", "data=im a cool guy");
+        MockRequest request = new MockRequest("/form", "PUT", "data=im a cool guy", null);
 
         formController.put(request);
         String getResponse = formController.get(mockGetRequest);
@@ -106,7 +106,7 @@ public class FormControllerTest {
 
     @Test
     public void TestPutReturnsAOkayResponse() throws IOException {
-        MockRequest request = new MockRequest("/form", "PUT", "data=im a cool guy");
+        MockRequest request = new MockRequest("/form", "PUT", "data=im a cool guy", null);
         String response = formController.put(request);
 
         Assert.assertThat(response, containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
@@ -114,7 +114,7 @@ public class FormControllerTest {
 
     @Test
     public void TestMethodIsNotAllowed() throws IOException {
-        MockRequest request = new MockRequest("/form", "FAKEHTTPACTION", "data=hello");
+        MockRequest request = new MockRequest("/form", "FAKEHTTPACTION", "data=hello", null);
         String response = formController.handle(request);
 
         Assert.assertThat(response, containsString(HttpStatus.methodNotAllowed));
@@ -122,7 +122,7 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleChoosesCorrectAction() throws IOException {
-        MockRequest request = new MockRequest("/form", "GET", null);
+        MockRequest request = new MockRequest("/form", "GET", null, null);
         MockFormController controller = new MockFormController();
         controller.handle(request);
 
@@ -131,7 +131,7 @@ public class FormControllerTest {
 
     @Test
     public void TestHandlePicksTheCorrectAction() throws IOException {
-        MockRequest request = new MockRequest("/form", "POST", null);
+        MockRequest request = new MockRequest("/form", "POST", null, null);
         MockFormController controller = new MockFormController();
         controller.handle(request);
 
@@ -140,7 +140,7 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleCallsTheCorrectAction() throws IOException {
-        MockRequest request = new MockRequest("/form", "PUT", null);
+        MockRequest request = new MockRequest("/form", "PUT", null, null);
         MockFormController controller = new MockFormController();
         controller.handle(request);
 
@@ -149,7 +149,7 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleCallsTheAppropriateAction() throws IOException {
-        MockRequest request = new MockRequest("/form", "OPTIONS", null);
+        MockRequest request = new MockRequest("/form", "OPTIONS", null, null);
         MockFormController controller = new MockFormController();
         controller.handle(request);
 
@@ -158,7 +158,7 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleChoosesTheCorrectAction() throws IOException {
-        MockRequest request = new MockRequest("/form", "DELETE", null);
+        MockRequest request = new MockRequest("/form", "DELETE", null, null);
         MockFormController controller = new MockFormController();
         controller.handle(request);
 

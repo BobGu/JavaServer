@@ -60,9 +60,9 @@ public class LogTest {
 
     @Test
     public void TestOnlyOneLoggerIsCreated() {
-        Log instanceOfLog = Log.getInstance();
-        Log sameInstanceOfLog = Log.getInstance();
+        Log instanceOfLogOne = Log.getInstance();
+        Log instanceOfLogTwo = Log.getInstance();
 
-        assertSame(instanceOfLog, sameInstanceOfLog);
+        assertSame(instanceOfLogOne, instanceOfLogTwo);
     }
 }

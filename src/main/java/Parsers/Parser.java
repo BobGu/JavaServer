@@ -51,7 +51,7 @@ public class Parser {
         return matcher.group(0);
     }
 
-    public static String parseForParameters(String requestHeader) {
+    private static String parseForUrlParameters(String requestHeader) {
         String parameters = "";
         String[] linesOfRequest= requestHeader.split(EscapeCharacters.newline);
         String firstLineOfRequest = linesOfRequest[0];
@@ -104,17 +104,10 @@ public class Parser {
 
     private static Map<String, String> parseRequest(String request) {
         Map<String, String> fields = new HashMap<String,String>();
-        String parameters;
 
         String path = parseForPathUrl(request);
         String httpVerb = parseForHttpVerb(request);
-        if (isBodyOfRequest(request)) {
-            parameters = parseForBody(request);
-        } else if(isQuery(request)) {
-            parameters = parseForParameters(request);
-        } else {
-            parameters = null;
-        }
+        String parameters = parseForParameters(request);
         String authorization = request.contains("Authorization") ? parseForAuthorization(request) : null;
 
         fields.put("path", path);
@@ -123,6 +116,19 @@ public class Parser {
         fields.put("authorization", authorization);
 
         return fields;
+    }
+
+    private static String parseForParameters(String request) {
+        String parameters;
+
+        if (isBodyOfRequest(request)) {
+            parameters = parseForBody(request);
+        } else if (isQuery(request)) {
+            parameters = parseForUrlParameters(request);
+        } else {
+            parameters = null;
+        }
+        return parameters;
     }
 
     private static boolean isQuery(String request) {

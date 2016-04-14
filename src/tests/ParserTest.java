@@ -6,11 +6,14 @@ import specialCharacters.EscapeCharacters;
 
 import javax.lang.model.util.ElementScanner6;
 import java.io.ByteArrayInputStream;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,23 +82,29 @@ public class ParserTest {
     }
 
     @Test
-    public void TestCanParseForParameter() {
-        String request = "GET /parameters?name=myname";
-        assertEquals("name = myname", Parser.parseForParameters(request));
+    public void TestCanParseForParameter() throws IOException {
+        String requestHeader = "GET /parameters?name=myname" + EscapeCharacters.newline + EscapeCharacters.newline;
+        InputStream stream = new ByteArrayInputStream(requestHeader.getBytes());
+        Request request = Parser.parseAndCreateRequest(stream);
+        assertEquals("name = myname", request.getParameters());
     }
 
     @Test
-    public void TestCanParseForMultipleParameters() {
-        String request = "GET /parameters?name=myname&city=losangeles";
-        assertEquals("name = myname" + EscapeCharacters.newline + "city = losangeles",
-                     Parser.parseForParameters(request));
+    public void TestCanParseForMultipleParameters() throws IOException {
+        String requestHeader = "GET /parameters?name=myname&city=losangeles" + EscapeCharacters.newline + EscapeCharacters.newline;
+        InputStream stream = new ByteArrayInputStream(requestHeader.getBytes());
+        Request request = Parser.parseAndCreateRequest(stream);
+        assertEquals("name = myname" + EscapeCharacters.newline + "city = losangeles", request.getParameters());
     }
 
     @Test
-    public void TestCanParseForParametersThatArePercentEncoded() {
-        String request = "GET /parameters?variable_1=Operators%20%3C%2C&variable_2=stuff";
+    public void TestCanParseForParametersThatArePercentEncoded() throws IOException {
+        String requestHeader = "GET /parameters?variable_1=Operators%20%3C%2C&variable_2=stuff" + EscapeCharacters.newline + EscapeCharacters.newline;
+        InputStream stream = new ByteArrayInputStream((requestHeader.getBytes()));
+        Request request = Parser.parseAndCreateRequest(stream);
         assertEquals("variable_1 = Operators <," + EscapeCharacters.newline + "variable_2 = stuff",
-                     Parser.parseForParameters(request));
+                      request.getParameters());
+
     }
 
 }

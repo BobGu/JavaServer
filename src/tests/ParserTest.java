@@ -4,18 +4,13 @@ import org.junit.Test;
 import org.junit.Assert;
 import specialCharacters.EscapeCharacters;
 
-import javax.lang.model.util.ElementScanner6;
 import java.io.ByteArrayInputStream;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.spec.ECField;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ParserTest {
 

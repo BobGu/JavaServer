@@ -43,6 +43,7 @@ public class Router {
         routes.add(new Route("/logs", new LogsController()));
         routes.add(new Route("/log", new LogController()));
         routes.add(new Route("/these", new TheseController()));
+        routes.add(new Route("/requests", new RequestsController()));
     }
 
     private Optional<Route> findRoute(String path) {

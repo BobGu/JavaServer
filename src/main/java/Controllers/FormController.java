@@ -112,9 +112,15 @@ public class FormController implements Controller {
 
         List<String> allExistingKeys = findMatches(fileText, existingKeyMatcher);
         replacementKeyMatcher.find();
+        String replacementKey = replacementKeyMatcher.group();
 
-        if(anyKeysTheSame(allExistingKeys, replacementKeyMatcher.group())) {
-            fileText = replaceValue(fileText, textToWrite);
+        if(anyKeysTheSame(allExistingKeys, replacementKey)) {
+            Pattern keyValue = Pattern.compile("(replacementKey[a-zA-Z0-9\"]+)");
+            Matcher keyValueMatcher = keyValue.matcher(fileText);
+            keyValueMatcher.find();
+            String keyValueToReplace = keyValueMatcher.group();
+            fileText.replaceFirst(keyValueToReplace, textToWrite);
+
         } else {
             fileText += "\n" + textToWrite;
         }

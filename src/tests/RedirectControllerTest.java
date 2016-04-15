@@ -21,7 +21,7 @@ public class RedirectControllerTest {
 
     @Test
     public void TestResponseIncludesTheLocationOfRedirect() throws IOException {
-        assertThat(controller.handle(getRequest), containsString("localhost:5000/"));
+        assertThat(controller.handle(getRequest), containsString("http://localhost:5000/"));
     }
-   
+
 }

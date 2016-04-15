@@ -19,7 +19,7 @@ public class RedirectController implements Controller{
     private String get() {
         return HttpStatus.redirect
                + EscapeCharacters.newline
-               + "Location: localhost:5000/"
+               + "Location: http://localhost:5000/"
                + EscapeCharacters.newline
                + EscapeCharacters.newline;
     }

@@ -44,6 +44,7 @@ public class Router {
         routes.add(new Route("/log", new LogController()));
         routes.add(new Route("/these", new TheseController()));
         routes.add(new Route("/requests", new RequestsController()));
+        routes.add(new Route("/redirect", new RedirectController()));
     }
 
     private Optional<Route> findRoute(String path) {

@@ -1,10 +1,11 @@
 package controllers;
 
+import writers.FileWriter;
+import writers.Writer;
 import parsers.Parser;
 import requests.Request;
 import httpStatus.HttpStatus;
 import specialCharacters.EscapeCharacters;
-
 import java.io.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -15,16 +16,23 @@ import java.util.regex.Pattern;
 public class FormController implements Controller {
     private String METHODS_ALLOWED = "GET,POST,PUT,DELETE,OPTIONS";
     private String resourcePath;
+    private writers.Writer writer;
 
-    public FormController(){
-       this(null);
+    public FormController(Writer writer){
+       this(null, writer);
     }
 
     public FormController(String resourcePath) {
+        this(resourcePath, null);
+    }
+
+    public FormController(String resourcePath, Writer writer) {
         if (resourcePath == null) {
             this.resourcePath = "../resources/main/form.txt";
+            this.writer = writer;
         } else {
             this.resourcePath = resourcePath;
+            this.writer = writer;
         }
     }
 
@@ -67,15 +75,7 @@ public class FormController implements Controller {
     private String post(Request request) throws IOException {
         String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
         String textToWrite = request.getParameters();
-        File file = new File(resourcePath);
-
-        if(file.exists()) {
-            textToWrite = updateFileText(file, textToWrite);
-        }
-
-        FileWriter writer = new FileWriter(resourcePath, false);
-        writer.write(textToWrite);
-        writer.close();
+        writer.write(resourcePath, textToWrite);
         return response;
     }
 

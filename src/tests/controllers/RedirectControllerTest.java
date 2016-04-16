@@ -1,6 +1,8 @@
-import Controllers.Controller;
-import Controllers.RedirectController;
-import Requests.Request;
+package controllers;
+
+import controllers.Controller;
+import controllers.RedirectController;
+import requests.Request;
 import httpStatus.HttpStatus;
 import org.junit.Test;
 import specialCharacters.EscapeCharacters;

@@ -1,5 +1,7 @@
-import org.junit.After;
+package servers;
+
 import org.junit.Test;
+import servers.Server;
 
 import java.io.*;
 import java.net.ServerSocket;

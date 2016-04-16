@@ -1,5 +1,5 @@
-package Controllers;
-import Requests.Request;
+package controllers;
+import requests.Request;
 import httpStatus.HttpStatus;
 import logs.Log;
 import specialCharacters.EscapeCharacters;

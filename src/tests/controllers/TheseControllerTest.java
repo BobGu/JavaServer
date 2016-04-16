@@ -1,6 +1,8 @@
-import Controllers.Controller;
-import Controllers.RequestsController;
-import Requests.Request;
+package controllers;
+
+import controllers.Controller;
+import controllers.TheseController;
+import requests.Request;
 import httpStatus.HttpStatus;
 import logs.Log;
 import org.junit.Test;
@@ -9,15 +11,14 @@ import specialCharacters.EscapeCharacters;
 import java.io.IOException;
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
-public class RequestsControllerTest {
+public class TheseControllerTest {
 
     @Test
     public void TestRepliesWithTwoHundredOkayForPut() throws IOException {
-        Request request = new Request("/requests", "HEAD", null, null);
-        Controller controller = new RequestsController();
+        Request request = new Request("/these", "PUT", null, null);
+        Controller controller = new TheseController();
         String response = controller.handle(request);
 
         assertEquals(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline, response);
@@ -26,21 +27,21 @@ public class RequestsControllerTest {
     @Test
     public void TestVisitGetsAddedToLog() throws IOException {
         Log log = Log.getInstance();
-        Request request = new Request("/requests", "HEAD", null, null);
-        Controller controller = new RequestsController();
+        Request request = new Request("/these", "PUT", null, null);
+        Controller controller = new TheseController();
 
         controller.handle(request);
 
-        List<String> recentVisits = log.recentVisits(100);
+        List<String> recentVisits = log.recentVisits(1);
         String recentVisit = recentVisits.get(0);
 
-        assertEquals("HEAD /requests HTTP/1.1", recentVisit);
+        assertEquals("PUT /these HTTP/1.1", recentVisit);
     }
 
     @Test
     public void TestMethodsNotAllowed() throws IOException {
-        Request request = new Request("/requests", "POST", null, null);
-        Controller controller = new RequestsController();
+        Request request = new Request("/these", "POST", null, null);
+        Controller controller = new TheseController();
         String response = controller.handle(request);
 
         assertEquals(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline,

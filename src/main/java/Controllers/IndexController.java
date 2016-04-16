@@ -1,7 +1,7 @@
-package Controllers;
+package controllers;
 
-import Parsers.Parser;
-import Requests.Request;
+import parsers.Parser;
+import requests.Request;
 import httpStatus.HttpStatus;
 import specialCharacters.EscapeCharacters;
 

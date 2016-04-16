@@ -1,7 +1,7 @@
-package Routes;
+package routes;
 
-import Controllers.*;
-import Requests.Request;
+import controllers.*;
+import requests.Request;
 import httpStatus.HttpStatus;
 import specialCharacters.EscapeCharacters;
 import java.io.IOException;

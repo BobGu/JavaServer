@@ -1,10 +1,13 @@
-import Parsers.Parser;
-import Requests.Request;
-import Routes.Router;
+package servers;
+
+import parsers.Parser;
+import requests.Request;
+import routes.Router;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+
 
 public class Server {
     private ServerSocket serverSocket;

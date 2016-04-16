@@ -1,6 +1,6 @@
-package Routes;
+package routes;
 
-import Controllers.Controller;
+import controllers.Controller;
 
 public class Route {
     private String path;

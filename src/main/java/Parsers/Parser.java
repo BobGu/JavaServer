@@ -1,5 +1,5 @@
-package Parsers;
-import Requests.Request;
+package parsers;
+import requests.Request;
 import decoders.ParameterDecoder;
 import specialCharacters.EscapeCharacters;
 import java.io.BufferedReader;

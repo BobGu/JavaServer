@@ -1,9 +1,11 @@
-import Controllers.Controller;
-import Controllers.LogController;
+package controllers;
+
+import controllers.Controller;
+import controllers.LogController;
 import httpStatus.HttpStatus;
 import logs.Log;
 import org.junit.Test;
-import Requests.Request;
+import requests.Request;
 import specialCharacters.EscapeCharacters;
 
 import java.io.IOException;

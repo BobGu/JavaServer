@@ -1,5 +1,5 @@
-import Parsers.Parser;
-import Requests.Request;
+import parsers.Parser;
+import requests.Request;
 import org.junit.Test;
 import org.junit.Assert;
 import specialCharacters.EscapeCharacters;

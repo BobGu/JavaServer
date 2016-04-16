@@ -1,4 +1,5 @@
-import decoders.ParameterDecoder;
+package decoders;
+
 import org.junit.Before;
 import org.junit.Test;
 

@@ -2,11 +2,7 @@ import logs.Log;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import static com.sun.xml.internal.ws.dump.LoggingDumpTube.Position.Before;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
@@ -33,7 +29,7 @@ public class LogTest {
     public void TestRecentVisitsReturnsVisits() {
         log.addVisit("GET /form HTTP/1.1");
         log.addVisit("POST /form HTTP/1.1");
-        log.addVisit("OPTIONS, / HTTP/1.1");
+        log.addVisit("OPTIONS / HTTP/1.1");
 
         List<String> recentVisits = log.recentVisits(2);
         String secondMostRecentVisit = recentVisits.get(0);

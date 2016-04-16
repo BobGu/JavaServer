@@ -1,5 +1,6 @@
-import Mocks.MockController;
-import Routes.Route;
+import controllers.Controller;
+import requests.Request;
+import routes.Route;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,6 +23,15 @@ public class RouteTest {
     @Test
     public void TestRouteCanGetAController() {
         assertThat(route.getController(), instanceOf(MockController.class));
+    }
+
+
+    private class MockController implements Controller {
+
+        public String handle(Request request) {
+            return "";
+        }
+
     }
 
 }

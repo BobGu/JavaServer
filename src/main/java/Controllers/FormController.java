@@ -1,7 +1,7 @@
-package Controllers;
+package controllers;
 
-import Parsers.Parser;
-import Requests.Request;
+import parsers.Parser;
+import requests.Request;
 import httpStatus.HttpStatus;
 import specialCharacters.EscapeCharacters;
 
@@ -49,7 +49,7 @@ public class FormController implements Controller {
         return response;
     }
 
-    public String get(Request request) throws IOException {
+    private String get(Request request) throws IOException {
         String response;
         String responseHead = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
         String responseBody;
@@ -64,7 +64,7 @@ public class FormController implements Controller {
         return responseHead + responseBody;
     }
 
-    public String post(Request request) throws IOException {
+    private String post(Request request) throws IOException {
         String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
         String textToWrite = request.getParameters();
         File file = new File(resourcePath);
@@ -79,7 +79,7 @@ public class FormController implements Controller {
         return response;
     }
 
-    public String delete() {
+    private String delete() {
         String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
         File file = new File(resourcePath);
 
@@ -89,11 +89,11 @@ public class FormController implements Controller {
         return response;
     }
 
-    public String put(Request request) throws IOException {
+    private String put(Request request) throws IOException {
         return post(request);
     }
 
-    public String options() {
+    private String options() {
         return  HttpStatus.okay
                 + EscapeCharacters.newline
                 + "Allow: "

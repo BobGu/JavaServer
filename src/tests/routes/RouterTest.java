@@ -1,13 +1,10 @@
-import Controllers.Controller;
-import Controllers.FormController;
-import Controllers.IndexController;
-import Mocks.MockController;
-import Requests.Request;
-import Routes.Route;
-import Routes.Router;
+import controllers.Controller;
+import requests.Request;
 import httpStatus.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
+import routes.Route;
+import routes.Router;
 import specialCharacters.EscapeCharacters;
 
 import java.io.IOException;
@@ -61,4 +58,42 @@ public class RouterTest {
 
         assertEquals(HttpStatus.notFound + EscapeCharacters.newline + EscapeCharacters.newline, response);
     }
+
+    private class MockController implements Controller {
+        private boolean postInvoked = false;
+        private boolean handleInvoked = false;
+
+        public String get(Request request) {
+            return "Hello World!";
+        }
+
+        public String post(Request request) {
+            postInvoked = true;
+            return "TRUE";
+        }
+
+        public void delete() {
+        }
+
+        public String put(Request request) { return "PUTTER";}
+
+        public boolean isPostInvoked() {
+            return postInvoked;
+        }
+
+        public boolean isHandleInvoked() {
+            return handleInvoked;
+        }
+
+        public void head() {
+
+        }
+
+        public String handle(Request request) {
+            handleInvoked = true;
+            return "handling the request";
+        }
+
+    }
+
 }

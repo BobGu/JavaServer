@@ -1,7 +1,9 @@
-import Controllers.Controller;
-import Controllers.LogsController;
-import Controllers.TheseController;
-import Requests.Request;
+package controllers;
+
+import controllers.Controller;
+import controllers.LogsController;
+import controllers.TheseController;
+import requests.Request;
 import httpStatus.HttpStatus;
 import logs.Log;
 import org.junit.Test;

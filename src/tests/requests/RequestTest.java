@@ -1,4 +1,5 @@
-import Requests.Request;
+package requests;
+
 import org.junit.Before;
 import org.junit.Test;
 

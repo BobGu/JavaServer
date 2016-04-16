@@ -1,6 +1,6 @@
-package Controllers;
+package controllers;
 
-import Requests.Request;
+import requests.Request;
 import httpStatus.HttpStatus;
 import specialCharacters.EscapeCharacters;
 

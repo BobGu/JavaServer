@@ -73,11 +73,7 @@ public class FormController implements Controller {
 
     private String delete() {
         String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
-        File file = new File(resourcePath);
-
-        if(file.exists()) {
-            file.delete();
-        }
+        writer.delete(resourcePath);
         return response;
     }
 

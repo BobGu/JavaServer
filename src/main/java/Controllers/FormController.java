@@ -82,7 +82,10 @@ public class FormController implements Controller {
     }
 
     private String put(Request request) throws IOException {
-        return post(request);
+        String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+        String textToWrite = request.getParameters();
+        writer.update(resourcePath, textToWrite);
+        return response;
     }
 
     private String options() {
@@ -94,57 +97,5 @@ public class FormController implements Controller {
                 + EscapeCharacters.newline;
     }
 
-    private String updateFileText(File file, String textToWrite) throws IOException {
-        InputStream fileStream = new FileInputStream(file);
-        String fileText = Parser.fileToText(fileStream);
-
-        Pattern keyPattern = Pattern.compile("([a-zA-Z0-9\"]+=)");
-        Matcher existingKeyMatcher = keyPattern.matcher(fileText);
-        Matcher replacementKeyMatcher = keyPattern.matcher(textToWrite);
-
-        List<String> allExistingKeys = findMatches(fileText, existingKeyMatcher);
-        replacementKeyMatcher.find();
-        String replacementKey = replacementKeyMatcher.group();
-
-        if(anyKeysTheSame(allExistingKeys, replacementKey)) {
-            Pattern keyValue = Pattern.compile("(replacementKey[a-zA-Z0-9\"]+)");
-            Matcher keyValueMatcher = keyValue.matcher(fileText);
-            keyValueMatcher.find();
-            String keyValueToReplace = keyValueMatcher.group();
-            fileText.replaceFirst(keyValueToReplace, textToWrite);
-
-        } else {
-            fileText += "\n" + textToWrite;
-        }
-
-
-        return fileText;
-
-    }
-
-    private List<String> findMatches(String fileText, Matcher existingKeyMatcher) {
-        List<String> allMatches = new ArrayList<String>();
-
-        while(existingKeyMatcher.find()) {
-            allMatches.add(existingKeyMatcher.group());
-        }
-        return allMatches;
-    }
-
-    private boolean anyKeysTheSame(List<String> existingKeys, String replacementKey) {
-        return existingKeys.stream()
-                           .anyMatch(key -> key.equals(replacementKey));
-    }
-
-    private String replaceValue(String fileText, String textToWrite) {
-        Pattern valuePattern = Pattern.compile("(=[a-zA-Z0-9\" ]+)");
-        Matcher existingValueMatcher = valuePattern.matcher(fileText);
-        Matcher replacementValueMatcher = valuePattern.matcher(textToWrite);
-
-        existingValueMatcher.find();
-        replacementValueMatcher.find();
-
-        return fileText.replace(existingValueMatcher.group(1), replacementValueMatcher.group(1));
-    }
 
 }

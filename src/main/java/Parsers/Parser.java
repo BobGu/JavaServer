@@ -184,8 +184,8 @@ public class Parser {
     }
 
     private static String parseForBody(String request) {
-        String[] requestWords = request.split(" ");
-        return requestWords[requestWords.length - 1];
+        String[] requestLines= request.split(EscapeCharacters.newline);
+        return requestLines[requestLines.length - 1];
     }
 
 }

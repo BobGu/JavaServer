@@ -53,11 +53,11 @@ public class FileWriter implements Writer {
         String replacementKey = replacementKeyMatcher.group();
 
         if(anyKeysTheSame(allExistingKeys, replacementKey)) {
-            Pattern keyValue = Pattern.compile("(replacementKey[a-zA-Z0-9\"]+)");
+            Pattern keyValue = Pattern.compile("(" + replacementKey + "[a-zA-Z0-9\"]+)");
             Matcher keyValueMatcher = keyValue.matcher(fileText);
             keyValueMatcher.find();
             String keyValueToReplace = keyValueMatcher.group();
-            fileText.replaceFirst(keyValueToReplace, textToWrite);
+            fileText = fileText.replaceFirst(keyValueToReplace, textToWrite);
 
         } else {
             fileText += "\n" + textToWrite;

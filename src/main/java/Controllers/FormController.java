@@ -71,18 +71,19 @@ public class FormController implements Controller {
         return response;
     }
 
-    private String delete() {
-        String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
-        writer.delete(resourcePath);
-        return response;
-    }
-
     private String put(Request request) throws IOException {
         String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
         String textToWrite = request.getParameters();
         writer.update(resourcePath, textToWrite);
         return response;
     }
+
+    private String delete() {
+        String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+        writer.delete(resourcePath);
+        return response;
+    }
+
 
     private String options() {
         return  HttpStatus.okay

@@ -1,5 +1,6 @@
 package controllers;
 
+import readers.*;
 import writers.FileWriter;
 import writers.Writer;
 import parsers.Parser;
@@ -8,6 +9,7 @@ import httpStatus.HttpStatus;
 import specialCharacters.EscapeCharacters;
 import java.io.*;
 import java.io.File;
+import readers.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -16,23 +18,22 @@ import java.util.regex.Pattern;
 public class FormController implements Controller {
     private String METHODS_ALLOWED = "GET,POST,PUT,DELETE,OPTIONS";
     private String resourcePath;
-    private writers.Writer writer;
+    private Writer writer;
+    private Reader reader;
 
-    public FormController(Writer writer){
-       this(null, writer);
+    public FormController(Writer writer, Reader reader){
+       this(null, writer, reader);
     }
 
-    public FormController(String resourcePath) {
-        this(resourcePath, null);
-    }
-
-    public FormController(String resourcePath, Writer writer) {
+    public FormController(String resourcePath, Writer writer, Reader reader) {
         if (resourcePath == null) {
             this.resourcePath = "../resources/main/form.txt";
             this.writer = writer;
+            this.reader = reader;
         } else {
             this.resourcePath = resourcePath;
             this.writer = writer;
+            this.reader = reader;
         }
     }
 
@@ -58,17 +59,8 @@ public class FormController implements Controller {
     }
 
     private String get(Request request) throws IOException {
-        String response;
         String responseHead = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
-        String responseBody;
-        File file = new File(resourcePath);
-
-        if(file.exists()) {
-            InputStream fileStream = new FileInputStream(file);
-            responseBody = Parser.fileToText(fileStream);
-        } else {
-            responseBody = "";
-        }
+        String responseBody = reader.read(resourcePath);
         return responseHead + responseBody;
     }
 

@@ -1,4 +1,5 @@
 import controllers.FormController;
+import readers.Reader;
 import requests.Request;
 import httpStatus.HttpStatus;
 import org.junit.Assert;
@@ -17,11 +18,12 @@ public class FormControllerTest {
     private String path;
     private Request getRequest;
     private MockWriter writer = new MockWriter();
+    private MockReader reader = new MockReader();
 
     @Before
     public void setup() {
-        String path = "../tests/TestFiles/fakeform.txt";
-        formController = new FormController(path, writer);
+        path = "../tests/TestFiles/fakeform.txt";
+        formController = new FormController(path, writer, reader);
         getRequest = new Request("/form", "GET", "data=yet", null);
     }
 
@@ -78,6 +80,7 @@ public class FormControllerTest {
         String response = formController.handle(getRequest);
         Assert.assertThat(response,
                           containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
+        Assert.assertThat(response, containsString("I'm reading from this " + path));
     }
 
     @Test
@@ -127,6 +130,13 @@ public class FormControllerTest {
 
         public String getText() {
             return text;
+        }
+    }
+
+    private class MockReader implements Reader {
+
+        public String read(String location) {
+            return "I'm reading from this " + location;
         }
     }
 }

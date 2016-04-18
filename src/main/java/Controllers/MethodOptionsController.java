@@ -1,28 +1,33 @@
 package controllers;
 
+import httpStatus.HttpStatus;
 import requests.Request;
+import specialCharacters.EscapeCharacters;
 
 public class MethodOptionsController implements Controller{
 
+    String METHODS_ALLOWED = "GET,HEAD,POST,OPTIONS,PUT";
+
     public String handle(Request request) {
-        return "pop";
+        String response = "";
+
+        if (request.getHttpVerb().equals("OPTIONS")) {
+            response += options();
+        } else if (METHODS_ALLOWED.contains(request.getHttpVerb())) {
+            response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+        } else {
+            response = HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
+        }
+        return response;
     }
 
-    public String get() {
-        return "";
+    private String options() {
+        return HttpStatus.okay
+               + EscapeCharacters.newline
+               + "Allow: "
+               + METHODS_ALLOWED
+               + EscapeCharacters.newline
+               + EscapeCharacters.newline;
     }
 
-    public String post(Request request) {
-        return "a response";
-    }
-
-    public String put(Request request) {
-        return "put";
-    }
-
-    public void delete() {}
-
-    public void head() {
-
-    }
 }

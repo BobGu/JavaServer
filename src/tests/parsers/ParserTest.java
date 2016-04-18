@@ -53,6 +53,12 @@ public class ParserTest {
     }
 
     @Test
+    public void TestCanParsePathWithUnderscore() {
+        String firstLineOfRequestHeader = "GEt /method_options";
+        assertEquals("/method_options", Parser.parseForPathUrl(firstLineOfRequestHeader));
+    }
+
+    @Test
     public void TestCanCreateARequestObject() throws IOException {
         String requestString = "GET /logs HTTP/1.1\r\n"
                                + "Authorization: Basic YWRtaW46aHVudGVyMg==\r\n"

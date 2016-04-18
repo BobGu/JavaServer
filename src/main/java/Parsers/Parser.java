@@ -44,7 +44,7 @@ public class Parser {
     }
 
     public static String parseForPathUrl(String requestHeader) {
-        Pattern pattern = Pattern.compile("(/[a-zA-Z0-9/]*)");
+        Pattern pattern = Pattern.compile("(/[a-zA-Z0-9/_]*)");
         Matcher matcher = pattern.matcher(requestHeader);
         matcher.find();
 

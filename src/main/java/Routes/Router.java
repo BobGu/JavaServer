@@ -27,6 +27,7 @@ public class Router {
     }
 
     public String direct(Request request) throws IOException {
+        System.out.println(request.getPath());
         String response;
         Optional<Route> route = findRoute(request.getPath());
 

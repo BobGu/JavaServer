@@ -13,6 +13,7 @@ public class Server {
     private ServerSocket serverSocket;
     private Socket socket;
     private Router router;
+    private String directoryName;
 
     public Server() {
         this.router = new Router();
@@ -20,6 +21,10 @@ public class Server {
 
     public void setServerSocket(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
+    }
+
+    public void setDirectoryName(String directoryName) {
+        this.directoryName = directoryName;
     }
 
     public void startServer() {

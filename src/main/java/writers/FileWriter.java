@@ -24,7 +24,9 @@ public class FileWriter implements Writer {
         File file = new File(location);
 
         if (file.exists()) {
-            updatedText = updateFileText(file, textToWrite);
+            InputStream fileStream = new FileInputStream(file);
+            String fileText = Parser.fileToText(fileStream);
+            updatedText = updateFileText(fileText, textToWrite);
         }
 
         java.io.FileWriter writer = new java.io.FileWriter(location, false);
@@ -40,32 +42,41 @@ public class FileWriter implements Writer {
         }
     }
 
-    private String updateFileText(File file, String textToWrite) throws IOException {
-        InputStream fileStream = new FileInputStream(file);
-        String fileText = Parser.fileToText(fileStream);
-
-        Pattern keyPattern = Pattern.compile("([a-zA-Z0-9\"]+=)");
-        Matcher existingKeyMatcher = keyPattern.matcher(fileText);
-        Matcher replacementKeyMatcher = keyPattern.matcher(textToWrite);
-
-        List<String> allExistingKeys = findMatches(fileText, existingKeyMatcher);
-        replacementKeyMatcher.find();
-        String replacementKey = replacementKeyMatcher.group();
+    private String updateFileText(String fileText, String textToWrite) throws IOException {
+        String updatedFileText = "";
+        List<String> allExistingKeys = findExistingKeys(fileText);
+        String replacementKey = getReplacementKey(textToWrite);
 
         if(anyKeysTheSame(allExistingKeys, replacementKey)) {
-            Pattern keyValue = Pattern.compile("(" + replacementKey + "[a-zA-Z0-9\"]+)");
-            Matcher keyValueMatcher = keyValue.matcher(fileText);
-            keyValueMatcher.find();
-            String keyValueToReplace = keyValueMatcher.group();
-            fileText = fileText.replaceFirst(keyValueToReplace, textToWrite);
-
+            updatedFileText = replaceValue(replacementKey, fileText, textToWrite);
         } else {
-            fileText += "\n" + textToWrite;
+            updatedFileText += "\n" + textToWrite;
         }
+        return updatedFileText;
 
+    }
 
-        return fileText;
+    private List<String> findExistingKeys(String text) {
+        Pattern keyPattern = Pattern.compile("([a-zA-Z0-9\"]+=)");
+        Matcher existingKeyMatcher = keyPattern.matcher(text);
+        return findMatches(text, existingKeyMatcher);
+    }
 
+    private String replaceValue(String replacementKey, String textToReplace, String textToWrite) {
+        Pattern keyValue = Pattern.compile("(" + replacementKey + "[a-zA-Z0-9\"]+)");
+        Matcher keyValueMatcher = keyValue.matcher(textToReplace);
+
+        keyValueMatcher.find();
+        String keyValueToReplace = keyValueMatcher.group();
+        return textToReplace.replaceFirst(keyValueToReplace, textToWrite);
+    }
+
+    private String getReplacementKey(String text) {
+        Pattern keyPattern = Pattern.compile("([a-zA-Z0-9\"]+=)");
+        Matcher replacementKeyMatcher = keyPattern.matcher(text);
+
+        replacementKeyMatcher.find();
+        return replacementKeyMatcher.group();
     }
 
     private List<String> findMatches(String fileText, Matcher existingKeyMatcher) {
@@ -82,14 +93,4 @@ public class FileWriter implements Writer {
                 .anyMatch(key -> key.equals(replacementKey));
     }
 
-    private String replaceValue(String fileText, String textToWrite) {
-        Pattern valuePattern = Pattern.compile("(=[a-zA-Z0-9\" ]+)");
-        Matcher existingValueMatcher = valuePattern.matcher(fileText);
-        Matcher replacementValueMatcher = valuePattern.matcher(textToWrite);
-
-        existingValueMatcher.find();
-        replacementValueMatcher.find();
-
-        return fileText.replace(existingValueMatcher.group(1), replacementValueMatcher.group(1));
-    }
 }

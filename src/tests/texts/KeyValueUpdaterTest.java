@@ -6,6 +6,7 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class KeyValueUpdaterTest {
     private KeyValueUpdater textUpdate;
@@ -16,20 +17,20 @@ public class KeyValueUpdaterTest {
     }
 
     @Test
-    public void TestItAddsAKeyAndValueWhenNoExisitingText() {
+    public void ItAddsAKeyAndValueWhenNoExisitingText() {
         assertThat(textUpdate.update("", "name=hello"), containsString("name=hello"));
     }
 
     @Test
-    public void TestItUpdatesAValueIfKeyIsTheSame() {
+    public void ItUpdatesAValueIfKeyIsTheSame() {
         String updatedText = textUpdate.update("name=bob", "name=john");
 
-        assertThat(updatedText, containsString("name=john"));
+        assertTrue(updatedText.contains("name=john"));
         assertFalse(updatedText.contains("name=bob"));
     }
 
     @Test
-    public void TestItAddsAKeyAndValueWithExisitingText() {
+    public void ItAddsAKeyAndValueWithExisitingText() {
         String updatedText = textUpdate.update("name=bob", "address=theUSA");
 
         assertThat(updatedText, containsString("name=bob"));

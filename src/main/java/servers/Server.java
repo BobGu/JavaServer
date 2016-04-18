@@ -14,9 +14,12 @@ public class Server {
     private Socket socket;
     private Router router;
 
-    public Server(ServerSocket serverSocket) {
-        this.serverSocket = serverSocket;
+    public Server() {
         this.router = new Router();
+    }
+
+    public void setServerSocket(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
     }
 
     public void startServer() {

@@ -6,21 +6,23 @@ import java.net.ServerSocket;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Server server;
+    public static void main(String[] args) throws IOException {
+        main(args, null);
+    }
 
-        try {
-            if(args.length == 0) {
-                server = new Server(new ServerSocket(5000));
-            } else {
-                String port = args[0];
-                int portNumber = Integer.parseInt(port);
-                server = new Server(new ServerSocket(portNumber));
-            }
-            server.startServer();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static void main(String[] args, Server customServer) throws IOException {
+        Server server = customServer == null ? new Server() : customServer;
+
+        if (args.length == 0) {
+            ServerSocket serverSocket = new ServerSocket(5000);
+            server.setServerSocket(serverSocket);
+        } else {
+            String port = args[0];
+            int portNumber = Integer.parseInt(port);
+            ServerSocket serverSocket = new ServerSocket(portNumber);
+            server.setServerSocket(serverSocket);
         }
+        server.startServer();
     }
 
 }

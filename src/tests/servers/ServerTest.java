@@ -18,7 +18,7 @@ public class ServerTest {
     @Test
     public void TestASocketIsOpened() throws IOException {
         MockServerSocket serverSocket = new MockServerSocket(9092);
-        Server server = new Server(serverSocket);
+        Server server = new Server();
         server.startServer();
         assertTrue(serverSocket.hasInvokedAccepted());
         serverSocket.close();

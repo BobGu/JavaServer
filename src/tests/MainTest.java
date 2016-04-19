@@ -19,6 +19,7 @@ public class MainTest {
         ServerSocket socket = server.getServerSocket();
 
         assertEquals(5001, socket.getLocalPort());
+
         socket.close();
     }
 
@@ -29,6 +30,7 @@ public class MainTest {
         ServerSocket socket = server.getServerSocket();
 
         assertEquals(5000, socket.getLocalPort());
+
         socket.close();
     }
 
@@ -36,18 +38,33 @@ public class MainTest {
     public void RootDirectoryIsPublicDirectoryByDefault() throws IOException {
         String[] args = {};
         Main.main(args, server);
+        ServerSocket socket = server.getServerSocket();
 
         assertEquals("public", server.getDirectoryName());
+
+        socket.close();
     }
 
     @Test
-    public void CanReadBothAPortNumberAndADirectory() throws IOException {
+    public void CanAcceptAPortNumberAndADirectory() throws IOException {
         String[] args = {"-p", "5001", "-d", "non-public"};
         Main.main(args, server);
         ServerSocket socket = server.getServerSocket();
 
         assertEquals(5001, socket.getLocalPort());
         assertEquals("non-public", server.getDirectoryName());
+
+        socket.close();
+    }
+
+    @Test
+    public void CanAcceptADirectory() throws IOException {
+        String[] args = {"-d", "summer-family-photos"};
+        Main.main(args, server);
+        ServerSocket socket = server.getServerSocket();
+
+        assertEquals("summer-family-photos", server.getDirectoryName());
+
         socket.close();
     }
 

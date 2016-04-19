@@ -42,8 +42,7 @@ public class Server {
                 socket = serverSocket.accept();
                 InputStream socketInputStream = socket.getInputStream();
                 Request request = Parser.parseAndCreateRequest(socketInputStream);
-                router.setDirectory(directoryName);
-                router.setRoutes();
+                routerConfigure();
                 String response = router.direct(request);
                 respond(response);
                 socket.shutdownOutput();
@@ -55,6 +54,11 @@ public class Server {
 
     private void respond(String response) throws IOException {
         socket.getOutputStream().write(response.getBytes());
+    }
+
+    private void routerConfigure() {
+        router.setDirectory(directoryName);
+        router.setRoutes();
     }
 
 }

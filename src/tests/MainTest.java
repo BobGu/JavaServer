@@ -1,11 +1,8 @@
 import org.junit.Test;
-import routes.Router;
 import servers.Server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.nio.file.Files;
-import java.nio.file.Path;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -68,7 +65,6 @@ public class MainTest {
 
         socket.close();
     }
-
 
     private class MockServer extends Server {
         private ServerSocket serverSocket;

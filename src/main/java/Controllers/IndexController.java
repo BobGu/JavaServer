@@ -28,11 +28,28 @@ public class IndexController implements Controller {
     public String get() throws IOException {
         String response = "";
         response += HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+        String directoryAndFiles = resourceCRUD.read(directoryName);
 
-        response += "<h1>Hello world<h1>";
-        response += "<a href=" + resourceCRUD.read(directoryName) + ">" + directoryName + "</a>";
+        response += "<html><head><title>bobsjavaserver</title></head><body>";
+        response += "<h1>Hello world</h1>";
+        response += format(directoryAndFiles);
+        response += "</body></html>";
 
         return response;
+    }
+
+    private String format(String directoryAndFiles) {
+        String htmlFormat = "";
+        String[] dirAndFiles = directoryAndFiles.split(" ");
+
+        for(String file: dirAndFiles) {
+            if (file.equals("public")) {
+                htmlFormat += "<li> public </li>";
+            } else {
+                htmlFormat += "<li><a href=http://localhost:5000/" + file + ">" + file + "</a>";
+            }
+        }
+        return htmlFormat;
     }
 
 }

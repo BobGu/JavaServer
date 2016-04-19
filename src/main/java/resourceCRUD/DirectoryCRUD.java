@@ -13,12 +13,12 @@ public class DirectoryCRUD implements ResourceCRUD{
 
     public String read(String directoryName) throws IOException {
         if (!directoryName.equals("public")) {
-            File file =  new File("../resources/" + directoryName);
-            String directory = file.getName();
-            return directory;
+            File file =  new File("../resources/main/" + directoryName);
+            return directoryName;
         } else {
-            File file = new File("../resources/public");
-            return file.getName();
+            File file = new File("../resources/main/public");
+            String files = collectFileNames(file.list());
+            return file.getName() + " " + files;
         }
     }
 
@@ -34,7 +34,7 @@ public class DirectoryCRUD implements ResourceCRUD{
         String fileNames = "";
 
         for(String f : files) {
-            fileNames += f;
+            fileNames += f + " ";
         }
         return fileNames;
     }

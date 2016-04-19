@@ -31,8 +31,9 @@ public class RouterTest {
 
         routes.add(routeRoot);
         routes.add(routeForm);
+        router = new Router();
+        router.setRoutes(routes);
 
-        router = new Router(routes);
     }
 
     @Test

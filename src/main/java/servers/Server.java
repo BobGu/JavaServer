@@ -16,7 +16,15 @@ public class Server {
     private String directoryName;
 
     public Server() {
-        this.router = new Router();
+        this(null);
+    }
+
+    public Server(Router router) {
+        if (router == null) {
+            this.router = new Router();
+        } else {
+            this.router = router;
+        }
     }
 
     public void setServerSocket(ServerSocket serverSocket) {
@@ -34,6 +42,8 @@ public class Server {
                 socket = serverSocket.accept();
                 InputStream socketInputStream = socket.getInputStream();
                 Request request = Parser.parseAndCreateRequest(socketInputStream);
+                router.setDirectory(directoryName);
+                router.setRoutes();
                 String response = router.direct(request);
                 respond(response);
                 socket.shutdownOutput();

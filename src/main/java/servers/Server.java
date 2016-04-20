@@ -45,7 +45,7 @@ public class Server {
                 routerConfigure();
                 String response = router.direct(request);
                 respond(response);
-                socket.shutdownOutput();
+                socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

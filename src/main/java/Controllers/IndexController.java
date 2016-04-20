@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class IndexController implements Controller {
+    private final String METHODS_ALLOWED = "GET,OPTIONS";
     private ResourceCRUD resourceCRUD;
     private String directoryName;
 
@@ -22,17 +23,27 @@ public class IndexController implements Controller {
     }
 
     public String handle(Request request) throws IOException {
-        return get();
+        String response = "";
+
+        if (request.getHttpVerb().equals("GET")) {
+            response = get();
+        } else if(request.getHttpVerb().equals("OPTIONS")) {
+            response = options();
+        } else {
+            response = HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
+        }
+        return response;
     }
 
     public String get() throws IOException {
         String response = "";
-        response += HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+        response += HttpStatus.okay + EscapeCharacters.newline;
+        response += "Content-Type: text/html;" + EscapeCharacters.newline + EscapeCharacters.newline;
         String directoryAndFiles = resourceCRUD.read(directoryName);
 
-        response += "<html><head><title>bobsjavaserver</title></head><body>";
-        response += "<h1>Hello world</h1>";
-        response += format(directoryAndFiles);
+        response += "<!DOCTYPE html><html><head>title>bobsjavaserver</title></head><body>";
+        response += "<h1>Hello world</h1><ul>";
+        response += format(directoryAndFiles) + "</ul>";
         response += "</body></html>";
 
         return response;
@@ -44,12 +55,21 @@ public class IndexController implements Controller {
 
         for(String file: dirAndFiles) {
             if (file.equals("public")) {
-                htmlFormat += "<li> public </li>";
+                htmlFormat += "<li>public</li>";
             } else {
-                htmlFormat += "<li><a href=http://localhost:5000/" + file + ">" + file + "</a>";
+                htmlFormat += "<li><a href=/" + file + ">" + file + "</a></li>";
             }
         }
         return htmlFormat;
+    }
+
+    private String options() {
+        return  HttpStatus.okay
+                + EscapeCharacters.newline
+                + "Allow: "
+                + METHODS_ALLOWED
+                + EscapeCharacters.newline
+                + EscapeCharacters.newline;
     }
 
 }

@@ -6,21 +6,12 @@ import requests.Request;
 import specialCharacters.EscapeCharacters;
 import java.io.IOException;
 
-public class FileOneController implements Controller {
+public class FileController implements Controller {
     private final String METHODS_ALLOWED = "GET,OPTIONS";
+    private String directoryBaseUrl = "../resources/main/public/";
     private Reader reader;
-    private String resourcePath;
 
-    public FileOneController(Reader reader) {
-        this(null, reader);
-    }
-
-    public FileOneController(String resourcePath, Reader reader) {
-        if (resourcePath == null) {
-            this.resourcePath = "../resources/main/public/file1";
-        } else {
-            this.resourcePath = resourcePath;
-        }
+    public FileController(Reader reader) {
         this.reader = reader;
     }
 
@@ -28,9 +19,10 @@ public class FileOneController implements Controller {
        String response = "";
 
        if (request.getHttpVerb().equals("GET")) {
-          response = get(resourcePath);
+           String resourcePath = directoryBaseUrl + request.getPath();
+           response = get(resourcePath);
        } else if (request.getHttpVerb().equals("OPTIONS")) {
-          response = options();
+           response = options();
        } else {
            response = methodNotAllowed();
        }

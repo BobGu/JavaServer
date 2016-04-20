@@ -55,6 +55,9 @@ public class Router {
         routes.add(new Route("/these", new TheseController()));
         routes.add(new Route("/requests", new RequestsController()));
         routes.add(new Route("/redirect", new RedirectController()));
+        routes.add(new Route("/file1", new FileController(new FileReader())));
+        routes.add(new Route("/file2", new FileController(new FileReader())));
+        routes.add(new Route("/text-file.txt", new FileController(new FileReader())));
     }
 
     private Optional<Route> findRoute(String path) {

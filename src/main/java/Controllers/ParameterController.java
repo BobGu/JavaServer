@@ -22,13 +22,4 @@ public class ParameterController implements Controller {
         return responseHead + responseBody;
     }
 
-    private int toInt(byte[] responseBody) {
-        int totalBytes = 0;
-
-        for(Byte b:responseBody) {
-            totalBytes += b.intValue();
-        }
-        return totalBytes;
-    }
-
 }

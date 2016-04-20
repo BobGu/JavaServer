@@ -30,12 +30,12 @@ public class IndexController implements Controller {
         } else if(request.getHttpVerb().equals("OPTIONS")) {
             response = options();
         } else {
-            response = HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
+            response = methodNotAllowed();
         }
         return response;
     }
 
-    public String get() throws IOException {
+    private String get() throws IOException {
         String response = "";
         response += HttpStatus.okay + EscapeCharacters.newline;
         response += "Content-Type: text/html;" + EscapeCharacters.newline + EscapeCharacters.newline;
@@ -47,6 +47,10 @@ public class IndexController implements Controller {
         response += "</body></html>";
 
         return response;
+    }
+
+    private String methodNotAllowed() {
+        return HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
     }
 
     private String format(String directoryAndFiles) {

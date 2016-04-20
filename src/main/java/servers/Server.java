@@ -13,10 +13,26 @@ public class Server {
     private ServerSocket serverSocket;
     private Socket socket;
     private Router router;
+    private String directoryName;
 
-    public Server(ServerSocket serverSocket) {
+    public Server() {
+        this(null);
+    }
+
+    public Server(Router router) {
+        if (router == null) {
+            this.router = new Router();
+        } else {
+            this.router = router;
+        }
+    }
+
+    public void setServerSocket(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
-        this.router = new Router();
+    }
+
+    public void setDirectoryName(String directoryName) {
+        this.directoryName = directoryName;
     }
 
     public void startServer() {
@@ -26,9 +42,10 @@ public class Server {
                 socket = serverSocket.accept();
                 InputStream socketInputStream = socket.getInputStream();
                 Request request = Parser.parseAndCreateRequest(socketInputStream);
+                routerConfigure();
                 String response = router.direct(request);
                 respond(response);
-                socket.shutdownOutput();
+                socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -37,6 +54,11 @@ public class Server {
 
     private void respond(String response) throws IOException {
         socket.getOutputStream().write(response.getBytes());
+    }
+
+    private void routerConfigure() {
+        router.setDirectory(directoryName);
+        router.setRoutes();
     }
 
 }

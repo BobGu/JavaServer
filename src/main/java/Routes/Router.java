@@ -4,6 +4,7 @@ import controllers.*;
 import readers.FileReader;
 import requests.Request;
 import httpStatus.HttpStatus;
+import resourceCRUD.DirectoryCRUD;
 import specialCharacters.EscapeCharacters;
 import writers.FileWriter;
 
@@ -12,13 +13,19 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class Router {
-    private ArrayList<Route> routes = new ArrayList<Route>();
 
-    public Router() {
-        this(null);
+    private ArrayList<Route> routes = new ArrayList<Route>();
+    private String directoryName;
+
+    public void setDirectory(String directoryName) {
+        this.directoryName = directoryName;
     }
 
-    public Router(ArrayList<Route> routes) {
+    public void setRoutes() {
+        setRoutes(null);
+    }
+
+    public void setRoutes(ArrayList<Route> routes) {
         if (routes == null) {
             createRoutes();
         } else {
@@ -27,7 +34,6 @@ public class Router {
     }
 
     public String direct(Request request) throws IOException {
-        System.out.println(request.getPath());
         String response;
         Optional<Route> route = findRoute(request.getPath());
 
@@ -40,7 +46,7 @@ public class Router {
     }
 
     private void createRoutes() {
-        routes.add(new Route("/", new IndexController()));
+        routes.add(new Route("/", new IndexController(directoryName, new DirectoryCRUD())));
         routes.add(new Route("/form", new FormController(new FileWriter(), new FileReader())));
         routes.add(new Route("/method_options",  new MethodOptionsController()));
         routes.add(new Route("/parameters", new ParameterController()));

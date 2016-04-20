@@ -41,7 +41,7 @@ public class IndexController implements Controller {
         response += "Content-Type: text/html;" + EscapeCharacters.newline + EscapeCharacters.newline;
         String directoryAndFiles = resourceCRUD.read(directoryName);
 
-        response += "<!DOCTYPE html><html><head>title>bobsjavaserver</title></head><body>";
+        response += "<!DOCTYPE html><html><head><title>bobsjavaserver</title></head><body>";
         response += "<h1>Hello world</h1><ul>";
         response += format(directoryAndFiles) + "</ul>";
         response += "</body></html>";
@@ -54,8 +54,8 @@ public class IndexController implements Controller {
         String[] dirAndFiles = directoryAndFiles.split(" ");
 
         for(String file: dirAndFiles) {
-            if (file.equals("public")) {
-                htmlFormat += "<li>public</li>";
+            if (file.equals(directoryName)) {
+                htmlFormat += "<li>" + directoryName + "</li>";
             } else {
                 htmlFormat += "<li><a href=/" + file + ">" + file + "</a></li>";
             }

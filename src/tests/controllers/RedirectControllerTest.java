@@ -13,7 +13,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RedirectControllerTest {
-    private Request getRequest = new Request("/redirect", "GET", null, null, false);
+    private Request getRequest = new Request("/redirect", "GET", null, null, false, false);
     private Controller controller = new RedirectController();
 
     @Test

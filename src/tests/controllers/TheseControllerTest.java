@@ -17,7 +17,7 @@ public class TheseControllerTest {
 
     @Test
     public void TestRepliesWithTwoHundredOkayForPut() throws IOException {
-        Request request = new Request("/these", "PUT", null, null, false);
+        Request request = new Request("/these", "PUT", null, null, false, false);
         Controller controller = new TheseController();
         String response = controller.handle(request);
 
@@ -27,7 +27,7 @@ public class TheseControllerTest {
     @Test
     public void TestVisitGetsAddedToLog() throws IOException {
         Log log = Log.getInstance();
-        Request request = new Request("/these", "PUT", null, null, false);
+        Request request = new Request("/these", "PUT", null, null, false, false);
         Controller controller = new TheseController();
 
         controller.handle(request);
@@ -40,7 +40,7 @@ public class TheseControllerTest {
 
     @Test
     public void TestMethodsNotAllowed() throws IOException {
-        Request request = new Request("/these", "POST", null, null, false);
+        Request request = new Request("/these", "POST", null, null, false, false);
         Controller controller = new TheseController();
         String response = controller.handle(request);
 

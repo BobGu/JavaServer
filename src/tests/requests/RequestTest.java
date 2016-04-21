@@ -11,7 +11,7 @@ public class RequestTest {
 
     @Before
     public void RequestObjectCreation() {
-        request = new Request("/", "GET", "data=fatcat", "QWxhZGRpbjpPcGVuU2VzYW1l", true);
+        request = new Request("/", "GET", "data=fatcat", "QWxhZGRpbjpPcGVuU2VzYW1l", true, true);
     }
 
     @Test
@@ -37,6 +37,11 @@ public class RequestTest {
     @Test
     public void TestCanGetIfItIsAFile() {
         assertTrue(request.getIsFile());
+    }
+
+    @Test
+    public void TestCanGetIsImage() {
+        assertTrue(request.getIsImage());
     }
 
 

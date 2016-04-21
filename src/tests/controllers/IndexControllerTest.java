@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 public class IndexControllerTest {
     private MockDirectoryCRUD resourceCRUD = new MockDirectoryCRUD();
     private IndexController controller;
-    private Request getRequest = new Request("/", "GET", null, null, false);
+    private Request getRequest = new Request("/", "GET", null, null, false, false);
 
     @Before
     public void setup() {
@@ -43,7 +43,7 @@ public class IndexControllerTest {
 
     @Test
     public void MethodNotAllowed() throws IOException {
-        Request request = new Request("/", "POST", null, null, false);
+        Request request = new Request("/", "POST", null, null, false, false);
         String response = controller.handle(request);
 
         assertTrue(response.contains(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline));
@@ -51,7 +51,7 @@ public class IndexControllerTest {
 
     @Test
     public void HandlingAnOptionsRequest() throws IOException {
-        Request request = new Request("/", "OPTIONS", null, null, false);
+        Request request = new Request("/", "OPTIONS", null, null, false, false);
         String response = controller.handle(request);
 
         assertTrue(response.contains("Allow: GET,OPTIONS"));

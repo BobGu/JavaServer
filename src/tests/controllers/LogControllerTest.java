@@ -19,7 +19,7 @@ public class LogControllerTest {
 
     @Test
     public void TestRepliesWithTwoHundredOkayForGet() throws IOException {
-        Request request = new Request("/log", "GET", null, null, false);
+        Request request = new Request("/log", "GET", null, null, false, false);
         Controller controller = new LogController();
         assertThat(controller.handle(request) , containsString(HttpStatus.okay));
     }
@@ -27,7 +27,7 @@ public class LogControllerTest {
     @Test
     public void TestVisitGetsAddedToLog() throws IOException {
         Log log = Log.getInstance();
-        Request request = new Request("/log", "GET", null, null, false);
+        Request request = new Request("/log", "GET", null, null, false, false);
         Controller controller = new LogController();
 
         controller.handle(request);
@@ -40,7 +40,7 @@ public class LogControllerTest {
 
     @Test
     public void TestMethodsNotAllowed() throws IOException {
-        Request request = new Request("/log", "POST", null, null, false);
+        Request request = new Request("/log", "POST", null, null, false, false);
         Controller controller = new LogController();
         String response = controller.handle(request);
 

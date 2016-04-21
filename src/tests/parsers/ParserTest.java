@@ -17,7 +17,7 @@ import java.io.InputStream;
 public class ParserTest {
 
     @Test
-    public void TestCanParseRequest() throws IOException {
+    public void CanParseRequest() throws IOException {
         String request= "GET /logs HTTP/1.1\r\nHost: localhost:5000\r\nConnection: Keep-Alive\r\nUser-Agent: Apache-HttpClient/4.3.5 (java 1.5)\r\nAccept-Encoding: gzip,deflate\r\n\r\n";
         InputStream inputStream = new ByteArrayInputStream(request.getBytes());
 
@@ -27,7 +27,7 @@ public class ParserTest {
     }
 
     @Test
-    public void TestCanParseRequestWithABody() throws IOException {
+    public void CanParseRequestWithABody() throws IOException {
         String request = "POST /foobar HTTP/1.1 Host: localhost:5000/form Connection: Keep-Alive Content-Length: 10\r\n\r\nname=Johns";
         InputStream inputStream = new ByteArrayInputStream(request.getBytes());
 
@@ -37,35 +37,35 @@ public class ParserTest {
     }
 
     @Test
-    public void TestCanParseForHTTPVerb() {
+    public void CanParseForHTTPVerb() {
         String firstLineOfRequestHeader = "GET /logs HTTP/1.1";
 
         assertEquals("GET",  Parser.parseForHttpVerb(firstLineOfRequestHeader));
     }
 
     @Test
-    public void TestCanParseForPathOfUrl() {
+    public void CanParseForPathOfUrl() {
         String  firstLineOfRequestHeader = "GET /foobar HTTP/1.1";
 
         assertEquals("/foobar", Parser.parseForPathUrl(firstLineOfRequestHeader));
     }
 
     @Test
-    public void TestCanParseForMoreComplexPath() {
+    public void CanParseForMoreComplexPath() {
         String firstLineOfRequestHeader = "GET /foobar/items/1";
 
         assertEquals("/foobar/items/1", Parser.parseForPathUrl(firstLineOfRequestHeader));
     }
 
     @Test
-    public void TestCanParsePathWithUnderscore() {
+    public void CanParsePathWithUnderscore() {
         String firstLineOfRequestHeader = "GEt /method_options";
 
         assertEquals("/method_options", Parser.parseForPathUrl(firstLineOfRequestHeader));
     }
 
     @Test
-    public void TestCanCreateARequestObject() throws IOException {
+    public void CanCreateARequestObject() throws IOException {
         String requestString = "GET /logs HTTP/1.1" + EscapeCharacters.newline
                                + "Authorization: Basic YWRtaW46aHVudGVyMg==" + EscapeCharacters.newline + EscapeCharacters.newline;
         InputStream inputStream = new ByteArrayInputStream(requestString.getBytes());
@@ -79,14 +79,14 @@ public class ParserTest {
     }
 
     @Test
-    public void TestCanParseForPath() {
+    public void CanParseForPath() {
         String request= "GET /parameters?name=boboblaw";
 
         assertEquals("/parameters", Parser.parseForPathUrl(request));
     }
 
     @Test
-    public void TestCanParseForParameter() throws IOException {
+    public void CanParseForParameter() throws IOException {
         String requestHeader = "GET /parameters?name=myname" + EscapeCharacters.newline + EscapeCharacters.newline;
         InputStream stream = new ByteArrayInputStream(requestHeader.getBytes());
         Request request = Parser.parseAndCreateRequest(stream, "public");
@@ -95,7 +95,7 @@ public class ParserTest {
     }
 
     @Test
-    public void TestCanParseForMultipleParameters() throws IOException {
+    public void CanParseForMultipleParameters() throws IOException {
         String requestHeader = "GET /parameters?name=myname&city=losangeles" + EscapeCharacters.newline + EscapeCharacters.newline;
         InputStream stream = new ByteArrayInputStream(requestHeader.getBytes());
         Request request = Parser.parseAndCreateRequest(stream, "public");
@@ -104,7 +104,7 @@ public class ParserTest {
     }
 
     @Test
-    public void TestCanParseForParametersThatArePercentEncoded() throws IOException {
+    public void CanParseForParametersThatArePercentEncoded() throws IOException {
         String requestHeader = "GET /parameters?variable_1=Operators%20%3C%2C&variable_2=stuff" + EscapeCharacters.newline + EscapeCharacters.newline;
         InputStream stream = new ByteArrayInputStream((requestHeader.getBytes()));
         Request request = Parser.parseAndCreateRequest(stream, "public");

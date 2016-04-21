@@ -25,7 +25,7 @@ public class FormControllerTest {
     public void setup() {
         path = "../tests/TestFiles/fakeform.txt";
         formController = new FormController(path, writer, reader);
-        getRequest = new Request("/form", "GET", "data=yet", null, false);
+        getRequest = new Request("/form", "GET", "data=yet", null, false, false);
     }
 
     @Test
@@ -38,7 +38,7 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleAPostRequest() throws IOException {
-        Request request = new Request("/form", "POST", "data=shouldbeposted", null, false);
+        Request request = new Request("/form", "POST", "data=shouldbeposted", null, false, false);
         String responseToPost = formController.handle(request);
 
         Assert.assertThat(responseToPost,
@@ -49,7 +49,7 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleAPutRequest() throws IOException {
-        Request request = new Request("/form", "PUT", "data=acoolname", null, false);
+        Request request = new Request("/form", "PUT", "data=acoolname", null, false, false);
         String responseToPut = formController.handle(request);
 
         Assert.assertThat(responseToPut,
@@ -60,7 +60,7 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleOptionsRequest() throws IOException {
-        Request request = new Request("/form", "OPTIONS", null, null, false);
+        Request request = new Request("/form", "OPTIONS", null, null, false, false);
         String response = formController.handle(request);
 
         Assert.assertThat(response,
@@ -71,7 +71,7 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleDeleteRequest() throws IOException {
-        Request request = new Request("/form", "DELETE", null, null, false);
+        Request request = new Request("/form", "DELETE", null, null, false, false);
         String response = formController.handle(request);
 
         Assert.assertThat(response,

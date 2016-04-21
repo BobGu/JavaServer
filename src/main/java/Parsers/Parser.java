@@ -16,18 +16,30 @@ public class Parser {
         String httpVerb = parseForHttpVerb(request);
         String parameters = parseForParameters(request);
         String authorization = parseForAuthorization(request);
-        boolean isFile = requestForFile(path, directoryName);
+        boolean isFile = containsFile(path, directoryName);
+        boolean isImage = containsImage(path, isFile);
 
-        return new Request(path, httpVerb, parameters, authorization, isFile);
+        return new Request(path, httpVerb, parameters, authorization, isFile, isImage);
     }
 
-    private static boolean requestForFile(String path, String directoryName) {
+    private static boolean containsFile(String path, String directoryName) {
         String fileName = path.replace("/", "");
         String location = "../resources/main/" + directoryName + "/" + fileName;
         File file = new File(location);
         return !file.isDirectory() && file.exists();
     }
 
+    private static boolean containsImage(String path, boolean isFile) {
+        if(!isFile) {
+            return false;
+        } else {
+            return hasImageExtension(path);
+        }
+    }
+
+    private static boolean hasImageExtension(String path) {
+        return path.contains(".jpeg") || path.contains(".png") || path.contains(".gif");
+    }
 
     public static String parseInputStream(InputStream inputStream) throws IOException {
         String parsedRequest= "";

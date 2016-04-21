@@ -37,7 +37,10 @@ public class Router {
         String response;
         Optional<Route> route = findRoute(request.getPath());
 
-        if (route.isPresent()) {
+        if (request.getIsFile()) {
+            Controller controller = new FileController(new FileReader());
+            response = controller.handle(request);
+        } else if (route.isPresent()) {
             response = route.get().getController().handle(request);
         } else {
             response = HttpStatus.notFound + EscapeCharacters.newline + EscapeCharacters.newline;
@@ -55,9 +58,6 @@ public class Router {
         routes.add(new Route("/these", new TheseController()));
         routes.add(new Route("/requests", new RequestsController()));
         routes.add(new Route("/redirect", new RedirectController()));
-        routes.add(new Route("/file1", new FileController(new FileReader())));
-        routes.add(new Route("/file2", new FileController(new FileReader())));
-        routes.add(new Route("/text-file.txt", new FileController(new FileReader())));
     }
 
     private Optional<Route> findRoute(String path) {

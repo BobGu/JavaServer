@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class FileController implements Controller {
     private final String METHODS_ALLOWED = "GET,OPTIONS";
-    private String directoryBaseUrl = "../resources/main/public/";
+    private String directoryBaseUrl = "../resources/main/public";
     private Reader reader;
 
     public FileController(Reader reader) {

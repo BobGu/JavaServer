@@ -18,29 +18,29 @@ public class LogsControllerTest {
 
     @Test
     public void TestItGivesAFourOhFourOhOneResponseIfNoAuthorizationHeader() throws IOException {
-        Request request = new Request("/logs", "GET", null, null);
+        Request request = new Request("/logs", "GET", null, null, false);
         assertThat(controller.handle(request), containsString(HttpStatus.notAuthorized));
     }
 
     @Test
     public void TestResponseContainsAResponseHeaderWithAWWWAuthenticateField() throws IOException {
-        Request request = new Request("/logs", "GET", null, null);
+        Request request = new Request("/logs", "GET", null, null, false);
         assertThat(controller.handle(request), containsString("WWW-Authenticate: Basic realm=\"/ Bob Server Logs\""));
     }
 
     @Test
     public void TestResponseIsTwoHundredIfAuthenticated() throws IOException {
-        Request request = new Request("/logs", "GET", null, "YWRtaW46aHVudGVyMg==");
+        Request request = new Request("/logs", "GET", null, "YWRtaW46aHVudGVyMg==", false);
         assertThat(controller.handle(request), containsString(HttpStatus.okay));
     }
 
     @Test
     public void TestResponseContainsLogsIfAuthenticated() throws IOException {
         Controller mockController = new MockTheseController();
-        Request logThisRequest = new Request("/these", "GET", null, null);
+        Request logThisRequest = new Request("/these", "GET", null, null, false);
         mockController.handle(logThisRequest);
 
-        Request request = new Request("/logs", "GET" , null, "YWRtaW46aHVudGVyMg==");
+        Request request = new Request("/logs", "GET" , null, "YWRtaW46aHVudGVyMg==", false);
         String response = controller.handle(request);
 
         assertThat(response, containsString("GET /these HTTP/1.1"));

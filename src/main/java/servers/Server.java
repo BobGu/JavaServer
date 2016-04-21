@@ -41,7 +41,7 @@ public class Server {
             try {
                 socket = serverSocket.accept();
                 InputStream socketInputStream = socket.getInputStream();
-                Request request = Parser.parseAndCreateRequest(socketInputStream);
+                Request request = Parser.parseAndCreateRequest(socketInputStream, directoryName);
                 routerConfigure();
                 String response = router.direct(request);
                 respond(response);

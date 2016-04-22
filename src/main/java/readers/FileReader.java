@@ -11,7 +11,7 @@ import java.nio.file.Paths;
 
 public class FileReader implements Reader{
 
-    public String read(String location) throws IOException {
+    public byte[] read(String location) throws IOException {
         File file = new File(location);
         String responseBody;
 
@@ -22,6 +22,6 @@ public class FileReader implements Reader{
             responseBody = "";
         }
 
-        return responseBody;
+        return responseBody.getBytes();
     }
 }

@@ -15,32 +15,35 @@ public class FileControllerTest {
     @Test
     public void HandlesAGetRequest() throws IOException {
         Request request = new Request("/file1", "GET", null, null, true, false);
-        String response = controller.handle(request);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
 
-        assertTrue(response.contains(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
     }
 
     @Test
     public void HandlesAnOptionsRequest() throws IOException {
         Request request = new Request("/file1", "OPTIONS", null, null, true, false);
-        String response = controller.handle(request);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
 
-        assertTrue(response.contains(HttpStatus.okay + EscapeCharacters.newline));
-        assertTrue(response.contains("Allow: GET,OPTIONS"));
+        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline));
+        assertTrue(responseString.contains("Allow: GET,OPTIONS"));
     }
 
     @Test
     public void MethodNotAllowed() throws IOException {
         Request request = new Request("/file1", "PUT", null, null, true, false);
-        String response = controller.handle(request);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
 
-        assertTrue(response.contains(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline));
     }
 
     @Test
     public void ReaderReadsFromTheFile() throws IOException {
         Request request = new Request("/file1", "GET", null, null, true, false);
-        String response = controller.handle(request);
+        byte[] response = controller.handle(request);
 
         assertTrue(reader.getIsRead());
     }
@@ -49,9 +52,9 @@ public class FileControllerTest {
         private boolean isRead = false;
 
         @Override
-        public String read(String location) {
+        public byte[] read(String location) {
             isRead = true;
-            return "reading from file";
+            return "reading from file".getBytes();
         }
 
         public boolean getIsRead() {

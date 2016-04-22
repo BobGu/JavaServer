@@ -18,12 +18,18 @@ public class RedirectControllerTest {
 
     @Test
     public void TestGetsThreeOhOneRedirect() throws IOException {
-        assertThat(controller.handle(getRequest), containsString(HttpStatus.redirect + EscapeCharacters.newline));
+        byte[] response = controller.handle(getRequest);
+        String responseString = new String(response);
+
+        assertThat(responseString , containsString(HttpStatus.redirect + EscapeCharacters.newline));
     }
 
     @Test
     public void TestResponseIncludesTheLocationOfRedirect() throws IOException {
-        assertThat(controller.handle(getRequest), containsString("http://localhost:5000/"));
+        byte[] response = controller.handle(getRequest);
+        String responseString = new String(response);
+
+        assertThat(responseString, containsString("http://localhost:5000/"));
     }
 
 }

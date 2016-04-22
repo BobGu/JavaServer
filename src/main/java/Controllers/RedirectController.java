@@ -7,13 +7,13 @@ import specialCharacters.EscapeCharacters;
 
 public class RedirectController implements Controller{
 
-    public String handle(Request request) {
+    public byte[] handle(Request request) {
         String response = "";
 
         if (request.getHttpVerb().equals("GET")) {
             response = get();
         }
-        return response;
+        return response.getBytes();
     }
 
     private String get() {

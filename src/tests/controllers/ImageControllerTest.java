@@ -17,38 +17,43 @@ public class ImageControllerTest {
 
     @Test
     public void HandlesAGetRequest() throws IOException {
-        String response = controller.handle(getRequest);
+        byte[] response = controller.handle(getRequest);
+        String responseString = new String(response);
 
-        assertTrue(response.contains(HttpStatus.okay + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline));
     }
 
     @Test
     public void GetRequestReturnAContentType() throws IOException {
-        String response = controller.handle(getRequest);
+        byte[] response = controller.handle(getRequest);
+        String responseString = new String(response);
 
-        assertTrue(response.contains("Content-Type: text/html" + EscapeCharacters.newline + EscapeCharacters.newline));
+        assertTrue(responseString.contains("Content-Type: text/html" + EscapeCharacters.newline + EscapeCharacters.newline));
     }
     @Test
     public void HandlesAnOptionsRequest() throws IOException {
         Request request = new Request("/image.jpg", "OPTIONS", null, null, true, true);
-        String response = controller.handle(request);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
 
-        assertTrue(response.contains(HttpStatus.okay + EscapeCharacters.newline));
-        assertTrue(response.contains("Allow: GET,OPTIONS"));
+        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline));
+        assertTrue(responseString.contains("Allow: GET,OPTIONS"));
     }
 
     @Test
     public void HandlesMethodsThatAreNotAllowed() throws IOException {
         Request request = new Request("/cat.gif", "DELETE", null, null, true, true);
-        String response = controller.handle(request);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
 
-        assertTrue(response.contains(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline));
     }
 
     @Test
     public void ReaderReadsFromImageFile() throws IOException {
-        String response = controller.handle(getRequest);
+        byte[] response = controller.handle(getRequest);
         controller.handle(getRequest);
+        String responseString = new String(response);
 
         assertTrue(reader.getIsRead());
     }
@@ -60,9 +65,9 @@ public class ImageControllerTest {
             return isRead;
         }
 
-        public String read(String location) {
+        public byte[] read(String location) {
             isRead = true;
-            return "reading the image";
+            return "reading the image".getBytes();
         }
     }
 }

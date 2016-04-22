@@ -7,11 +7,7 @@ import specialCharacters.EscapeCharacters;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Base64.Encoder;
 
 public class ImageController implements Controller{
     private final String METHODS_ALLOWED = "GET,OPTIONS";
@@ -22,7 +18,7 @@ public class ImageController implements Controller{
         this.reader = reader;
     }
 
-    public String handle(Request request) throws IOException {
+    public byte[] handle(Request request) throws IOException {
         String response = "";
 
         if (request.getHttpVerb().equals("GET")) {
@@ -33,19 +29,23 @@ public class ImageController implements Controller{
         } else {
             response = methodNotAllowed();
         }
-        return response;
+        return response.getBytes();
     }
 
-    private String get(String location, String path) throws IOException {
-        String response = "";
-        response += HttpStatus.okay + EscapeCharacters.newline;
-        response += "Content-Type: image/jpeg" + EscapeCharacters.newline;
+    private byte[] get(String location, String path) throws IOException {
+        String responseHeadersString = "";
 
-        File file = new File(location);
-        byte[] fileContent = Files.readAllBytes(file.toPath());
-        String image = new String(fileContent);
+        responseHeadersString += HttpStatus.okay + EscapeCharacters.newline;
+        responseHeadersString += "Content-Type: image/jpeg" + EscapeCharacters.newline;
 
-        response += "Content-Length: " + fileContent.length + EscapeCharacters.newline + EscapeCharacters.newline;
+        byte[] responseBody = reader.read(location);
+        responseHeadersString += "Content-Length: " + responseBody.length + EscapeCharacters.newline + EscapeCharacters.newline;
+        byte[] responseHeader = responseHeadersString.getBytes();
+
+        byte[] response = new byte[responseHeader.length + responseBody.length];
+        System.arraycopy(responseHeader, 0, response, 0, responseHeader.length);
+        System.arraycopy(responseBody, 0, response, responseHeader.length, responseBody.length);
+
         return response;
     }
 

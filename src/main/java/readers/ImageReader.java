@@ -8,10 +8,9 @@ import java.nio.file.Files;
 
 public class ImageReader implements Reader {
 
-    public String read(String location) throws IOException {
+    public byte[] read(String location) throws IOException {
         File file = new File(location);
-        byte[] fileContent = Files.readAllBytes(file.toPath());
-        return new String(fileContent);
+        return Files.readAllBytes(file.toPath());
     }
 
 }

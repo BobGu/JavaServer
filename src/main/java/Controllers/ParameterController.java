@@ -6,13 +6,13 @@ import specialCharacters.EscapeCharacters;
 
 public class ParameterController implements Controller {
 
-    public String handle(Request request) {
+    public byte[] handle(Request request) {
         String response = "";
 
         if (request.getHttpVerb().equals("GET")) {
             response = get(request);
         }
-        return response;
+        return response.getBytes();
     }
 
     public String get(Request request) {

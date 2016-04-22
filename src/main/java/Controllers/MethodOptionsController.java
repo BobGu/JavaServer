@@ -8,7 +8,7 @@ public class MethodOptionsController implements Controller{
 
     String METHODS_ALLOWED = "GET,HEAD,POST,OPTIONS,PUT";
 
-    public String handle(Request request) {
+    public byte[] handle(Request request) {
         String response = "";
 
         if (request.getHttpVerb().equals("OPTIONS")) {
@@ -18,7 +18,7 @@ public class MethodOptionsController implements Controller{
         } else {
             response = HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
         }
-        return response;
+        return response.getBytes();
     }
 
     private String options() {

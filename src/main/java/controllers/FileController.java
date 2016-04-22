@@ -15,7 +15,7 @@ public class FileController implements Controller {
         this.reader = reader;
     }
 
-    public String handle(Request request) throws IOException {
+    public byte[] handle(Request request) throws IOException {
        String response = "";
 
        if (request.getHttpVerb().equals("GET")) {
@@ -26,7 +26,7 @@ public class FileController implements Controller {
        } else {
            response = methodNotAllowed();
        }
-       return response;
+       return response.getBytes();
     }
 
     private String get(String resourcePath) throws IOException {

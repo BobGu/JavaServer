@@ -29,32 +29,36 @@ public class IndexControllerTest {
 
     @Test
     public void TwoHundredOkayForAGetRequest() throws IOException {
-        String response = controller.handle(getRequest);
+        byte[] response = controller.handle(getRequest);
+        String responseString = new String(response);
 
-        assertTrue(response.contains(HttpStatus.okay + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline));
     }
 
     @Test
     public void ResponseHasContentType() throws IOException {
-        String response = controller.handle(getRequest);
+        byte[] response = controller.handle(getRequest);
+        String responseString = new String(response);
 
-        assertTrue(response.contains("Content-Type: text/html;"));
+        assertTrue(responseString.contains("Content-Type: text/html;"));
     }
 
     @Test
     public void MethodNotAllowed() throws IOException {
         Request request = new Request("/", "POST", null, null, false, false);
-        String response = controller.handle(request);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
 
-        assertTrue(response.contains(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline));
     }
 
     @Test
     public void HandlingAnOptionsRequest() throws IOException {
         Request request = new Request("/", "OPTIONS", null, null, false, false);
-        String response = controller.handle(request);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
 
-        assertTrue(response.contains("Allow: GET,OPTIONS"));
+        assertTrue(responseString.contains("Allow: GET,OPTIONS"));
     }
 
     private class MockDirectoryCRUD implements ResourceCRUD {

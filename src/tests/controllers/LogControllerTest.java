@@ -4,6 +4,7 @@ import controllers.Controller;
 import controllers.LogController;
 import httpStatus.HttpStatus;
 import logs.Log;
+import org.junit.Before;
 import org.junit.Test;
 import requests.Request;
 import specialCharacters.EscapeCharacters;
@@ -16,19 +17,28 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class LogControllerTest {
+    private Controller controller;
+
+    @Before
+    public void setup() {
+        controller = new LogController();
+    }
 
     @Test
     public void TestRepliesWithTwoHundredOkayForGet() throws IOException {
         Request request = new Request("/log", "GET", null, null, false, false);
-        Controller controller = new LogController();
-        assertThat(controller.handle(request) , containsString(HttpStatus.okay));
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
+
+        assertThat(responseString, containsString(HttpStatus.okay));
     }
 
     @Test
     public void TestVisitGetsAddedToLog() throws IOException {
         Log log = Log.getInstance();
         Request request = new Request("/log", "GET", null, null, false, false);
-        Controller controller = new LogController();
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
 
         controller.handle(request);
 
@@ -41,11 +51,11 @@ public class LogControllerTest {
     @Test
     public void TestMethodsNotAllowed() throws IOException {
         Request request = new Request("/log", "POST", null, null, false, false);
-        Controller controller = new LogController();
-        String response = controller.handle(request);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
 
         assertEquals(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline,
-                     response);
+                     responseString);
     }
 
 

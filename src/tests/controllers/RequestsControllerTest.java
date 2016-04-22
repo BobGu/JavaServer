@@ -1,7 +1,7 @@
-package controllers;
 
 import controllers.Controller;
 import controllers.RequestsController;
+import org.junit.Before;
 import requests.Request;
 import httpStatus.HttpStatus;
 import logs.Log;
@@ -15,21 +15,26 @@ import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class RequestsControllerTest {
+    private Controller controller;
+
+    @Before
+    public void setup() {
+        controller = new RequestsController();
+    }
 
     @Test
     public void TestRepliesWithTwoHundredOkayForPut() throws IOException {
         Request request = new Request("/requests", "HEAD", null, null, false, false);
-        Controller controller = new RequestsController();
-        String response = controller.handle(request);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
 
-        assertEquals(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline, response);
+        assertEquals(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline, responseString);
     }
 
     @Test
     public void TestVisitGetsAddedToLog() throws IOException {
         Log log = Log.getInstance();
         Request request = new Request("/requests", "HEAD", null, null, false, false);
-        Controller controller = new RequestsController();
 
         controller.handle(request);
 
@@ -43,9 +48,10 @@ public class RequestsControllerTest {
     public void TestMethodsNotAllowed() throws IOException {
         Request request = new Request("/requests", "POST", null, null, false, false);
         Controller controller = new RequestsController();
-        String response = controller.handle(request);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
 
         assertEquals(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline,
-                response);
+                responseString);
     }
 }

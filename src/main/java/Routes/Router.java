@@ -34,8 +34,8 @@ public class Router {
         }
     }
 
-    public String direct(Request request) throws IOException {
-        String response;
+    public byte[] direct(Request request) throws IOException {
+        byte[] response;
         Optional<Route> route = findRoute(request.getPath());
 
         if (request.getIsImage()) {
@@ -47,7 +47,8 @@ public class Router {
         } else if (route.isPresent()) {
             response = route.get().getController().handle(request);
         } else {
-            response = HttpStatus.notFound + EscapeCharacters.newline + EscapeCharacters.newline;
+            String responseString = HttpStatus.notFound + EscapeCharacters.newline + EscapeCharacters.newline;
+            response = responseString.getBytes();
         }
         return response;
     }

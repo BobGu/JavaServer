@@ -7,7 +7,7 @@ import specialCharacters.EscapeCharacters;
 
 public class RequestsController implements Controller {
 
-    public String handle(Request request) {
+    public byte[] handle(Request request) {
         String response = "";
 
         if(request.getHttpVerb().equals("HEAD")) {
@@ -15,7 +15,7 @@ public class RequestsController implements Controller {
         } else {
             response = HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
         }
-        return response;
+        return response.getBytes();
     }
 
     public String head() {

@@ -5,12 +5,16 @@ import readers.Reader;
 import requests.Request;
 import specialCharacters.EscapeCharacters;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Base64.Encoder;
 
 public class ImageController implements Controller{
-    private String METHODS_ALLOWED = "GET,OPTIONS";
+    private final String METHODS_ALLOWED = "GET,OPTIONS";
     private String directoryBaseUrl = "../resources/main/public";
     private Reader reader;
 
@@ -35,10 +39,13 @@ public class ImageController implements Controller{
     private String get(String location, String path) throws IOException {
         String response = "";
         response += HttpStatus.okay + EscapeCharacters.newline;
-        response += "Content-Type: text/html" + EscapeCharacters.newline + EscapeCharacters.newline;
+        response += "Content-Type: image/jpeg" + EscapeCharacters.newline;
 
-        String encodedFile = reader.read(location);
-        response += formatIntoDataUrl(encodedFile, path);
+        File file = new File(location);
+        byte[] fileContent = Files.readAllBytes(file.toPath());
+        String image = new String(fileContent);
+
+        response += "Content-Length: " + fileContent.length + EscapeCharacters.newline + EscapeCharacters.newline;
         return response;
     }
 
@@ -53,10 +60,6 @@ public class ImageController implements Controller{
 
     private String methodNotAllowed() {
         return HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
-    }
-
-    private String formatIntoDataUrl(String encodedFile, String path) {
-        return "<img alt='/public" + path + "' src='data:image/png;base64, " + encodedFile + "'/>";
     }
 
 }

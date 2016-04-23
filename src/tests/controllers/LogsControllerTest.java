@@ -1,4 +1,3 @@
-package controllers;
 
 import controllers.Controller;
 import controllers.LogsController;
@@ -18,41 +17,51 @@ public class LogsControllerTest {
 
     @Test
     public void TestItGivesAFourOhFourOhOneResponseIfNoAuthorizationHeader() throws IOException {
-        Request request = new Request("/logs", "GET", null, null);
-        assertThat(controller.handle(request), containsString(HttpStatus.notAuthorized));
+        Request request = new Request("/logs", "GET", null, null, false, false);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
+
+        assertThat(responseString, containsString(HttpStatus.notAuthorized));
     }
 
     @Test
     public void TestResponseContainsAResponseHeaderWithAWWWAuthenticateField() throws IOException {
-        Request request = new Request("/logs", "GET", null, null);
-        assertThat(controller.handle(request), containsString("WWW-Authenticate: Basic realm=\"/ Bob Server Logs\""));
+        Request request = new Request("/logs", "GET", null, null, false, false);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
+
+        assertThat(responseString, containsString("WWW-Authenticate: Basic realm=\"/ Bob Server Logs\""));
     }
 
     @Test
     public void TestResponseIsTwoHundredIfAuthenticated() throws IOException {
-        Request request = new Request("/logs", "GET", null, "YWRtaW46aHVudGVyMg==");
-        assertThat(controller.handle(request), containsString(HttpStatus.okay));
+        Request request = new Request("/logs", "GET", null, "YWRtaW46aHVudGVyMg==", false, false);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
+
+        assertThat(responseString, containsString(HttpStatus.okay));
     }
 
     @Test
     public void TestResponseContainsLogsIfAuthenticated() throws IOException {
         Controller mockController = new MockTheseController();
-        Request logThisRequest = new Request("/these", "GET", null, null);
+        Request logThisRequest = new Request("/these", "GET", null, null, false, false);
         mockController.handle(logThisRequest);
 
-        Request request = new Request("/logs", "GET" , null, "YWRtaW46aHVudGVyMg==");
-        String response = controller.handle(request);
+        Request request = new Request("/logs", "GET" , null, "YWRtaW46aHVudGVyMg==", false, false);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
 
-        assertThat(response, containsString("GET /these HTTP/1.1"));
+        assertThat(responseString, containsString("GET /these HTTP/1.1"));
 
     }
 
     private class MockTheseController extends TheseController {
         @Override
-        public String handle(Request request) {
+        public byte[] handle(Request request) {
             Log log = Log.getInstance();
             log.addVisit("GET /these HTTP/1.1");
-            return "Logged a get request to /these";
+            return "Logged a get request to /these".getBytes();
         }
     }
 

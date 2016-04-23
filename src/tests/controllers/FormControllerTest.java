@@ -25,23 +25,26 @@ public class FormControllerTest {
     public void setup() {
         path = "../tests/TestFiles/fakeform.txt";
         formController = new FormController(path, writer, reader);
-        getRequest = new Request("/form", "GET", "data=yet", null);
+        getRequest = new Request("/form", "GET", "data=yet", null, false, false);
     }
 
     @Test
     public void TestHandleAGetRequest() throws IOException {
-        String response = formController.handle(getRequest);
-        Assert.assertThat(response,
+        byte[] response= formController.handle(getRequest);
+        String responseString = new String(response);
+
+        Assert.assertThat(responseString,
                           containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
-        Assert.assertThat(response, containsString("I'm reading from this " + path));
+        Assert.assertThat(responseString, containsString("I'm reading from this " + path));
     }
 
     @Test
     public void TestHandleAPostRequest() throws IOException {
-        Request request = new Request("/form", "POST", "data=shouldbeposted", null);
-        String responseToPost = formController.handle(request);
+        Request request = new Request("/form", "POST", "data=shouldbeposted", null, false, false);
+        byte[] responseToPost= formController.handle(request);
+        String responseToPostString = new String(responseToPost);
 
-        Assert.assertThat(responseToPost,
+        Assert.assertThat(responseToPostString,
                 containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
         Assert.assertThat(writer.getText(), containsString("data=shouldbeposted"));
 
@@ -49,10 +52,11 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleAPutRequest() throws IOException {
-        Request request = new Request("/form", "PUT", "data=acoolname", null);
-        String responseToPut = formController.handle(request);
+        Request request = new Request("/form", "PUT", "data=acoolname", null, false, false);
+        byte[] responseToPut = formController.handle(request);
+        String responseToPutString = new String(responseToPut);
 
-        Assert.assertThat(responseToPut,
+        Assert.assertThat(responseToPutString,
                 containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
         Assert.assertThat(writer.getText(), containsString("data=acoolname"));
     }
@@ -60,21 +64,23 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleOptionsRequest() throws IOException {
-        Request request = new Request("/form", "OPTIONS", null, null);
-        String response = formController.handle(request);
+        Request request = new Request("/form", "OPTIONS", null, null, false, false);
+        byte[] response = formController.handle(request);
+        String responseString = new String(response);
 
-        Assert.assertThat(response,
+        Assert.assertThat(responseString,
                 containsString(HttpStatus.okay + EscapeCharacters.newline));
 
-        Assert.assertThat(response, containsString("Allow: GET,POST,PUT,DELETE,OPTIONS"));
+        Assert.assertThat(responseString, containsString("Allow: GET,POST,PUT,DELETE,OPTIONS"));
     }
 
     @Test
     public void TestHandleDeleteRequest() throws IOException {
-        Request request = new Request("/form", "DELETE", null, null);
-        String response = formController.handle(request);
+        Request request = new Request("/form", "DELETE", null, null, false, false);
+        byte[] response = formController.handle(request);
+        String responseString = new String(response);
 
-        Assert.assertThat(response,
+        Assert.assertThat(responseString,
                 containsString(HttpStatus.okay + EscapeCharacters.newline));
         assertEquals(writer.getText(), "");
     }
@@ -101,8 +107,8 @@ public class FormControllerTest {
 
     private class MockReader implements Reader {
 
-        public String read(String location) {
-            return "I'm reading from this " + location;
+        public byte[] read(String location) {
+            return ("I'm reading from this " + location).getBytes();
         }
     }
 }

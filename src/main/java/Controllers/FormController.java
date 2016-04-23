@@ -37,7 +37,7 @@ public class FormController implements Controller {
         }
     }
 
-    public String handle(Request request) throws IOException {
+    public byte[] handle(Request request) throws IOException {
         String response = "";
         if (METHODS_ALLOWED.contains(request.getHttpVerb())) {
             if (request.getHttpVerb().equals("GET")) {
@@ -55,13 +55,14 @@ public class FormController implements Controller {
             response = HttpStatus.methodNotAllowed;
         }
 
-        return response;
+        return response.getBytes();
     }
 
     private String get(Request request) throws IOException {
         String responseHead = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
-        String responseBody = reader.read(resourcePath);
-        return responseHead + responseBody;
+        byte[] file = reader.read(resourcePath);
+        String fileText = new String(file);
+        return responseHead + fileText;
     }
 
     private String post(Request request) throws IOException {

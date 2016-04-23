@@ -22,7 +22,7 @@ public class IndexController implements Controller {
         this.resourceCRUD = resourceCRUD;
     }
 
-    public String handle(Request request) throws IOException {
+    public byte[] handle(Request request) throws IOException {
         String response = "";
 
         if (request.getHttpVerb().equals("GET")) {
@@ -32,7 +32,7 @@ public class IndexController implements Controller {
         } else {
             response = methodNotAllowed();
         }
-        return response;
+        return response.getBytes();
     }
 
     private String get() throws IOException {

@@ -41,9 +41,9 @@ public class Server {
             try {
                 socket = serverSocket.accept();
                 InputStream socketInputStream = socket.getInputStream();
-                Request request = Parser.parseAndCreateRequest(socketInputStream);
+                Request request = Parser.parseAndCreateRequest(socketInputStream, directoryName);
                 routerConfigure();
-                String response = router.direct(request);
+                byte[] response = router.direct(request);
                 respond(response);
                 socket.close();
             } catch (IOException e) {
@@ -52,8 +52,8 @@ public class Server {
         }
     }
 
-    private void respond(String response) throws IOException {
-        socket.getOutputStream().write(response.getBytes());
+    private void respond(byte[] response) throws IOException {
+        socket.getOutputStream().write(response);
     }
 
     private void routerConfigure() {

@@ -4,6 +4,6 @@ import java.io.IOException;
 
 public interface Reader {
 
-    public String read(String location) throws IOException;
+    public byte[] read(String location) throws IOException;
 
 }

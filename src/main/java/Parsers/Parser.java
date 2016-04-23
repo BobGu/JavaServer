@@ -2,23 +2,44 @@ package parsers;
 import requests.Request;
 import decoders.ParameterDecoder;
 import specialCharacters.EscapeCharacters;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+
+import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Parser {
 
-    public static Request parseAndCreateRequest(InputStream inputStream) throws IOException {
+    public static Request parseAndCreateRequest(InputStream inputStream, String directoryName) throws IOException {
         String request = parseInputStream(inputStream);
-        Map<String,String> fields = parseRequest(request);
+        String path = parseForPathUrl(request);
+        String httpVerb = parseForHttpVerb(request);
+        String parameters = parseForParameters(request);
+        String authorization = parseForAuthorization(request);
+        boolean isFile = containsFile(path, directoryName);
+        boolean isImage = containsImage(path, isFile);
 
-        return new Request(fields.get("path"), fields.get("httpVerb"), fields.get("parameters"), fields.get("authorization"));
+        return new Request(path, httpVerb, parameters, authorization, isFile, isImage);
     }
 
+    private static boolean containsFile(String path, String directoryName) {
+        String fileName = path.replace("/", "");
+        String location = "../resources/main/" + directoryName + "/" + fileName;
+        File file = new File(location);
+        return !file.isDirectory() && file.exists();
+    }
+
+    private static boolean containsImage(String path, boolean isFile) {
+        if(!isFile) {
+            return false;
+        } else {
+            return hasImageExtension(path);
+        }
+    }
+
+    private static boolean hasImageExtension(String path) {
+        return path.contains(".jpeg") || path.contains(".png") || path.contains(".gif");
+    }
 
     public static String parseInputStream(InputStream inputStream) throws IOException {
         String parsedRequest= "";
@@ -44,7 +65,7 @@ public class Parser {
     }
 
     public static String parseForPathUrl(String requestHeader) {
-        Pattern pattern = Pattern.compile("(/[a-zA-Z0-9/_]*)");
+        Pattern pattern = Pattern.compile("(/[a-zA-Z0-9/_.-]*)");
         Matcher matcher = pattern.matcher(requestHeader);
         matcher.find();
 
@@ -92,22 +113,6 @@ public class Parser {
         matcher.find();
 
         return matcher.group(0);
-    }
-
-    private static Map<String, String> parseRequest(String request) {
-        Map<String, String> fields = new HashMap<String,String>();
-
-        String path = parseForPathUrl(request);
-        String httpVerb = parseForHttpVerb(request);
-        String parameters = parseForParameters(request);
-        String authorization = parseForAuthorization(request);
-
-        fields.put("path", path);
-        fields.put("httpVerb", httpVerb);
-        fields.put("parameters", parameters);
-        fields.put("authorization", authorization);
-
-        return fields;
     }
 
     private static String parseForAuthorization(String request) {

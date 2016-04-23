@@ -28,8 +28,8 @@ public class RouteTest {
 
     private class MockController implements Controller {
 
-        public String handle(Request request) {
-            return "";
+        public byte[] handle(Request request) {
+            return "".getBytes();
         }
 
     }

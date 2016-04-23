@@ -10,12 +10,12 @@ import java.util.List;
 
 public class LogsController implements Controller{
 
-    public String handle(Request request) {
+    public byte[] handle(Request request) {
         String response = " ";
         if (request.getHttpVerb().equals("GET")) {
             response = get(request);
         }
-        return response;
+        return response.getBytes();
     }
 
     private String get(Request request) {

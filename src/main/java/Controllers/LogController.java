@@ -6,7 +6,7 @@ import specialCharacters.EscapeCharacters;
 
 public class LogController implements Controller{
 
-    public String handle(Request request) {
+    public byte[] handle(Request request) {
         String response = "";
         if (request.getHttpVerb().equals("GET")) {
             response = get();
@@ -14,7 +14,7 @@ public class LogController implements Controller{
             response = HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
         }
 
-        return response;
+        return response.getBytes();
     }
 
     private String get() {

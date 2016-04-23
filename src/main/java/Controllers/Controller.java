@@ -6,6 +6,6 @@ import java.io.IOException;
 
 public interface Controller {
 
-    public abstract String handle(Request request) throws IOException;
+    public abstract byte[] handle(Request request) throws IOException;
 
 }

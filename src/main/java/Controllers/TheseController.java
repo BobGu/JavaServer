@@ -7,7 +7,7 @@ import specialCharacters.EscapeCharacters;
 
 public class TheseController implements Controller{
 
-    public String handle(Request request) {
+    public byte[] handle(Request request) {
         String response = "";
 
         if(request.getHttpVerb().equals("PUT")) {
@@ -15,7 +15,7 @@ public class TheseController implements Controller{
         } else {
             response = HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
         }
-        return response;
+        return response.getBytes();
     }
 
     public String put() {

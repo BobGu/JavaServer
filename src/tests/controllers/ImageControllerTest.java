@@ -28,7 +28,7 @@ public class ImageControllerTest {
         byte[] response = controller.handle(getRequest);
         String responseString = new String(response);
 
-        assertTrue(responseString.contains("Content-Type: text/html" + EscapeCharacters.newline + EscapeCharacters.newline));
+        assertTrue(responseString.contains("Content-Type: image/jpeg" +  EscapeCharacters.newline));
     }
     @Test
     public void HandlesAnOptionsRequest() throws IOException {

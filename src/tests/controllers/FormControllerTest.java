@@ -108,7 +108,7 @@ public class FormControllerTest {
     private class MockReader implements Reader {
 
         public byte[] read(String location) {
-            return "I'm reading from this ".getBytes();
+            return ("I'm reading from this " + location).getBytes();
         }
     }
 }

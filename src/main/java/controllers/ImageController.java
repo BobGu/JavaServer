@@ -19,17 +19,17 @@ public class ImageController implements Controller{
     }
 
     public byte[] handle(Request request) throws IOException {
-        String response = "";
+        byte[] response;
 
         if (request.getHttpVerb().equals("GET")) {
             String location = directoryBaseUrl + request.getPath();
             response = get(location, request.getPath());
         } else if(request.getHttpVerb().equals("OPTIONS")) {
-            response = options();
+            response = options().getBytes();
         } else {
-            response = methodNotAllowed();
+            response = methodNotAllowed().getBytes();
         }
-        return response.getBytes();
+        return response;
     }
 
     private byte[] get(String location, String path) throws IOException {

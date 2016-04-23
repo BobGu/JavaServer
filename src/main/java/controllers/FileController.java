@@ -32,7 +32,8 @@ public class FileController implements Controller {
     private String get(String resourcePath) throws IOException {
         String response = "";
         response += HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
-        response += reader.read(resourcePath);
+        byte[] responseBody = reader.read(resourcePath);
+        response += new String(responseBody);
         return response;
     }
 

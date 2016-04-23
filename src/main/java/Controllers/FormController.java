@@ -61,7 +61,8 @@ public class FormController implements Controller {
     private String get(Request request) throws IOException {
         String responseHead = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
         byte[] file = reader.read(resourcePath);
-        return new String(file);
+        String fileText = new String(file);
+        return responseHead + fileText;
     }
 
     private String post(Request request) throws IOException {

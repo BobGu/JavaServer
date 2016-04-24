@@ -2,7 +2,6 @@ package routes;
 
 import controllers.*;
 import readers.FileReader;
-import readers.ImageReader;
 import requests.Request;
 import httpStatus.HttpStatus;
 import resourceCRUD.DirectoryCRUD;
@@ -39,7 +38,7 @@ public class Router {
         Optional<Route> route = findRoute(request.getPath());
 
         if (request.getIsImage()) {
-            Controller controller = new ImageController(new ImageReader());
+            Controller controller = new ImageController(new FileReader());
             response = controller.handle(request);
         } else if (request.getIsFile()) {
             Controller controller = new FileController(new FileReader());

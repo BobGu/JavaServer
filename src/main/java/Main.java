@@ -33,7 +33,7 @@ public class Main {
     }
 
     private static void setDirectory(Server server, String[] args) {
-        String directoryName = "public";
+        String directoryName = "../resources/main/public";
 
         if (containsFlag(args, DIRECTORY_FLAG)) {
             directoryName = getValueAfterFlag(args, DIRECTORY_FLAG);

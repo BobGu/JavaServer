@@ -25,7 +25,7 @@ public class FormControllerTest {
     public void setup() {
         path = "../tests/TestFiles/fakeform.txt";
         formController = new FormController(path, writer, reader);
-        getRequest = new Request("/form", "GET", "data=yet", null, false, false);
+        getRequest = new Request("/form", "GET", "data=yet", null);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleAPostRequest() throws IOException {
-        Request request = new Request("/form", "POST", "data=shouldbeposted", null, false, false);
+        Request request = new Request("/form", "POST", "data=shouldbeposted", null);
         byte[] responseToPost= formController.handle(request);
         String responseToPostString = new String(responseToPost);
 
@@ -52,7 +52,7 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleAPutRequest() throws IOException {
-        Request request = new Request("/form", "PUT", "data=acoolname", null, false, false);
+        Request request = new Request("/form", "PUT", "data=acoolname", null);
         byte[] responseToPut = formController.handle(request);
         String responseToPutString = new String(responseToPut);
 
@@ -64,7 +64,7 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleOptionsRequest() throws IOException {
-        Request request = new Request("/form", "OPTIONS", null, null, false, false);
+        Request request = new Request("/form", "OPTIONS", null, null);
         byte[] response = formController.handle(request);
         String responseString = new String(response);
 
@@ -76,7 +76,7 @@ public class FormControllerTest {
 
     @Test
     public void TestHandleDeleteRequest() throws IOException {
-        Request request = new Request("/form", "DELETE", null, null, false, false);
+        Request request = new Request("/form", "DELETE", null, null);
         byte[] response = formController.handle(request);
         String responseString = new String(response);
 

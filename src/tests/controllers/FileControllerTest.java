@@ -10,20 +10,20 @@ import static org.junit.Assert.assertTrue;
 
 public class FileControllerTest {
     private MockFileReader reader = new MockFileReader();
-    private FileController controller = new FileController(reader);
+    private FileController controller = new FileController(reader, "public");
 
     @Test
     public void HandlesAGetRequest() throws IOException {
-        Request request = new Request("/file1", "GET", null, null, true, false);
+        Request request = new Request("/file1", "GET", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline));
     }
 
     @Test
     public void HandlesAnOptionsRequest() throws IOException {
-        Request request = new Request("/file1", "OPTIONS", null, null, true, false);
+        Request request = new Request("/file1", "OPTIONS", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -33,7 +33,7 @@ public class FileControllerTest {
 
     @Test
     public void MethodNotAllowed() throws IOException {
-        Request request = new Request("/file1", "PUT", null, null, true, false);
+        Request request = new Request("/file1", "PUT", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -42,7 +42,7 @@ public class FileControllerTest {
 
     @Test
     public void ReaderReadsFromTheFile() throws IOException {
-        Request request = new Request("/file1", "GET", null, null, true, false);
+        Request request = new Request("/file1", "GET", null, null);
         byte[] response = controller.handle(request);
 
         assertTrue(reader.getIsRead());

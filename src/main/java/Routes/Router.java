@@ -4,10 +4,10 @@ import controllers.*;
 import readers.FileReader;
 import requests.Request;
 import httpStatus.HttpStatus;
-import resourceCRUD.DirectoryCRUD;
 import specialCharacters.EscapeCharacters;
 import writers.FileWriter;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -36,15 +36,15 @@ public class Router {
     public byte[] direct(Request request) throws IOException {
         byte[] response;
         Optional<Route> route = findRoute(request.getPath());
+        String fileLocation = directoryName + request.getPath();
+        File file = new File(fileLocation);
+        boolean fileRequested = file.exists();
 
-        if (request.getIsImage()) {
-            Controller controller = new ImageController(new FileReader());
-            response = controller.handle(request);
-        } else if (request.getIsFile()) {
-            Controller controller = new FileController(new FileReader());
-            response = controller.handle(request);
-        } else if (route.isPresent()) {
+        if (route.isPresent()) {
             response = route.get().getController().handle(request);
+        } else if (fileRequested || request.getPath().equals("/")) {
+            Controller controller = new FileController(new FileReader(), fileLocation);
+            response = controller.handle(request);
         } else {
             String responseString = HttpStatus.notFound + EscapeCharacters.newline + EscapeCharacters.newline;
             response = responseString.getBytes();
@@ -53,7 +53,6 @@ public class Router {
     }
 
     private void createRoutes() {
-        routes.add(new Route("/", new IndexController(directoryName, new DirectoryCRUD())));
         routes.add(new Route("/form", new FormController(new FileWriter(), new FileReader())));
         routes.add(new Route("/method_options",  new MethodOptionsController()));
         routes.add(new Route("/parameters", new ParameterController()));

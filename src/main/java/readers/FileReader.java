@@ -12,7 +12,6 @@ public class FileReader implements Reader{
         if (file.isDirectory()) {
             String files = collectFileNames(file.list());
             files = file.getName() + " " + files;
-            System.out.println(files);
             return files.getBytes();
         } else {
             return Files.readAllBytes(file.toPath());

@@ -42,7 +42,7 @@ public class Router {
 
         if (route.isPresent()) {
             response = route.get().getController().handle(request);
-        } else if (fileRequested) {
+        } else if (fileRequested || request.getPath().equals("/")) {
             Controller controller = new FileController(new FileReader(), fileLocation);
             response = controller.handle(request);
         } else {
@@ -53,7 +53,6 @@ public class Router {
     }
 
     private void createRoutes() {
-        routes.add(new Route("/", new IndexController(directoryName, new FileReader())));
         routes.add(new Route("/form", new FormController(new FileWriter(), new FileReader())));
         routes.add(new Route("/method_options",  new MethodOptionsController()));
         routes.add(new Route("/parameters", new ParameterController()));

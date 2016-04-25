@@ -3,28 +3,27 @@ import httpStatus.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
 import requests.Request;
-import resourceCRUD.ResourceCRUD;
 import specialCharacters.EscapeCharacters;
-
+import readers.Reader;
 import java.io.IOException;
 
 import static org.junit.Assert.assertTrue;
 
 public class IndexControllerTest {
-    private MockDirectoryCRUD resourceCRUD = new MockDirectoryCRUD();
+    private MockReader reader = new MockReader();
     private IndexController controller;
     private Request getRequest = new Request("/", "GET", null, null, false, false);
 
     @Before
     public void setup() {
-        controller = new IndexController("public", resourceCRUD);
+        controller = new IndexController("public", reader);
     }
 
     @Test
     public void ItHasAFileDirectory() throws IOException {
         controller.handle(getRequest);
 
-        assertTrue(resourceCRUD.getIsDirectoryCreated());
+        assertTrue(reader.getIsDirectoryCreated());
     }
 
     @Test
@@ -61,22 +60,13 @@ public class IndexControllerTest {
         assertTrue(responseString.contains("Allow: GET,OPTIONS"));
     }
 
-    private class MockDirectoryCRUD implements ResourceCRUD {
+    private class MockReader implements Reader{
         private boolean isDirectoryCreated;
 
-        public void create(String dirName, String text) {
-        }
-
-        public String read(String dirName) {
+        public byte[] read(String dirName) {
             createDirectory();
-            return "File contents";
+            return "File contents".getBytes();
         }
-
-        public void update(String dirName, String text) {
-
-        }
-
-        public void delete(String dirName){}
 
         public boolean getIsDirectoryCreated() {
             return isDirectoryCreated;

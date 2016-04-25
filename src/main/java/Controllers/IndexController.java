@@ -1,25 +1,20 @@
 package controllers;
 
-import parsers.Parser;
 import requests.Request;
+import readers.Reader;
 import httpStatus.HttpStatus;
-import resourceCRUD.DirectoryCRUD;
-import resourceCRUD.ResourceCRUD;
 import specialCharacters.EscapeCharacters;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 public class IndexController implements Controller {
     private final String METHODS_ALLOWED = "GET,OPTIONS";
-    private ResourceCRUD resourceCRUD;
+    private Reader reader;
     private String directoryName;
 
-    public IndexController(String directoryName, ResourceCRUD resourceCRUD) {
+    public IndexController(String directoryName, Reader reader) {
         this.directoryName = directoryName;
-        this.resourceCRUD = resourceCRUD;
+        this.reader= reader;
     }
 
     public byte[] handle(Request request) throws IOException {
@@ -39,11 +34,12 @@ public class IndexController implements Controller {
         String response = "";
         response += HttpStatus.okay + EscapeCharacters.newline;
         response += "Content-Type: text/html;" + EscapeCharacters.newline + EscapeCharacters.newline;
-        String directoryAndFiles = resourceCRUD.read(directoryName);
+        byte[] directoryAndFiles = reader.read(directoryName);
+        String files = new String(directoryAndFiles);
 
         response += "<!DOCTYPE html><html><head><title>bobsjavaserver</title></head><body>";
         response += "<h1>Hello world</h1><ul>";
-        response += format(directoryAndFiles) + "</ul>";
+        response += format(files) + "</ul>";
         response += "</body></html>";
 
         return response;
@@ -56,13 +52,15 @@ public class IndexController implements Controller {
     private String format(String directoryAndFiles) {
         String htmlFormat = "";
         String[] dirAndFiles = directoryAndFiles.split(" ");
+        int count = 0;
 
         for(String file: dirAndFiles) {
-            if (file.equals(directoryName)) {
-                htmlFormat += "<li>" + directoryName + "</li>";
+            if (count == 0) {
+                htmlFormat += "<li>" + file + "</li>";
             } else {
                 htmlFormat += "<li><a href=/" + file + ">" + file + "</a></li>";
             }
+            count += 1;
         }
         return htmlFormat;
     }

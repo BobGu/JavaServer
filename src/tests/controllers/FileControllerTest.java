@@ -10,7 +10,7 @@ import static org.junit.Assert.assertTrue;
 
 public class FileControllerTest {
     private MockFileReader reader = new MockFileReader();
-    private FileController controller = new FileController(reader);
+    private FileController controller = new FileController(reader, "public");
 
     @Test
     public void HandlesAGetRequest() throws IOException {

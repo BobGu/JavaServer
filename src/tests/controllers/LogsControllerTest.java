@@ -17,7 +17,7 @@ public class LogsControllerTest {
 
     @Test
     public void TestItGivesAFourOhFourOhOneResponseIfNoAuthorizationHeader() throws IOException {
-        Request request = new Request("/logs", "GET", null, null, false, false);
+        Request request = new Request("/logs", "GET", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -26,7 +26,7 @@ public class LogsControllerTest {
 
     @Test
     public void TestResponseContainsAResponseHeaderWithAWWWAuthenticateField() throws IOException {
-        Request request = new Request("/logs", "GET", null, null, false, false);
+        Request request = new Request("/logs", "GET", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -35,7 +35,7 @@ public class LogsControllerTest {
 
     @Test
     public void TestResponseIsTwoHundredIfAuthenticated() throws IOException {
-        Request request = new Request("/logs", "GET", null, "YWRtaW46aHVudGVyMg==", false, false);
+        Request request = new Request("/logs", "GET", null, "YWRtaW46aHVudGVyMg==");
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -45,10 +45,10 @@ public class LogsControllerTest {
     @Test
     public void TestResponseContainsLogsIfAuthenticated() throws IOException {
         Controller mockController = new MockTheseController();
-        Request logThisRequest = new Request("/these", "GET", null, null, false, false);
+        Request logThisRequest = new Request("/these", "GET", null, null);
         mockController.handle(logThisRequest);
 
-        Request request = new Request("/logs", "GET" , null, "YWRtaW46aHVudGVyMg==", false, false);
+        Request request = new Request("/logs", "GET" , null, "YWRtaW46aHVudGVyMg==");
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 

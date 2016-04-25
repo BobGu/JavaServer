@@ -1,5 +1,4 @@
-package requests;
-
+import requests.Request;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,7 +10,7 @@ public class RequestTest {
 
     @Before
     public void RequestObjectCreation() {
-        request = new Request("/", "GET", "data=fatcat", "QWxhZGRpbjpPcGVuU2VzYW1l", true, true);
+        request = new Request("/", "GET", "data=fatcat", "QWxhZGRpbjpPcGVuU2VzYW1l");
     }
 
     @Test
@@ -33,17 +32,6 @@ public class RequestTest {
     public void TestCanGetAuthenticateBase64() {
         assertEquals("QWxhZGRpbjpPcGVuU2VzYW1l", request.getAuthorization());
     }
-
-    @Test
-    public void TestCanGetIfItIsAFile() {
-        assertTrue(request.getIsFile());
-    }
-
-    @Test
-    public void TestCanGetIsImage() {
-        assertTrue(request.getIsImage());
-    }
-
 
 }
 

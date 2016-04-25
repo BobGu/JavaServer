@@ -24,7 +24,7 @@ public class RequestsControllerTest {
 
     @Test
     public void TestRepliesWithTwoHundredOkayForPut() throws IOException {
-        Request request = new Request("/requests", "HEAD", null, null, false, false);
+        Request request = new Request("/requests", "HEAD", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -34,7 +34,7 @@ public class RequestsControllerTest {
     @Test
     public void TestVisitGetsAddedToLog() throws IOException {
         Log log = Log.getInstance();
-        Request request = new Request("/requests", "HEAD", null, null, false, false);
+        Request request = new Request("/requests", "HEAD", null, null);
 
         controller.handle(request);
 
@@ -46,7 +46,7 @@ public class RequestsControllerTest {
 
     @Test
     public void TestMethodsNotAllowed() throws IOException {
-        Request request = new Request("/requests", "POST", null, null, false, false);
+        Request request = new Request("/requests", "POST", null, null);
         Controller controller = new RequestsController();
         byte[] response = controller.handle(request);
         String responseString = new String(response);

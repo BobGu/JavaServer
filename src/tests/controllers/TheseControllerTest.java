@@ -16,7 +16,7 @@ public class TheseControllerTest {
 
     @Test
     public void TestRepliesWithTwoHundredOkayForPut() throws IOException {
-        Request request = new Request("/these", "PUT", null, null, false, false);
+        Request request = new Request("/these", "PUT", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -26,7 +26,7 @@ public class TheseControllerTest {
     @Test
     public void TestVisitGetsAddedToLog() throws IOException {
         Log log = Log.getInstance();
-        Request request = new Request("/these", "PUT", null, null, false, false);
+        Request request = new Request("/these", "PUT", null, null);
         controller.handle(request);
         List<String> recentVisits = log.recentVisits(1);
         String recentVisit = recentVisits.get(0);
@@ -36,7 +36,7 @@ public class TheseControllerTest {
 
     @Test
     public void TestMethodsNotAllowed() throws IOException {
-        Request request = new Request("/these", "POST", null, null, false, false);
+        Request request = new Request("/these", "POST", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 

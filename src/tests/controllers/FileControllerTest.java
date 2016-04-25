@@ -14,7 +14,7 @@ public class FileControllerTest {
 
     @Test
     public void HandlesAGetRequest() throws IOException {
-        Request request = new Request("/file1", "GET", null, null);
+        Request request = new Request("GET /file1 HTTP/1.1", "/file1", "GET", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -23,7 +23,7 @@ public class FileControllerTest {
 
     @Test
     public void HandlesAnOptionsRequest() throws IOException {
-        Request request = new Request("/file1", "OPTIONS", null, null);
+        Request request = new Request("OPTONS /file1 HTTP/1.1", "/file1", "OPTIONS", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -33,7 +33,7 @@ public class FileControllerTest {
 
     @Test
     public void MethodNotAllowed() throws IOException {
-        Request request = new Request("/file1", "PUT", null, null);
+        Request request = new Request("PUT /file1 HTTP/1.1", "/file1", "PUT", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -42,7 +42,7 @@ public class FileControllerTest {
 
     @Test
     public void ReaderReadsFromTheFile() throws IOException {
-        Request request = new Request("/file1", "GET", null, null);
+        Request request = new Request("GET /file1 HTTP/1.1", "/file1", "GET", null, null);
         byte[] response = controller.handle(request);
 
         assertTrue(reader.getIsRead());

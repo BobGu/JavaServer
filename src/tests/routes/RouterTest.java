@@ -38,14 +38,14 @@ public class RouterTest {
 
     @Test
     public void TestItCanDirectARequestToTheCorrectController() throws IOException {
-        Request request = new Request("/", "GET", null, null);
+        Request request = new Request("GET / HTTP/1.1", "/", "GET", null, null);
         router.direct(request);
         assertTrue(indexController.isHandleInvoked());
     }
 
     @Test
     public void TestItCanDirectToTheCorrectController() throws IOException {
-        Request request = new Request("/form", "GET", null, null);
+        Request request = new Request("GET /logs HTTP/1.1", "/form", "GET", null, null);
         router.direct(request);
 
         assertTrue(formController.isHandleInvoked());
@@ -54,7 +54,7 @@ public class RouterTest {
 
     @Test
     public void TestIfRouteDoesNotExist() throws IOException {
-        Request request = new Request("/foobar", "GET", null, null);
+        Request request = new Request("GET /foobar HTTP/1.1", "/foobar", "GET", null, null);
         byte[] response = router.direct(request);
         String responseString = new String(response);
 

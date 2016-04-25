@@ -23,4 +23,8 @@ public class Log {
         visits.add(visit);
     }
 
+    public void clear() {
+        visits = new ArrayList<String>();
+    }
+
 }

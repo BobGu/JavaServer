@@ -1,7 +1,7 @@
 
 import controllers.Controller;
+import controllers.LogController;
 import controllers.LogsController;
-import controllers.TheseController;
 import requests.Request;
 import httpStatus.HttpStatus;
 import logs.Log;
@@ -17,7 +17,7 @@ public class LogsControllerTest {
 
     @Test
     public void TestItGivesAFourOhFourOhOneResponseIfNoAuthorizationHeader() throws IOException {
-        Request request = new Request("/logs", "GET", null, null);
+        Request request = new Request("GET /logs HTTP/1.1", "/logs", "GET", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -26,7 +26,7 @@ public class LogsControllerTest {
 
     @Test
     public void TestResponseContainsAResponseHeaderWithAWWWAuthenticateField() throws IOException {
-        Request request = new Request("/logs", "GET", null, null);
+        Request request = new Request("GET /logs HTTP/1.1", "/logs", "GET", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -35,7 +35,7 @@ public class LogsControllerTest {
 
     @Test
     public void TestResponseIsTwoHundredIfAuthenticated() throws IOException {
-        Request request = new Request("/logs", "GET", null, "YWRtaW46aHVudGVyMg==");
+        Request request = new Request("GET /logs HTTP/1.1", "/logs", "GET", null, "YWRtaW46aHVudGVyMg==");
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -45,10 +45,10 @@ public class LogsControllerTest {
     @Test
     public void TestResponseContainsLogsIfAuthenticated() throws IOException {
         Controller mockController = new MockTheseController();
-        Request logThisRequest = new Request("/these", "GET", null, null);
+        Request logThisRequest = new Request("GET /these HTTP/1.1", "/these", "GET", null, null);
         mockController.handle(logThisRequest);
 
-        Request request = new Request("/logs", "GET" , null, "YWRtaW46aHVudGVyMg==");
+        Request request = new Request("GET /logs HTTP/1.1", "/logs", "GET" , null, "YWRtaW46aHVudGVyMg==");
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -56,7 +56,7 @@ public class LogsControllerTest {
 
     }
 
-    private class MockTheseController extends TheseController {
+    private class MockTheseController extends LogController {
         @Override
         public byte[] handle(Request request) {
             Log log = Log.getInstance();

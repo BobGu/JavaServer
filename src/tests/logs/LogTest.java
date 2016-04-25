@@ -1,10 +1,12 @@
 import logs.Log;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 public class LogTest {
     private Log log;
@@ -55,10 +57,27 @@ public class LogTest {
     }
 
     @Test
+    public void CanClearLogs() {
+        log.addVisit("GET /form HTTP/1.1");
+        log.addVisit("POST /form HTTP/1.1");
+        log.addVisit("OPTIONS / HTTP/1.1");
+
+        log.clear();
+        List<String> recentVisits = log.recentVisits(5);
+
+        assertTrue(recentVisits.size() == 0);
+    }
+
+    @Test
     public void TestOnlyOneLoggerIsCreated() {
         Log instanceOfLogOne = Log.getInstance();
         Log instanceOfLogTwo = Log.getInstance();
 
         assertSame(instanceOfLogOne, instanceOfLogTwo);
+    }
+
+    @After
+    public void clearLogs() {
+        log.clear();
     }
 }

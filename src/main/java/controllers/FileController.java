@@ -31,19 +31,10 @@ public class FileController implements Controller {
     private byte[] get(Request request) throws IOException {
         File file = new File(fileLocation);
 
-        if(file.exists()) {
-            if (file.isDirectory()) {
-                return directoryResponse(request);
-            } else {
-                return fileResponse();
-            }
+        if (file.isDirectory() || request.getPath().equals("/")) {
+            return directoryResponse(request);
         } else {
-            String responseString = "";
-            responseString += HttpStatus.okay + EscapeCharacters.newline;
-            responseString += "Content-Type: text/html;" + EscapeCharacters.newline + EscapeCharacters.newline;
-            responseString += "<!DOCTYPE html><html><head><title>bobsjavaserver</title></head><body>";
-            responseString += "<h1>Hello world</h1><ul></ul></body></html>";
-            return responseString.getBytes();
+            return fileResponse();
         }
     }
 
@@ -58,7 +49,6 @@ public class FileController implements Controller {
 
     private byte[] directoryResponse(Request request) throws IOException {
         String response = "";
-
         response += HttpStatus.okay + EscapeCharacters.newline;
         response += "Content-Type: text/html;" + EscapeCharacters.newline + EscapeCharacters.newline;
         byte[] directoryAndFiles = reader.read(fileLocation);

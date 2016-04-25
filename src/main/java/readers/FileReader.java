@@ -9,12 +9,16 @@ public class FileReader implements Reader{
     public byte[] read(String location) throws IOException {
         File file = new File(location);
 
-        if (file.isDirectory()) {
-            String files = collectFileNames(file.list());
-            files = file.getName() + " " + files;
-            return files.getBytes();
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                String files = collectFileNames(file.list());
+                files = file.getName() + " " + files;
+                return files.getBytes();
+            } else {
+                return Files.readAllBytes(file.toPath());
+            }
         } else {
-            return Files.readAllBytes(file.toPath());
+            return "".getBytes();
         }
     }
 

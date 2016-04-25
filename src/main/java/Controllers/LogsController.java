@@ -41,7 +41,7 @@ public class LogsController implements Controller{
     private String getLogVisits() {
         String visits = "";
         Log log = Log.getInstance();
-        List<String> recentVisits = log.recentVisits(3);
+        List<String> recentVisits = log.recentVisits(100);
 
         for(String recentVisit:recentVisits) {
             visits += recentVisit + EscapeCharacters.newline;

@@ -108,7 +108,6 @@ public class FileController implements Controller {
             if (count == 0) {
                 htmlFormat += "<li>" + file + "</li>";
             } else {
-                System.out.println(path);
                 htmlFormat += "<li><a href=http://localhost:5000" + path + file + "/>" + file + "</a></li>";
             }
             count += 1;

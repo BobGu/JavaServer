@@ -18,7 +18,7 @@ public class FileControllerTest {
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline));
     }
 
     @Test

@@ -1,6 +1,7 @@
 import requests.Request;
 import org.junit.Before;
 import org.junit.Test;
+import specialCharacters.EscapeCharacters;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -10,27 +11,38 @@ public class RequestTest {
 
     @Before
     public void RequestObjectCreation() {
-        request = new Request("/", "GET", "data=fatcat", "QWxhZGRpbjpPcGVuU2VzYW1l");
+        String requestString = "GET / HTTP/1.1"
+                + EscapeCharacters.newline
+                + "Host: localhost:5000";
+        request = new Request(requestString, "/", "GET", "data=fatcat", "QWxhZGRpbjpPcGVuU2VzYW1l");
     }
 
     @Test
-    public void TestCanSetAPath() {
+    public void CanSetAPath() {
         assertEquals("/", request.getPath());
     }
 
     @Test
-    public void TestCanSetAHttpVerb() {
+    public void CanSetAHttpVerb() {
         assertEquals("GET", request.getHttpVerb());
     }
 
     @Test
-    public void TestCanSetParameters() {
+    public void CanSetParameters() {
         assertEquals("data=fatcat", request.getParameters());
     }
 
     @Test
-    public void TestCanGetAuthenticateBase64() {
+    public void CanGetAuthenticateBase64() {
         assertEquals("QWxhZGRpbjpPcGVuU2VzYW1l", request.getAuthorization());
+    }
+
+    @Test
+    public void CanGetFullRequest() {
+        String requestString = "GET / HTTP/1.1"
+                       + EscapeCharacters.newline
+                       + "Host: localhost:5000";
+        assertTrue((request.getFullRequest()).contains(requestString));
     }
 
 }

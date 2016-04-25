@@ -17,7 +17,7 @@ public class Parser {
         String parameters = parseForParameters(request);
         String authorization = parseForAuthorization(request);
 
-        return new Request(path, httpVerb, parameters, authorization);
+        return new Request(request, path, httpVerb, parameters, authorization);
     }
 
     public static String parseInputStream(InputStream inputStream) throws IOException {

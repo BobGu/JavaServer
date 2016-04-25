@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 public class ImageControllerTest {
     MockImageReader reader = new MockImageReader();
     Controller controller = new ImageController(reader);
-    Request getRequest = new Request("/image.png", "GET", null, null);
+    Request getRequest = new Request("GET /image.png HTTP/1.1", "/image.png", "GET", null, null);
 
     @Test
     public void HandlesAGetRequest() throws IOException {
@@ -32,7 +32,7 @@ public class ImageControllerTest {
     }
     @Test
     public void HandlesAnOptionsRequest() throws IOException {
-        Request request = new Request("/image.jpg", "OPTIONS", null, null);
+        Request request = new Request("GET /image.jpg HTTP/1.1", "/image.jpg", "OPTIONS", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
@@ -42,7 +42,7 @@ public class ImageControllerTest {
 
     @Test
     public void HandlesMethodsThatAreNotAllowed() throws IOException {
-        Request request = new Request("/cat.gif", "DELETE", null, null);
+        Request request = new Request("GET /cat.gif HTTP/1.1", "/cat.gif", "DELETE", null, null);
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 

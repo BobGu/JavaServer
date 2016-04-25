@@ -4,8 +4,10 @@ public class Request {
     private String httpVerb;
     private String parameters;
     private String authorization;
+    private String fullRequest;
 
-    public Request(String path, String httpVerb, String body, String authorization) {
+    public Request(String fullRequest, String path, String httpVerb, String body, String authorization) {
+        this.fullRequest = fullRequest;
         this.path = path;
         this.httpVerb = httpVerb;
         this.parameters = body;
@@ -24,4 +26,8 @@ public class Request {
     public String getAuthorization() {
         return authorization;
     }
+    public String getFullRequest() {
+        return fullRequest;
+    }
+
 }

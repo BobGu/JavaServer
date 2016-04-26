@@ -7,6 +7,8 @@ import specialCharacters.EscapeCharacters;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FileController implements Controller {
     private final String METHODS_ALLOWED = "GET,OPTIONS";
@@ -58,7 +60,7 @@ public class FileController implements Controller {
         if (request.getPath().equals("/")) {
             response += "<h1>Hello world</h1><ul>";
         }
-        response += format(files, request.getPath()) + "</ul>";
+        response += format(files, request) + "</ul>";
         response += "</body></html>";
         return response.getBytes();
     }
@@ -99,20 +101,28 @@ public class FileController implements Controller {
         return contentType;
     }
 
-    private String format(String directoryAndFiles, String path) {
+    private String format(String directoryAndFiles, Request request) {
         String htmlFormat = "";
         String[] dirAndFiles = directoryAndFiles.split(" ");
         int count = 0;
-
         for(String file: dirAndFiles) {
             if (count == 0) {
                 htmlFormat += "<li>" + file + "</li>";
             } else {
-                htmlFormat += "<li><a href=http://localhost:5000" + path + file + "/>" + file + "</a></li>";
+                String currentDirectory = request.getPath().equals("/") ? "" : request.getPath() + "/";
+                htmlFormat += "<li><a href=\"" +  file + "\"/>" + file + "</a></li>";
             }
             count += 1;
         }
         return htmlFormat;
+    }
+
+    private String rootUrl(String request) {
+        Pattern pattern = Pattern.compile("Host: ([\\S]+)");
+        Matcher matcher = pattern.matcher(request);
+        matcher.find();
+
+        return matcher.group(1);
     }
 
 }

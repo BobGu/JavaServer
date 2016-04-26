@@ -86,6 +86,9 @@ public class FileController implements Controller {
     }
 
     private byte[] partialFileResponse(String fullRequest) throws IOException {
+        String responseHeaderString = "";
+        responseHeaderString += HttpStatus.partialContent + EscapeCharacters.newline;
+
         String[] linesOfRequest = fullRequest.split(EscapeCharacters.newline);
         String rangeRequest = linesOfRequest[1];
 
@@ -93,11 +96,33 @@ public class FileController implements Controller {
         Pattern endOfRangePattern = Pattern.compile("-([0-9]+)");
         String startOfRange = findRange(rangeRequest, startOfRangePattern);
         String endOfRange = findRange(rangeRequest, endOfRangePattern);
-        int start = Integer.parseInt(startOfRange);
-        int end = Integer.parseInt(endOfRange);
-
         byte[] fullContent = reader.read(fileLocation);
-        return Arrays.copyOfRange(fullContent, start, end);
+        int start;
+        int end;
+
+        if (startOfRange.equals("")) {
+            start = fullContent.length - Integer.parseInt(endOfRange) + 1;
+            end = fullContent.length;
+        } else if(endOfRange.equals("")) {
+            start = Integer.parseInt(startOfRange);
+            end = fullContent.length;
+        } else {
+            start = Integer.parseInt(startOfRange);
+            end = Integer.parseInt(endOfRange);
+        }
+
+        byte[] responseBody = Arrays.copyOfRange(fullContent, start, end);
+
+        responseHeaderString += "Content-Range: bytes " + startOfRange + "-" + endOfRange + "/" + fullContent.length + EscapeCharacters.newline;
+        responseHeaderString += "Content-Length: " + String.valueOf(end - start + 1) + EscapeCharacters.newline;
+        responseHeaderString += "Content-Type: " + determineContentType(fileLocation) + EscapeCharacters.newline + EscapeCharacters.newline;
+
+        byte[] responseHeader = responseHeaderString.getBytes();
+        byte[] response = new byte[responseHeader.length + responseBody.length];
+        System.arraycopy(responseHeader, 0, response, 0, responseHeader.length);
+        System.arraycopy(responseBody, 0, response, responseHeader.length, responseBody.length);
+
+        return response;
     }
 
     private String findRange(String rangeRequest, Pattern pattern) {

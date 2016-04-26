@@ -7,5 +7,6 @@ public class HttpStatus {
     public static final String redirect = "HTTP/1.1 302 Found";
     public static final String methodNotAllowed = "HTTP/1.1 405 Method Not Allowed";
     public static final String notAuthorized = "HTTP/1.1 401 Unauthorized";
+    public static final String partialContent = "HTTP/1.1 206 Partial Content";
 
 }

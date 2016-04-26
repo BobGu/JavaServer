@@ -23,7 +23,7 @@ public class FileControllerTest {
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline));
     }
 
     @Test
@@ -32,7 +32,7 @@ public class FileControllerTest {
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline));
         assertTrue(responseString.contains("Allow: GET,OPTIONS"));
     }
 
@@ -42,7 +42,7 @@ public class FileControllerTest {
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertTrue(responseString.contains(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.METHOD_NOT_ALLOWED.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline));
     }
 
     @Test
@@ -51,6 +51,15 @@ public class FileControllerTest {
         byte[] response = controller.handle(request);
 
         assertTrue(reader.getIsRead());
+    }
+
+    @Test
+    public void HandlesAPatchRequest() throws IOException {
+        Request request = new Request("PATCH /file1 HTTP/1.1", "/file1", "PATCH", null, null);
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
+
+        assertTrue(responseString.contains(HttpStatus.NO_CONTENT.getResponseCode() + EscapeCharacters.newline));
     }
 
 

@@ -46,7 +46,7 @@ public class Router {
             Controller controller = new FileController(new FileReader(), fileLocation);
             response = controller.handle(request);
         } else {
-            String responseString = HttpStatus.notFound + EscapeCharacters.newline + EscapeCharacters.newline;
+            String responseString = HttpStatus.NOT_FOUND.getResponseCode()+ EscapeCharacters.newline + EscapeCharacters.newline;
             response = responseString.getBytes();
         }
         return response;

@@ -29,10 +29,10 @@ public class LogsController implements Controller{
         }
 
         if (request.getAuthorization() != null && isAdmin(authorizationCode)) {
-            response += HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+            response += HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline;
             response += getLogVisits();
         } else {
-            response += HttpStatus.notAuthorized + EscapeCharacters.newline;
+            response += HttpStatus.NOT_AUTHORIZED.getResponseCode() + EscapeCharacters.newline;
             response += "WWW-Authenticate: Basic realm=\"/ Bob Server Logs\"" + EscapeCharacters.newline + EscapeCharacters.newline;
         }
         return response;

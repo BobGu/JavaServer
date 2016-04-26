@@ -32,7 +32,7 @@ public class LogControllerTest {
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertThat(responseString, containsString(HttpStatus.okay));
+        assertThat(responseString, containsString(HttpStatus.OKAY.getResponseCode()));
     }
 
     @Test
@@ -55,7 +55,7 @@ public class LogControllerTest {
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertEquals(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline,
+        assertEquals(HttpStatus.METHOD_NOT_ALLOWED.getResponseCode()+ EscapeCharacters.newline + EscapeCharacters.newline,
                      responseString);
     }
 

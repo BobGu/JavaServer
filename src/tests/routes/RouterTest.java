@@ -58,7 +58,7 @@ public class RouterTest {
         byte[] response = router.direct(request);
         String responseString = new String(response);
 
-        assertEquals(HttpStatus.notFound + EscapeCharacters.newline + EscapeCharacters.newline, responseString);
+        assertEquals(HttpStatus.NOT_FOUND.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline, responseString);
     }
 
     private class MockController implements Controller {

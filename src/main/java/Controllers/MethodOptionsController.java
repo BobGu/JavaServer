@@ -14,15 +14,15 @@ public class MethodOptionsController implements Controller{
         if (request.getHttpVerb().equals("OPTIONS")) {
             response += options();
         } else if (METHODS_ALLOWED.contains(request.getHttpVerb())) {
-            response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+            response = HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline;
         } else {
-            response = HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
+            response = HttpStatus.METHOD_NOT_ALLOWED.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline;
         }
         return response.getBytes();
     }
 
     private String options() {
-        return HttpStatus.okay
+        return HttpStatus.OKAY.getResponseCode()
                + EscapeCharacters.newline
                + "Allow: "
                + METHODS_ALLOWED

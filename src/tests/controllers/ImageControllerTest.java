@@ -20,7 +20,7 @@ public class ImageControllerTest {
         byte[] response = controller.handle(getRequest);
         String responseString = new String(response);
 
-        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline));
     }
 
     @Test
@@ -36,7 +36,7 @@ public class ImageControllerTest {
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline));
         assertTrue(responseString.contains("Allow: GET,OPTIONS"));
     }
 
@@ -46,7 +46,7 @@ public class ImageControllerTest {
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertTrue(responseString.contains(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.METHOD_NOT_ALLOWED.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline));
     }
 
     @Test

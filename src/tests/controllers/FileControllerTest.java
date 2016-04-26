@@ -96,7 +96,7 @@ public class FileControllerTest {
         String responseBody = bodyOfResponse(response);
 
         byte[] fullContent = "reading from file".getBytes();
-        byte[] partialContent = Arrays.copyOfRange(fullContent, 0, 6);
+        byte[] partialContent = Arrays.copyOfRange(fullContent, 0, 7);
         String expectedContent = new String(partialContent);
 
         assertEquals(expectedContent, responseBody);
@@ -113,7 +113,7 @@ public class FileControllerTest {
         String responseBody = bodyOfResponse(response);
 
         byte[] fullContent = "reading from file".getBytes();
-        byte[] partialContent = Arrays.copyOfRange(fullContent, 10, 17);
+        byte[] partialContent = Arrays.copyOfRange(fullContent, 9, 17);
         String expectedContent = new String(partialContent);
 
         assertEquals(expectedContent, responseBody);

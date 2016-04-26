@@ -101,19 +101,20 @@ public class FileController implements Controller {
         int end;
 
         if (startOfRange.equals("")) {
-            start = fullContent.length - Integer.parseInt(endOfRange) + 1;
+            start = fullContent.length - Integer.parseInt(endOfRange);
             end = fullContent.length;
         } else if(endOfRange.equals("")) {
             start = Integer.parseInt(startOfRange);
             end = fullContent.length;
         } else {
             start = Integer.parseInt(startOfRange);
-            end = Integer.parseInt(endOfRange);
+            end = Integer.parseInt(endOfRange) + 1;
         }
 
         byte[] responseBody = Arrays.copyOfRange(fullContent, start, end);
+        end = end - 1;
 
-        responseHeaderString += "Content-Range: bytes " + startOfRange + "-" + endOfRange + "/" + fullContent.length + EscapeCharacters.newline;
+        responseHeaderString += "Content-Range: bytes " + String.valueOf(start) + "-" + String.valueOf(end) + "/" + fullContent.length + EscapeCharacters.newline;
         responseHeaderString += "Content-Length: " + String.valueOf(end - start + 1) + EscapeCharacters.newline;
         responseHeaderString += "Content-Type: " + determineContentType(fileLocation) + EscapeCharacters.newline + EscapeCharacters.newline;
 

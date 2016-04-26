@@ -61,7 +61,6 @@ public class FormControllerTest {
         Assert.assertThat(writer.getText(), containsString("data=acoolname"));
     }
 
-
     @Test
     public void TestHandleOptionsRequest() throws IOException {
         Request request = new Request("OPTIONS /form HTTP/1.1", "/form", "OPTIONS", null, null);

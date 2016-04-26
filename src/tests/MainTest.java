@@ -38,7 +38,7 @@ public class MainTest {
         Main.main(args, server);
         ServerSocket socket = server.getServerSocket();
 
-        assertEquals("../resources/main/public", server.getDirectoryName());
+        assertEquals("/Users/robertgu/cob_spec/public", server.getDirectoryName());
 
         socket.close();
     }

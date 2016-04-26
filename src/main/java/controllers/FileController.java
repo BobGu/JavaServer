@@ -110,7 +110,7 @@ public class FileController implements Controller {
                 htmlFormat += "<li>" + file + "</li>";
             } else {
                 String currentDirectory = request.getPath().equals("/") ? "" : request.getPath() + "/";
-                htmlFormat += "<li><a href=\"" +  file + "\"/>" + file + "</a></li>";
+                htmlFormat += "<li><a href=\"" +  file + "\">" + file + "</a></li>";
             }
             count += 1;
         }

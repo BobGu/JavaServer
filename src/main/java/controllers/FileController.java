@@ -7,6 +7,7 @@ import specialCharacters.EscapeCharacters;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +36,8 @@ public class FileController implements Controller {
 
         if (file.isDirectory() || request.getPath().equals("/")) {
             return directoryResponse(request);
+        } else if(partialContentRequested(request.getFullRequest())) {
+            return partialFileResponse(request.getFullRequest());
         } else {
             return fileResponse();
         }
@@ -82,6 +85,30 @@ public class FileController implements Controller {
         return response;
     }
 
+    private byte[] partialFileResponse(String fullRequest) throws IOException {
+        String[] linesOfRequest = fullRequest.split(EscapeCharacters.newline);
+        String rangeRequest = linesOfRequest[1];
+
+        Pattern startOfRangePattern = Pattern.compile("([0-9]+)-");
+        Pattern endOfRangePattern = Pattern.compile("-([0-9]+)");
+        String startOfRange = findRange(rangeRequest, startOfRangePattern);
+        String endOfRange = findRange(rangeRequest, endOfRangePattern);
+        int start = Integer.parseInt(startOfRange);
+        int end = Integer.parseInt(endOfRange);
+
+        byte[] fullContent = reader.read(fileLocation);
+        return Arrays.copyOfRange(fullContent, start, end);
+    }
+
+    private String findRange(String rangeRequest, Pattern pattern) {
+        Matcher matcher = pattern.matcher(rangeRequest);
+
+        if (matcher.find()) {
+            return matcher.group(1);
+        }
+        return "";
+    }
+
     private String methodNotAllowed() {
         return HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
     }
@@ -117,12 +144,9 @@ public class FileController implements Controller {
         return htmlFormat;
     }
 
-    private String rootUrl(String request) {
-        Pattern pattern = Pattern.compile("Host: ([\\S]+)");
-        Matcher matcher = pattern.matcher(request);
-        matcher.find();
-
-        return matcher.group(1);
+    private boolean partialContentRequested(String fullRequest) {
+        return fullRequest.contains("Range");
     }
+
 
 }

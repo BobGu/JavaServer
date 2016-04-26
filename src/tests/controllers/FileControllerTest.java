@@ -6,6 +6,11 @@ import requests.Request;
 import specialCharacters.EscapeCharacters;
 
 import java.io.IOException;
+import java.util.Arrays;
+
+import static junit.framework.TestCase.assertEquals;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class FileControllerTest {
@@ -47,6 +52,27 @@ public class FileControllerTest {
 
         assertTrue(reader.getIsRead());
     }
+
+    @Test
+    public void HandlesRequestForPartialContent() throws IOException {
+        String fullRequest = "GET /partial_content.txt HTTP/1.1"
+                           + EscapeCharacters.newline
+                           + "Range: bytes=0-6"
+                           + EscapeCharacters.newline;
+        Request request = new Request(fullRequest, "/partial-content.txt", "GET", null, null);
+
+        byte[] response = controller.handle(request);
+        String responseString = new String(response);
+        String[] responseLines = responseString.split(EscapeCharacters.newline);
+        String responseBody = responseLines[responseLines.length -1];
+
+        byte[] fullContent = "reading from file".getBytes();
+        byte[] partialContent = Arrays.copyOfRange(fullContent, 0, 6);
+        String expectedContent = new String(partialContent);
+
+        assertEquals(expectedContent, responseBody);
+    }
+
 
     private class MockFileReader extends FileReader {
         private boolean isRead = false;

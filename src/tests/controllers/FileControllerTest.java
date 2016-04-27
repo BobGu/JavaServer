@@ -4,13 +4,9 @@ import org.junit.Test;
 import readers.FileReader;
 import requests.Request;
 import specialCharacters.EscapeCharacters;
-
+import writers.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-
-import static junit.framework.TestCase.assertEquals;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
+import java.security.NoSuchAlgorithmException;
 import static org.junit.Assert.assertTrue;
 
 public class FileControllerTest {
@@ -23,7 +19,7 @@ public class FileControllerTest {
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline));
     }
 
     @Test
@@ -32,7 +28,7 @@ public class FileControllerTest {
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertTrue(responseString.contains(HttpStatus.okay + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline));
         assertTrue(responseString.contains("Allow: GET,OPTIONS"));
     }
 
@@ -42,7 +38,7 @@ public class FileControllerTest {
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertTrue(responseString.contains(HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.METHOD_NOT_ALLOWED.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline));
     }
 
     @Test
@@ -54,18 +50,37 @@ public class FileControllerTest {
     }
 
 
-
     private class MockFileReader extends FileReader {
         private boolean isRead = false;
+        private String text = "default text";
 
         @Override
         public byte[] read(String location) {
             isRead = true;
-            return "reading from file".getBytes();
+            return text.getBytes();
         }
 
         public boolean getIsRead() {
             return isRead;
         }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+    }
+
+    private class MockWriter extends FileWriter {
+        private MockFileReader reader;
+
+        MockWriter(MockFileReader reader) {
+            this.reader = reader;
+        }
+
+        @Override
+        public void write(String location, String textToWrite) {
+            reader.setText(textToWrite);
+        }
+
     }
 }
+

@@ -5,7 +5,6 @@ import readers.FileReader;
 import readers.Reader;
 import requests.Request;
 import specialCharacters.EscapeCharacters;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -43,7 +42,7 @@ public class FileController implements Controller {
     }
 
     private String options() {
-        return HttpStatus.okay
+        return HttpStatus.OKAY.getResponseCode()
                + EscapeCharacters.newline
                + "Allow: "
                + METHODS_ALLOWED
@@ -53,7 +52,7 @@ public class FileController implements Controller {
 
     private byte[] directoryResponse(Request request) throws IOException {
         String response = "";
-        response += HttpStatus.okay + EscapeCharacters.newline;
+        response += HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline;
         response += "Content-Type: text/html;" + EscapeCharacters.newline + EscapeCharacters.newline;
         byte[] directoryAndFiles = reader.read(fileLocation);
         String files = new String(directoryAndFiles);
@@ -71,7 +70,7 @@ public class FileController implements Controller {
         String contentType = determineContentType(fileLocation);
         String responseHeadersString = "";
 
-        responseHeadersString += HttpStatus.okay + EscapeCharacters.newline;
+        responseHeadersString += HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline;
         responseHeadersString += "Content-Type: " + contentType + EscapeCharacters.newline;
         byte[] responseBody = reader.read(fileLocation);
         responseHeadersString += "Content-Length: " + responseBody.length + EscapeCharacters.newline + EscapeCharacters.newline;
@@ -83,7 +82,7 @@ public class FileController implements Controller {
 
 
     private String methodNotAllowed() {
-        return HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
+        return HttpStatus.METHOD_NOT_ALLOWED.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline;
     }
 
     private String determineContentType(String resourcePath) {

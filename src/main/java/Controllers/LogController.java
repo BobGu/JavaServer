@@ -16,7 +16,7 @@ public class LogController implements Controller{
         } else if (request.getHttpVerb().equals("HEAD") && request.getPath().equals("/requests")) {
             response = logVisit(request.getFullRequest());
         } else {
-            response = HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
+            response = HttpStatus.METHOD_NOT_ALLOWED.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline;
         }
 
 
@@ -27,6 +27,6 @@ public class LogController implements Controller{
         String[] linesOfRequest = fullRequest.split(EscapeCharacters.newline);
         String visit = linesOfRequest[0];
         log.addVisit(visit);
-        return HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+        return HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline;
     }
 }

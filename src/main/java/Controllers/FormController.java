@@ -52,42 +52,42 @@ public class FormController implements Controller {
                 response = options();
             }
         } else {
-            response = HttpStatus.methodNotAllowed;
+            response = HttpStatus.METHOD_NOT_ALLOWED.getResponseCode();
         }
 
         return response.getBytes();
     }
 
     private String get(Request request) throws IOException {
-        String responseHead = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+        String responseHead = HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline;
         byte[] file = reader.read(resourcePath);
         String fileText = new String(file);
         return responseHead + fileText;
     }
 
     private String post(Request request) throws IOException {
-        String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+        String response = HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline;
         String textToWrite = request.getParameters();
         writer.write(resourcePath, textToWrite);
         return response;
     }
 
     private String put(Request request) throws IOException {
-        String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+        String response = HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline;
         String textToWrite = request.getParameters();
         writer.update(resourcePath, textToWrite);
         return response;
     }
 
     private String delete() {
-        String response = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+        String response = HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline;
         writer.delete(resourcePath);
         return response;
     }
 
 
     private String options() {
-        return  HttpStatus.okay
+        return  HttpStatus.OKAY.getResponseCode()
                 + EscapeCharacters.newline
                 + "Allow: "
                 + METHODS_ALLOWED

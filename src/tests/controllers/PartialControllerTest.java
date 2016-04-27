@@ -26,7 +26,7 @@ public class PartialControllerTest {
         byte[] response = controller.handle(partialContentRequest);
         String responseString = new String(response);
 
-        assertTrue(responseString.contains(HttpStatus.partialContent+ EscapeCharacters.newline));
+        assertTrue(responseString.contains(HttpStatus.PARTIAL_CONTENT.getResponseCode() + EscapeCharacters.newline));
     }
 
     @Test

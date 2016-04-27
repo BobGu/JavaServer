@@ -51,7 +51,7 @@ public class PartialController implements Controller{
 
     private byte[] partialResponseHeader(int start, int end, int fileLength) {
         String responseHeaderString = "";
-        responseHeaderString += HttpStatus.partialContent + EscapeCharacters.newline;
+        responseHeaderString += HttpStatus.PARTIAL_CONTENT.getResponseCode() + EscapeCharacters.newline;
         responseHeaderString += "Content-Range: bytes " + String.valueOf(start) + "-" + String.valueOf(end - 1) + "/" + fileLength + EscapeCharacters.newline;
         responseHeaderString += "Content-Length: " + String.valueOf(end - start) + EscapeCharacters.newline;
         responseHeaderString += "Content-Type: " + determineContentType(fileLocation) + EscapeCharacters.newline + EscapeCharacters.newline;

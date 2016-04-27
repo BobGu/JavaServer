@@ -1,12 +1,23 @@
 package httpStatus;
 
-public class HttpStatus {
+public enum HttpStatus {
 
-    public static final String okay = "HTTP/1.1 200 OK";
-    public static final String notFound = "HTTP/1.1 404 Not Found";
-    public static final String redirect = "HTTP/1.1 302 Found";
-    public static final String methodNotAllowed = "HTTP/1.1 405 Method Not Allowed";
-    public static final String notAuthorized = "HTTP/1.1 401 Unauthorized";
-    public static final String partialContent = "HTTP/1.1 206 Partial Content";
+    OKAY ("HTTP/1.1 200 OK"),
+    NOT_FOUND ("HTTP/1.1 404 Not Found"),
+    REDIRECT ("HTTP/1.1 302 Found"),
+    METHOD_NOT_ALLOWED ("HTTP/1.1 405 Method Not Allowed"),
+    NOT_AUTHORIZED ("HTTP/1.1 401 Unauthorized"),
+    PARTIAL_CONTENT ("HTTP/1.1 206 Partial Content"),
+    NO_CONTENT ("HTTP/1.1 204 No Content"), ;
+
+    private final String responseCode;
+
+    private HttpStatus(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public String getResponseCode() {
+        return responseCode;
+    }
 
 }

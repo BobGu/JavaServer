@@ -42,11 +42,14 @@ public class Router {
 
         if (route.isPresent()) {
             response = route.get().getController().handle(request);
+        } else if (request.getHttpVerb().equals("PATCH") && fileRequested) {
+            Controller controller = new PatchController(new FileReader(), new FileWriter(), fileLocation);
+            response = controller.handle(request);
         } else if (fileRequested || request.getPath().equals("/")) {
             Controller controller = new FileController(new FileReader(), fileLocation);
             response = controller.handle(request);
         } else {
-            String responseString = HttpStatus.notFound + EscapeCharacters.newline + EscapeCharacters.newline;
+            String responseString = HttpStatus.NOT_FOUND.getResponseCode()+ EscapeCharacters.newline + EscapeCharacters.newline;
             response = responseString.getBytes();
         }
         return response;
@@ -58,9 +61,9 @@ public class Router {
         routes.add(new Route("/parameters", new ParameterController()));
         routes.add(new Route("/logs", new LogsController()));
         routes.add(new Route("/log", new LogController()));
+        routes.add(new Route("/redirect", new RedirectController()));
         routes.add(new Route("/these", new LogController()));
         routes.add(new Route("/requests", new LogController()));
-        routes.add(new Route("/redirect", new RedirectController()));
     }
 
     private Optional<Route> findRoute(String path) {

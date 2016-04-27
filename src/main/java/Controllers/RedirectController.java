@@ -17,7 +17,7 @@ public class RedirectController implements Controller{
     }
 
     private String get() {
-        return HttpStatus.redirect
+        return HttpStatus.REDIRECT.getResponseCode()
                + EscapeCharacters.newline
                + "Location: http://localhost:5000/"
                + EscapeCharacters.newline

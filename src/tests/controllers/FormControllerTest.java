@@ -34,7 +34,7 @@ public class FormControllerTest {
         String responseString = new String(response);
 
         Assert.assertThat(responseString,
-                          containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
+                          containsString(HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline));
         Assert.assertThat(responseString, containsString("I'm reading from this " + path));
     }
 
@@ -45,7 +45,7 @@ public class FormControllerTest {
         String responseToPostString = new String(responseToPost);
 
         Assert.assertThat(responseToPostString,
-                containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
+                containsString(HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline));
         Assert.assertThat(writer.getText(), containsString("data=shouldbeposted"));
 
     }
@@ -57,7 +57,7 @@ public class FormControllerTest {
         String responseToPutString = new String(responseToPut);
 
         Assert.assertThat(responseToPutString,
-                containsString(HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline));
+                containsString(HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline));
         Assert.assertThat(writer.getText(), containsString("data=acoolname"));
     }
 
@@ -68,7 +68,7 @@ public class FormControllerTest {
         String responseString = new String(response);
 
         Assert.assertThat(responseString,
-                containsString(HttpStatus.okay + EscapeCharacters.newline));
+                containsString(HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline));
 
         Assert.assertThat(responseString, containsString("Allow: GET,POST,PUT,DELETE,OPTIONS"));
     }
@@ -80,7 +80,7 @@ public class FormControllerTest {
         String responseString = new String(response);
 
         Assert.assertThat(responseString,
-                containsString(HttpStatus.okay + EscapeCharacters.newline));
+                containsString(HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline));
         assertEquals(writer.getText(), "");
     }
 

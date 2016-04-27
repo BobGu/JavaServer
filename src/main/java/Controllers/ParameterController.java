@@ -16,7 +16,7 @@ public class ParameterController implements Controller {
     }
 
     public String get(Request request) {
-        String responseHead = HttpStatus.okay + EscapeCharacters.newline + EscapeCharacters.newline;
+        String responseHead = HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline + EscapeCharacters.newline;
         String responseBody = request.getParameters();
 
         return responseHead + responseBody;

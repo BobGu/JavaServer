@@ -21,7 +21,7 @@ public class RedirectControllerTest {
         byte[] response = controller.handle(getRequest);
         String responseString = new String(response);
 
-        assertThat(responseString , containsString(HttpStatus.redirect + EscapeCharacters.newline));
+        assertThat(responseString , containsString(HttpStatus.REDIRECT.getResponseCode() + EscapeCharacters.newline));
     }
 
     @Test

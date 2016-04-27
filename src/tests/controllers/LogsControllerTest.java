@@ -21,7 +21,7 @@ public class LogsControllerTest {
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertThat(responseString, containsString(HttpStatus.notAuthorized));
+        assertThat(responseString, containsString(HttpStatus.NOT_AUTHORIZED.getResponseCode()));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class LogsControllerTest {
         byte[] response = controller.handle(request);
         String responseString = new String(response);
 
-        assertThat(responseString, containsString(HttpStatus.okay));
+        assertThat(responseString, containsString(HttpStatus.OKAY.getResponseCode()));
     }
 
     @Test

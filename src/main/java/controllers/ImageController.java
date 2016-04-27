@@ -35,7 +35,7 @@ public class ImageController implements Controller{
     private byte[] get(String location, String path) throws IOException {
         String responseHeadersString = "";
 
-        responseHeadersString += HttpStatus.okay + EscapeCharacters.newline;
+        responseHeadersString += HttpStatus.OKAY.getResponseCode() + EscapeCharacters.newline;
         responseHeadersString += "Content-Type: image/jpeg" + EscapeCharacters.newline;
 
         byte[] responseBody = reader.read(location);
@@ -50,7 +50,7 @@ public class ImageController implements Controller{
     }
 
     private String options() {
-        return HttpStatus.okay
+        return HttpStatus.OKAY.getResponseCode()
                 + EscapeCharacters.newline
                 + "Allow: "
                 + METHODS_ALLOWED
@@ -59,7 +59,7 @@ public class ImageController implements Controller{
     }
 
     private String methodNotAllowed() {
-        return HttpStatus.methodNotAllowed + EscapeCharacters.newline + EscapeCharacters.newline;
+        return HttpStatus.METHOD_NOT_ALLOWED.getResponseCode()+ EscapeCharacters.newline + EscapeCharacters.newline;
     }
 
 }

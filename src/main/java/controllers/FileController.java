@@ -8,6 +8,9 @@ import specialCharacters.EscapeCharacters;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Formatter;
 
 public class FileController implements Controller {
     private final String METHODS_ALLOWED = "GET,OPTIONS";
@@ -24,6 +27,8 @@ public class FileController implements Controller {
            return get(request);
        } else if (request.getHttpVerb().equals("OPTIONS")) {
            return options().getBytes();
+       } else if (request.getHttpVerb().equals("PATCH")) {
+           return patch(request);
        } else {
            return methodNotAllowed().getBytes();
        }
@@ -40,6 +45,11 @@ public class FileController implements Controller {
         } else {
             return fileResponse();
         }
+    }
+
+    private byte[] patch(Request request) {
+        String response = HttpStatus.NO_CONTENT.getResponseCode() + EscapeCharacters.newline;
+        return response.getBytes();
     }
 
     private String options() {
@@ -122,6 +132,20 @@ public class FileController implements Controller {
         System.arraycopy(responseHeader, 0, response, 0, responseHeader.length);
         System.arraycopy(responseBody, 0, response, responseHeader.length, responseBody.length);
         return response;
+    }
+
+    public String convertToSHA1(String message) throws NoSuchAlgorithmException {
+        byte[] messageByte = message.getBytes();
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        return byteArrayToHex(md.digest(messageByte));
+    }
+
+    private static String byteArrayToHex(byte[] hash) {
+        Formatter formatter = new Formatter();
+        for (byte b : hash) {
+            formatter.format("%02x", b);
+        }
+        return formatter.toString();
     }
 
     private boolean partialContentRequested(String fullRequest) {

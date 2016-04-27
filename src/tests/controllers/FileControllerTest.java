@@ -6,6 +6,7 @@ import requests.Request;
 import specialCharacters.EscapeCharacters;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import static junit.framework.TestCase.assertEquals;
@@ -61,6 +62,15 @@ public class FileControllerTest {
 
         assertTrue(responseString.contains(HttpStatus.NO_CONTENT.getResponseCode() + EscapeCharacters.newline));
     }
+
+    @Test
+    public void CanEncodeContentsOfFile() throws NoSuchAlgorithmException {
+        String body = "reading from file";
+
+        assertEquals("2bc11063c692f047bf8309aea99b3dfd7651b877", controller.convertToSHA1(body));
+    }
+
+
 
 
 

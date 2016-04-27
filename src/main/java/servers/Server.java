@@ -39,10 +39,11 @@ public class Server {
 
         while (true) {
             try {
+                routerConfigure();
                 socket = serverSocket.accept();
                 InputStream socketInputStream = socket.getInputStream();
-                Request request = Parser.parseAndCreateRequest(socketInputStream, directoryName);
-                routerConfigure();
+                Parser parser = new Parser();
+                Request request = parser.parseAndCreateRequest(socketInputStream, directoryName);
                 byte[] response = router.direct(request);
                 respond(response);
                 socket.close();

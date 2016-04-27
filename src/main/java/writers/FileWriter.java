@@ -41,7 +41,8 @@ public class FileWriter implements Writer {
 
         if (file.exists()) {
             InputStream fileStream = new FileInputStream(file);
-            String fileText = Parser.fileToText(fileStream);
+            Parser parser = new Parser();
+            String fileText = parser.fileToText(fileStream);
             updatedText = textUpdater.update(fileText, textToWrite);
         }
 

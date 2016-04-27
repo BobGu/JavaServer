@@ -43,7 +43,7 @@ public class Router {
         if (route.isPresent()) {
             response = route.get().getController().handle(request);
         } else if (fileRequested || request.getPath().equals("/")) {
-            Controller controller = new FileController(new FileReader(), fileLocation);
+            Controller controller = new FileController(new FileReader(), new FileWriter(), fileLocation);
             response = controller.handle(request);
         } else {
             String responseString = HttpStatus.NOT_FOUND.getResponseCode()+ EscapeCharacters.newline + EscapeCharacters.newline;

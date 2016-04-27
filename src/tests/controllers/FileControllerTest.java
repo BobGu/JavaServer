@@ -4,19 +4,17 @@ import org.junit.Test;
 import readers.FileReader;
 import requests.Request;
 import specialCharacters.EscapeCharacters;
-
+import writers.FileWriter;
+import writers.Writer;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-
 import static junit.framework.TestCase.assertEquals;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class FileControllerTest {
     private MockFileReader reader = new MockFileReader();
-    private FileController controller = new FileController(reader, "public");
+    private MockWriter writer = new MockWriter(reader);
+    private FileController controller = new FileController(reader, writer, "public");
 
     @Test
     public void HandlesAGetRequest() throws IOException {
@@ -73,17 +71,55 @@ public class FileControllerTest {
 
 
 
+    @Test
+    public void HandlesAPatchRequestWithMatchingEtag() throws IOException, NoSuchAlgorithmException {
+        String fullRequest = "PATCH /patch-content.txt HTTP/1.1"
+                + EscapeCharacters.newline
+                + "If-Match: 1387ee43ab23c285a1bf455bc72081429106ac2a"
+                + EscapeCharacters.newline
+                + EscapeCharacters.newline
+                + "Brand new material!";
+        Request request = new Request(fullRequest, "/file1", "PATCH", "Brand new material!", null);
+        controller.handle(request);
+
+        Request getRequest = new Request("GET /file1 HTTP/1.1", "/file1", "GET", null, null);
+        byte[] getResponse = controller.handle(getRequest);
+        String getResponseString = new String(getResponse);
+
+        assertTrue(getResponseString.contains("Brand new material!"));
+    }
+
     private class MockFileReader extends FileReader {
         private boolean isRead = false;
+        private String text = "default text";
 
         @Override
         public byte[] read(String location) {
             isRead = true;
-            return "reading from file".getBytes();
+            return text.getBytes();
         }
 
         public boolean getIsRead() {
             return isRead;
         }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+    }
+
+    private class MockWriter extends FileWriter {
+        private MockFileReader reader;
+
+        MockWriter(MockFileReader reader) {
+            this.reader = reader;
+        }
+
+        @Override
+        public void write(String location, String textToWrite) {
+            reader.setText(textToWrite);
+        }
+
     }
 }
+

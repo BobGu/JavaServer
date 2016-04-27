@@ -5,6 +5,8 @@ import readers.FileReader;
 import readers.Reader;
 import requests.Request;
 import specialCharacters.EscapeCharacters;
+import writers.FileWriter;
+import writers.Writer;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,10 +20,12 @@ public class FileController implements Controller {
     private final String METHODS_ALLOWED = "GET,OPTIONS";
     private String fileLocation;
     private Reader reader;
+    private Writer writer = new FileWriter();
 
-    public FileController(Reader reader, String fileLocation) {
+    public FileController(Reader reader, Writer writer, String fileLocation) {
         this.reader = reader;
         this.fileLocation = fileLocation;
+        this.writer = writer;
     }
 
     public byte[] handle(Request request) throws IOException {
@@ -49,8 +53,20 @@ public class FileController implements Controller {
         }
     }
 
-    private byte[] patch(Request request) {
+    private byte[] patch(Request request) throws IOException {
         String response = HttpStatus.NO_CONTENT.getResponseCode() + EscapeCharacters.newline;
+        String eTagRequest = getEtag(request.getFullRequest());
+        byte[] fileContents = reader.read(fileLocation);
+        String fileEtag = "";
+        try {
+            fileEtag = convertToSHA1(fileContents);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        if (fileEtag.equals(eTagRequest))  {
+            writer.write(fileLocation, request.getParameters());
+        }
         return response.getBytes();
     }
 
@@ -136,10 +152,9 @@ public class FileController implements Controller {
         return response;
     }
 
-    private String convertToSHA1(String message) throws NoSuchAlgorithmException {
-        byte[] messageByte = message.getBytes();
+    private String convertToSHA1(byte[] message) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
-        return byteArrayToHex(md.digest(messageByte));
+        return byteArrayToHex(md.digest(message));
     }
 
     public String getEtag(String fullRequest) {

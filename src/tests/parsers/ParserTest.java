@@ -66,7 +66,7 @@ public class ParserTest {
                                + "Authorization: Basic YWRtaW46aHVudGVyMg==" + EscapeCharacters.newline + EscapeCharacters.newline;
         InputStream inputStream = new ByteArrayInputStream(requestString.getBytes());
 
-        Request request = parser.parseAndCreateRequest(inputStream, "public");
+        Request request = parser.parseAndCreateRequest(inputStream);
 
         assertEquals("/logs", request.getPath());
         assertEquals( "GET", request.getHttpVerb());
@@ -85,7 +85,7 @@ public class ParserTest {
     public void CanParseForParameter() throws IOException {
         String requestHeader = "GET /parameters?name=myname" + EscapeCharacters.newline + EscapeCharacters.newline;
         InputStream stream = new ByteArrayInputStream(requestHeader.getBytes());
-        Request request = parser.parseAndCreateRequest(stream, "public");
+        Request request = parser.parseAndCreateRequest(stream);
 
         assertEquals("name = myname", request.getParameters());
     }
@@ -94,7 +94,7 @@ public class ParserTest {
     public void CanParseForMultipleParameters() throws IOException {
         String requestHeader = "GET /parameters?name=myname&city=losangeles" + EscapeCharacters.newline + EscapeCharacters.newline;
         InputStream stream = new ByteArrayInputStream(requestHeader.getBytes());
-        Request request = parser.parseAndCreateRequest(stream, "public");
+        Request request = parser.parseAndCreateRequest(stream);
 
         assertEquals("name = myname" + EscapeCharacters.newline + "city = losangeles", request.getParameters());
     }
@@ -103,7 +103,7 @@ public class ParserTest {
     public void CanParseForParametersThatArePercentEncoded() throws IOException {
         String requestHeader = "GET /parameters?variable_1=Operators%20%3C%2C&variable_2=stuff" + EscapeCharacters.newline + EscapeCharacters.newline;
         InputStream stream = new ByteArrayInputStream((requestHeader.getBytes()));
-        Request request = parser.parseAndCreateRequest(stream, "public");
+        Request request = parser.parseAndCreateRequest(stream);
 
         assertEquals("variable_1 = Operators <," + EscapeCharacters.newline + "variable_2 = stuff",
                       request.getParameters());

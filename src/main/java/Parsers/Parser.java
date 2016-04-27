@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class Parser {
 
-    public Request parseAndCreateRequest(InputStream inputStream, String directoryName) throws IOException {
+    public Request parseAndCreateRequest(InputStream inputStream) throws IOException {
         String request = parseInputStream(inputStream);
         String path = parseForPathUrl(request);
         String httpVerb = parseForHttpVerb(request);

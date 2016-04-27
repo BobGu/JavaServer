@@ -1,5 +1,4 @@
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import parsers.Parser;
 import requests.Request;
@@ -9,19 +8,20 @@ import runnables.RunnableRequestResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 import static org.junit.Assert.assertTrue;
 
 public class RunnableRequestResponseTest {
     private boolean setUpIsDone = false;
-    private MockSocket socket = new MockSocket();
+    private MockOutputStream outputStream = new MockOutputStream();
+    private MockSocket socket = new MockSocket(outputStream);
     private MockParser parser = new MockParser();
     private MockRouter router = new MockRouter();
-    private RunnableRequestResponse runnable = new RunnableRequestResponse(socket, "public", parser, router);
+    private RunnableRequestResponse runnable = new RunnableRequestResponse(socket, "public", parser, router, "Thread 1");
 
     public void startThread() throws InterruptedException, IOException {
-        runnable.setThreadName("Thread 1");
         runnable.start();
         Thread.sleep(100);
     }
@@ -45,7 +45,39 @@ public class RunnableRequestResponseTest {
         assertTrue(router.isDirectInvoked());
     }
 
+    @Test
+    public void ThreadWritesToTheSocket() {
+        assertTrue(outputStream.isWriteInvoked());
+    }
+
+    @Test
+    public void ThreadClosesTheSocket() {
+        assertTrue(socket.isCloseInvoked());
+    }
+
+
+    private class MockOutputStream extends OutputStream {
+        private boolean writeInvoked = false;
+
+        public MockOutputStream() {}
+
+        @Override
+        public void write(int bytes) {
+            writeInvoked = true;
+        }
+
+        public boolean isWriteInvoked() {
+            return writeInvoked;
+        }
+    }
+
     private class MockSocket extends Socket {
+        private boolean closeInvoked = false;
+        private OutputStream outputStream;
+
+        MockSocket(OutputStream outputStream) {
+            this.outputStream = outputStream;
+        }
 
         @Override
         public InputStream getInputStream() {
@@ -53,13 +85,28 @@ public class RunnableRequestResponseTest {
             InputStream inputStream = new ByteArrayInputStream(request.getBytes());
             return inputStream;
         }
+
+        @Override
+        public OutputStream getOutputStream() {
+            return outputStream;
+        }
+
+        @Override
+        public void close() {
+            closeInvoked = true;
+        }
+
+
+        public boolean isCloseInvoked() {
+            return closeInvoked;
+        }
     }
 
     private class MockParser extends Parser {
         private boolean parseAndCreateRequestInvoked = false;
 
         @Override
-        public Request parseAndCreateRequest(InputStream inputStream, String directoryName) {
+        public Request parseAndCreateRequest(InputStream inputStream) {
             parseAndCreateRequestInvoked = true;
             return new Request("GET / HTTP/1.1", "/", "GET", null , null);
         }

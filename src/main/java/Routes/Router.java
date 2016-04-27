@@ -15,10 +15,10 @@ import java.util.Optional;
 public class Router {
 
     private ArrayList<Route> routes = new ArrayList<Route>();
-    private String directoryName;
+    private String fileLocation;
 
-    public void setDirectory(String directoryName) {
-        this.directoryName = directoryName;
+    public void setFileLocation(String fileLocation) {
+        this.fileLocation = fileLocation;
     }
 
     public void setRoutes() {
@@ -36,7 +36,6 @@ public class Router {
     public byte[] direct(Request request) throws IOException {
         byte[] response;
         Optional<Route> route = findRoute(request.getPath());
-        String fileLocation = directoryName + request.getPath();
         File file = new File(fileLocation);
         boolean fileRequested = file.exists();
 

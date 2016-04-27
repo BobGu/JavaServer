@@ -11,30 +11,31 @@ public class RunnableRequestResponse implements Runnable{
     private Thread thread;
     private String threadName;
     private Socket socket;
-    private String fileLocation;
+    private String directoryLocation;
     private Parser parser;
     private Router router;
 
-    public RunnableRequestResponse(Socket socket, String fileLocation, Parser parser, Router router) {
+    public RunnableRequestResponse(Socket socket, String directoryLocation, Parser parser, Router router, String threadName) {
         this.socket = socket;
-        this.fileLocation = fileLocation;
+        this.directoryLocation = directoryLocation;
         this.parser = parser;
         this.router = router;
-    }
-
-    public void setThreadName(String threadName) {
         this.threadName = threadName;
     }
 
     public void run() {
         try {
-            Request request = parser.parseAndCreateRequest(socket.getInputStream(), fileLocation);
-            router.direct(request);
+            Request request = parser.parseAndCreateRequest(socket.getInputStream());
+            synchronized (router) {
+                router.setFileLocation(directoryLocation + request.getPath());
+                router.setRoutes();
+                byte[] response = router.direct(request);
+                socket.getOutputStream().write(response);
+                socket.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public void start() throws IOException {

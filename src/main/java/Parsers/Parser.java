@@ -12,7 +12,6 @@ public class Parser {
 
     public static Request parseAndCreateRequest(InputStream inputStream, String directoryName) throws IOException {
         String request = parseInputStream(inputStream);
-        System.out.println(request);
         String path = parseForPathUrl(request);
         String httpVerb = parseForHttpVerb(request);
         String parameters = parseForParameters(request);

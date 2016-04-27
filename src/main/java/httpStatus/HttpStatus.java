@@ -8,7 +8,7 @@ public enum HttpStatus {
     METHOD_NOT_ALLOWED ("HTTP/1.1 405 Method Not Allowed"),
     NOT_AUTHORIZED ("HTTP/1.1 401 Unauthorized"),
     PARTIAL_CONTENT ("HTTP/1.1 206 Partial Content"),
-    NO_CONTENT ("HTTP/1.1 204 No Content");
+    NO_CONTENT ("HTTP/1.1 204 No Content"), ;
 
     private final String responseCode;
 

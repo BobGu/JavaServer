@@ -64,13 +64,12 @@ public class FileControllerTest {
     }
 
     @Test
-    public void CanEncodeContentsOfFile() throws NoSuchAlgorithmException {
-        String body = "reading from file";
+    public void CanGetContentsOfEtag() {
+        String fullRequest = "PATCH /patch-content.txt HTTP/1.1" + EscapeCharacters.newline
+                           + "If-Match: 5c36acad75b78b82be6d9cbbd6143ab7e0cc04b0" + EscapeCharacters.newline;
 
-        assertEquals("2bc11063c692f047bf8309aea99b3dfd7651b877", controller.convertToSHA1(body));
+        assertEquals("5c36acad75b78b82be6d9cbbd6143ab7e0cc04b0", controller.getEtag(fullRequest));
     }
-
-
 
 
 

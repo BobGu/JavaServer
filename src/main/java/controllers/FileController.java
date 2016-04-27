@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FileController implements Controller {
     private final String METHODS_ALLOWED = "GET,OPTIONS";
@@ -134,10 +136,21 @@ public class FileController implements Controller {
         return response;
     }
 
-    public String convertToSHA1(String message) throws NoSuchAlgorithmException {
+    private String convertToSHA1(String message) throws NoSuchAlgorithmException {
         byte[] messageByte = message.getBytes();
         MessageDigest md = MessageDigest.getInstance("SHA-1");
         return byteArrayToHex(md.digest(messageByte));
+    }
+
+    public String getEtag(String fullRequest) {
+        String[] linesOfRequest = fullRequest.split(EscapeCharacters.newline);
+        String eTagLineOfRequest = linesOfRequest[1];
+        Pattern pattern = Pattern.compile("If-Match: ([0-9a-z]+)");
+        Matcher matcher = pattern.matcher(eTagLineOfRequest);
+
+        matcher.find();
+
+        return matcher.group(1);
     }
 
     private static String byteArrayToHex(byte[] hash) {

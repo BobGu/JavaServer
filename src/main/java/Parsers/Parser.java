@@ -33,11 +33,6 @@ public class Parser {
         return parsedRequest;
     }
 
-    public String fileToText(InputStream inputStream) throws IOException {
-        Scanner s = new Scanner(inputStream).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
-    }
-
     public String parseForHttpVerb(String requestHeader) {
         String[] words = requestHeader.split(" ");
         return words[0];

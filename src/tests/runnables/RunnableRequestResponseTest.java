@@ -2,7 +2,7 @@ import org.junit.Before;
 import org.junit.Test;
 import parsers.Parser;
 import requests.Request;
-import routes.Router;
+import routes.FileRouter;
 import runnables.RunnableRequestResponse;
 
 import java.io.ByteArrayInputStream;
@@ -18,7 +18,7 @@ public class RunnableRequestResponseTest {
     private MockOutputStream outputStream = new MockOutputStream();
     private MockSocket socket = new MockSocket(outputStream);
     private MockParser parser = new MockParser();
-    private MockRouter router = new MockRouter();
+    private MockFileRouter router = new MockFileRouter();
     private RunnableRequestResponse runnable = new RunnableRequestResponse(socket, "public", parser, router, "Thread 1");
 
     public void startThread() throws InterruptedException, IOException {
@@ -116,7 +116,7 @@ public class RunnableRequestResponseTest {
         }
     }
 
-    private class MockRouter extends Router {
+    private class MockFileRouter extends FileRouter {
         private boolean directInvoked = false;
 
         @Override

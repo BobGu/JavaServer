@@ -2,12 +2,13 @@ import org.junit.Test;
 import threadpool.FixedThreadPool;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class FixedThreadPoolTest {
+    private FixedThreadPool threadPool = FixedThreadPool.getInstance();
 
     @Test
     public void GetInstanceReturnsSameInstanceOfThreadPool() {
-        FixedThreadPool threadPool = FixedThreadPool.getInstance();
         FixedThreadPool sameThreadPool = FixedThreadPool.getInstance();
 
         assertEquals(threadPool, sameThreadPool);
@@ -15,17 +16,30 @@ public class FixedThreadPoolTest {
 
     @Test
     public void CanAddAJob() {
-        FixedThreadPool threadPool = FixedThreadPool.getInstance();
         MockRunnable runnable = new MockRunnable();
         threadPool.addJob(runnable);
 
         assertEquals(runnable, threadPool.getFirstJob());
     }
 
+    @Test
+    public void CanRunAJob() {
+        MockRunnable runnable = new MockRunnable();
+        threadPool.addJob(runnable);
+        threadPool.start();
+
+        assertTrue(runnable.getIsRun());
+    }
+
     private class MockRunnable implements Runnable {
+        private boolean isRun = false;
 
         public void run() {
+            isRun = true;
+        }
 
+        public boolean getIsRun() {
+            return isRun;
         }
     }
 }

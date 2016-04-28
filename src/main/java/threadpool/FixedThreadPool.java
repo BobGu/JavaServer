@@ -1,9 +1,9 @@
 package threadpool;
 
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class FixedThreadPool {
     private static FixedThreadPool threadPool =  new FixedThreadPool();
@@ -13,6 +13,15 @@ public class FixedThreadPool {
 
     public static FixedThreadPool getInstance() {
         return threadPool;
+    }
+
+    public void start() {
+        ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
+        while(!jobQueue.isEmpty()) {
+            Runnable runnable = getFirstJob();
+            executor.execute(runnable);
+        }
+        executor.shutdown();
     }
 
     public void addJob(Runnable runnable) {

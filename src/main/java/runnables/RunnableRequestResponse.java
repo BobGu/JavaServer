@@ -27,7 +27,7 @@ public class RunnableRequestResponse implements Runnable{
         try {
             Request request = parser.parseAndCreateRequest(socket.getInputStream());
             synchronized (router) {
-                router.setFileLocation(directoryLocation + request.getPath());
+                router.setDirectoryLocation(directoryLocation);
                 router.setRoutes();
                 byte[] response = router.direct(request);
                 socket.getOutputStream().write(response);

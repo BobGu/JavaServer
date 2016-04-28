@@ -14,6 +14,7 @@ public class Main {
     }
 
     public static void main(String[] args, Server customServer) throws IOException {
+        System.out.println(args.length);
         Server server = setServer(customServer);
         setServerSocketPort(server, args);
         setDirectory(server, args);

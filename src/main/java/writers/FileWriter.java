@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,8 +42,7 @@ public class FileWriter implements Writer {
 
         if (file.exists()) {
             InputStream fileStream = new FileInputStream(file);
-            Parser parser = new Parser();
-            String fileText = parser.fileToText(fileStream);
+            String fileText = fileToText(fileStream);
             updatedText = textUpdater.update(fileText, textToWrite);
         }
 
@@ -59,5 +59,8 @@ public class FileWriter implements Writer {
         }
     }
 
-
+    private String fileToText(InputStream inputStream) throws IOException {
+        Scanner s = new Scanner(inputStream).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
 }

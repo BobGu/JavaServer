@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class Parser {
 
-    public static Request parseAndCreateRequest(InputStream inputStream, String directoryName) throws IOException {
+    public Request parseAndCreateRequest(InputStream inputStream) throws IOException {
         String request = parseInputStream(inputStream);
         String path = parseForPathUrl(request);
         String httpVerb = parseForHttpVerb(request);
@@ -20,7 +20,7 @@ public class Parser {
         return new Request(request, path, httpVerb, parameters, authorization);
     }
 
-    public static String parseInputStream(InputStream inputStream) throws IOException {
+    public String parseInputStream(InputStream inputStream) throws IOException {
         String parsedRequest= "";
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -33,17 +33,17 @@ public class Parser {
         return parsedRequest;
     }
 
-    public static String fileToText(InputStream inputStream) throws IOException {
+    public String fileToText(InputStream inputStream) throws IOException {
         Scanner s = new Scanner(inputStream).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
     }
 
-    public static String parseForHttpVerb(String requestHeader) {
+    public String parseForHttpVerb(String requestHeader) {
         String[] words = requestHeader.split(" ");
         return words[0];
     }
 
-    public static String parseForPathUrl(String requestHeader) {
+    public String parseForPathUrl(String requestHeader) {
         Pattern pattern = Pattern.compile("(/[a-zA-Z0-9/_.-]*)");
         Matcher matcher = pattern.matcher(requestHeader);
         matcher.find();
@@ -51,7 +51,7 @@ public class Parser {
         return matcher.group(0);
     }
 
-    private static String parseForUrlParameters(String requestHeader) {
+    private String parseForUrlParameters(String requestHeader) {
         String parameters = "";
         String[] linesOfRequest= requestHeader.split(EscapeCharacters.newline);
         String firstLineOfRequest = linesOfRequest[0];
@@ -63,12 +63,12 @@ public class Parser {
         return parameters;
     }
 
-    private static String formatParameters(String parameters) {
+    private String formatParameters(String parameters) {
         parameters = parameters.replaceAll("&", EscapeCharacters.newline);
         return parameters.replaceAll("=", " = ");
     }
 
-    private static String decodeParameters(String parameters) {
+    private String decodeParameters(String parameters) {
         String decodedParameters = "";
         ParameterDecoder decoder = new ParameterDecoder();
         String[] keyAndValues = parameters.split("\r\n");
@@ -81,11 +81,11 @@ public class Parser {
     }
 
 
-    private static boolean isEncoded(String parameters) {
+    private boolean isEncoded(String parameters) {
         return parameters.contains("%");
     }
 
-    private static String parseForQuery(String request) {
+    private String parseForQuery(String request) {
         Pattern pattern = Pattern.compile("([^?]+=[\\S]+)");
         Matcher matcher = pattern.matcher(request);
 
@@ -94,7 +94,7 @@ public class Parser {
         return matcher.group(0);
     }
 
-    private static String parseForAuthorization(String request) {
+    private String parseForAuthorization(String request) {
         String authorization = "";
 
         if (request.contains("Authorization")) {
@@ -105,7 +105,7 @@ public class Parser {
         return authorization;
     }
 
-    private static String findAuthorization(String request) {
+    private String findAuthorization(String request) {
         Pattern pattern = Pattern.compile("Authorization: Basic (.+)");
         Matcher matcher = pattern.matcher(request);
 
@@ -114,7 +114,7 @@ public class Parser {
         return matcher.group(1);
     }
 
-    private static String parseForParameters(String request) {
+    private String parseForParameters(String request) {
         String parameters;
 
         if (isBodyOfRequest(request)) {
@@ -127,11 +127,11 @@ public class Parser {
         return parameters;
     }
 
-    private static boolean isQuery(String request) {
+    private boolean isQuery(String request) {
         return request.contains("?");
     }
 
-    private static String readHeadersOfRequest(BufferedReader reader) throws IOException {
+    private String readHeadersOfRequest(BufferedReader reader) throws IOException {
         String requestHeaders = "";
 
         String line;
@@ -142,7 +142,7 @@ public class Parser {
         return requestHeaders;
     }
 
-    private static String readBodyOfRequest(String request, BufferedReader reader) throws IOException {
+    private String readBodyOfRequest(String request, BufferedReader reader) throws IOException {
         String requestBody = "";
         String contentLength = getContentLength(request);
         int lettersToRead = Integer.parseInt(contentLength);
@@ -156,18 +156,18 @@ public class Parser {
         return requestBody;
     }
 
-    private static boolean isBodyOfRequest(String header) {
+    private boolean isBodyOfRequest(String header) {
         return header.contains("Content-Length");
     }
 
-    private static String getContentLength(String header) {
+    private String getContentLength(String header) {
         Pattern pattern = Pattern.compile("Content-Length: ([0-9]+)");
         Matcher matcher = pattern.matcher(header);
         matcher.find();
         return matcher.group(1);
     }
 
-    private static String parseForBody(String request) {
+    private String parseForBody(String request) {
         String[] requestLines= request.split(EscapeCharacters.newline);
         return requestLines[requestLines.length - 1];
     }

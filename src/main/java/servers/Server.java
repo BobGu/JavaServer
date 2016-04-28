@@ -3,6 +3,8 @@ package servers;
 import parsers.Parser;
 import requests.Request;
 import routes.Router;
+import runnables.RunnableRequestResponse;
+import threadpool.FixedThreadPool;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -14,6 +16,8 @@ public class Server {
     private Socket socket;
     private Router router;
     private String directoryName;
+    private FixedThreadPool threadPool = FixedThreadPool.getInstance();
+    private Parser parser = new Parser();
 
     public Server() {
         this(null);
@@ -40,25 +44,13 @@ public class Server {
         while (true) {
             try {
                 socket = serverSocket.accept();
-                InputStream socketInputStream = socket.getInputStream();
-                Request request = Parser.parseAndCreateRequest(socketInputStream, directoryName);
-                routerConfigure();
-                byte[] response = router.direct(request);
-                respond(response);
-                socket.close();
+                RunnableRequestResponse runnable = new RunnableRequestResponse(socket, directoryName, parser, router, "Thread");
+                threadPool.addJob(runnable);
+                threadPool.start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void respond(byte[] response) throws IOException {
-        socket.getOutputStream().write(response);
-    }
-
-    private void routerConfigure() {
-        router.setDirectory(directoryName);
-        router.setRoutes();
     }
 
 }

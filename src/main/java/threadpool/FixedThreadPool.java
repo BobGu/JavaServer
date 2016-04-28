@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class FixedThreadPool {
     private static FixedThreadPool threadPool =  new FixedThreadPool();
-    private LinkedList<Runnable> jobQueue = new LinkedList<Runnable>();
+    private LinkedList<Runnable> jobQueue = new LinkedList<>();
 
     private FixedThreadPool() {}
 
@@ -17,6 +17,7 @@ public class FixedThreadPool {
 
     public void start() {
         ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(4);
+
         while(!jobQueue.isEmpty()) {
             Runnable runnable = getFirstJob();
             executor.execute(runnable);

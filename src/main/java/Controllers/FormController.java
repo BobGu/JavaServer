@@ -21,20 +21,10 @@ public class FormController implements Controller {
     private Writer writer;
     private Reader reader;
 
-    public FormController(Writer writer, Reader reader){
-       this(null, writer, reader);
-    }
-
     public FormController(String resourcePath, Writer writer, Reader reader) {
-        if (resourcePath == null) {
-            this.resourcePath = "../resources/main/form.txt";
-            this.writer = writer;
-            this.reader = reader;
-        } else {
-            this.resourcePath = resourcePath;
-            this.writer = writer;
-            this.reader = reader;
-        }
+        this.resourcePath = resourcePath + "/form.txt";
+        this.writer = writer;
+        this.reader = reader;
     }
 
     public byte[] handle(Request request) throws IOException {

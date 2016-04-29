@@ -8,6 +8,12 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
 }
 
+dependencies {
+    testCompile "junit:junit:4.11"
+}
+
 jar {
       manifest.attributes 'Main-Class': 'Main'
 }
+
+

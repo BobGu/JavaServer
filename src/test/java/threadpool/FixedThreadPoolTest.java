@@ -34,6 +34,7 @@ public class FixedThreadPoolTest {
     private class MockRunnable implements Runnable {
         private boolean isRun = false;
 
+        @Override
         public void run() {
             isRun = true;
         }

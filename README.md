@@ -10,7 +10,7 @@
 
 This JavaServer allows you to load files from a directory and then serves those
 files. To start the server type in this from the root of the project.  `java
--jar build/libs/javaserver.jar`
+-jar build/libs/JavaServer.jar`
 
 To choose a directory to serve files from use this flag at the end of the
 command to start the server `-d location-of-directory`

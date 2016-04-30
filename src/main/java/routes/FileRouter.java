@@ -21,10 +21,6 @@ public class FileRouter implements Router {
         this.directoryLocation = directoryLocation;
     }
 
-    public void setRoutes() {
-        setRoutes(null);
-    }
-
     public void setRoutes(ArrayList<Route> routes) {
         if (routes == null) {
             createRoutes();

@@ -3,6 +3,7 @@ package runnables;
 import parsers.Parser;
 import requests.Request;
 import routes.FileRouter;
+import routes.Router;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -13,23 +14,23 @@ public class RunnableRequestResponse implements Runnable{
     private Socket socket;
     private String directoryLocation;
     private Parser parser;
-    private FileRouter fileRouter;
+    private Router router;
 
-    public RunnableRequestResponse(Socket socket, String directoryLocation, Parser parser, FileRouter fileRouter, String threadName) {
+    public RunnableRequestResponse(Socket socket, String directoryLocation, Parser parser, Router router, String threadName) {
         this.socket = socket;
         this.directoryLocation = directoryLocation;
         this.parser = parser;
-        this.fileRouter = fileRouter;
+        this.router = router;
         this.threadName = threadName;
     }
 
     public void run() {
         try {
             Request request = parser.parseAndCreateRequest(socket.getInputStream());
-            synchronized (fileRouter) {
-                fileRouter.setDirectoryLocation(directoryLocation);
-                fileRouter.setRoutes();
-                byte[] response = fileRouter.direct(request);
+            synchronized (router) {
+                router.setDirectoryLocation(directoryLocation);
+                router.setRoutes(null);
+                byte[] response = router.direct(request);
                 socket.getOutputStream().write(response);
                 socket.close();
             }

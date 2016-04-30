@@ -2,6 +2,7 @@ package servers;
 
 import parsers.Parser;
 import routes.FileRouter;
+import routes.Router;
 import runnables.RunnableRequestResponse;
 import threadpool.FixedThreadPool;
 
@@ -13,7 +14,7 @@ import java.net.Socket;
 public class Server {
     private ServerSocket serverSocket;
     private Socket socket;
-    private FileRouter fileRouter;
+    private Router router;
     private String directoryName;
     private FixedThreadPool threadPool = FixedThreadPool.getInstance();
     private Parser parser = new Parser();
@@ -22,11 +23,11 @@ public class Server {
         this(null);
     }
 
-    public Server(FileRouter fileRouter) {
-        if (fileRouter == null) {
-            this.fileRouter = new FileRouter();
+    public Server(Router router) {
+        if (router == null) {
+            this.router = new FileRouter();
         } else {
-            this.fileRouter = fileRouter;
+            this.router = router;
         }
     }
 
@@ -43,7 +44,7 @@ public class Server {
         while (true) {
             try {
                 socket = serverSocket.accept();
-                RunnableRequestResponse runnable = new RunnableRequestResponse(socket, directoryName, parser, fileRouter, "Thread");
+                RunnableRequestResponse runnable = new RunnableRequestResponse(socket, directoryName, parser, router, "Thread");
                 threadPool.addJob(runnable);
                 threadPool.start();
             } catch (IOException e) {

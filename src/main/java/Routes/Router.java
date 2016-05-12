@@ -10,5 +10,6 @@ public interface Router {
     public byte[] direct(Request request) throws IOException;
     public void setRoutes(ArrayList<Route> routes);
     public void setDirectoryLocation(String location);
+    public boolean isRoutes();
 
 }

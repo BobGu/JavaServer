@@ -15,7 +15,11 @@ public class Configuration {
     private ArrayList<Route> routes = new ArrayList<Route>();
     private Router router;
 
+    public Configuration(Router router) {
+        this.router = router;
+    }
 
+    public int getPort() {return port;}
     public void setPort(int port) {
                                 this.port = port;
                                                  }
@@ -23,10 +27,6 @@ public class Configuration {
     public void addRoute(String path, Controller controller) {
         Route route = new Route(path, controller);
         routes.add(route);
-    }
-
-    public void setRouter(Router router) {
-        this.router = router;
     }
 
     public void setRoutes() {

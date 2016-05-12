@@ -29,6 +29,10 @@ public class FileRouter implements Router {
         }
     }
 
+    public boolean isRoutes() {
+        return !routes.isEmpty();
+    }
+
     public byte[] direct(Request request) throws IOException {
         byte[] response;
         Optional<Route> route = findRoute(request.getPath());
